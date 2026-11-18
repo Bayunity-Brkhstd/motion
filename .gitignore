@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Builds and outputs
+hasil/
+hasil-klip/
+motion/hasil/
+motion/public/suara/
+motion/public/klip/
+motion/naskah/20*.json
+*.mp4
+*.mp3
+*.wav
+*.aac
+*.m4a
+
+# Environment and secrets
+.env
+*.env
+!*.env.contoh
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
