@@ -13,6 +13,12 @@ __pycache__/
 # Builds and outputs
 hasil/
 hasil-klip/
+build_video/
+build_stickman/
+out_sound_*/
+motion khusus cli langganan/build_video/
+motion khusus cli langganan/build_stickman/
+motion khusus cli langganan/out_sound_*/
 motion/hasil/
 motion/public/suara/
 motion/public/klip/

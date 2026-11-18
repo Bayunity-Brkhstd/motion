@@ -1,0 +1,28 @@
+{
+  "versi": "1.0.0",
+  "nama": "Pipeline Motion Pro Long-form",
+  "durasi_minimal_detik": 240,
+  "engine_cli": ["claude", "codex", "opencode"],
+  "tahapan": [
+    {
+      "fase": 1,
+      "nama": "Ingest Aset & Naskah",
+      "deskripsi": "Parsing file .md, audio VO, dan gambar referensi"
+    },
+    {
+      "fase": 2,
+      "nama": "AI Audio-Script Alignment",
+      "deskripsi": "Pencocokan kata per kata dengan faster-whisper"
+    },
+    {
+      "fase": 3,
+      "nama": "Penyusunan Storyboard & SVG",
+      "deskripsi": "Generasi elemen visual konsisten per adegan"
+    },
+    {
+      "fase": 4,
+      "nama": "Remotion Orchestration & Render",
+      "deskripsi": "Kompilasi React Remotion 1080x1920 MP4"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "video-making-scripts",
+  "version": "1.0.0",
+  "description": "Parallel rendering engine for video-making skill",
+  "main": "render-parallel.js",
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}

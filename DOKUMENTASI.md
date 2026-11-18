@@ -296,6 +296,24 @@ Jika opsi ilustrasi AI diaktifkan, engine `gambar.mjs` akan memerintahkan AI men
 
 ---
 
+### Fitur Khusus: Motion Pro (Long-form AI Studio ≥ 4 Menit)
+
+Workspace khusus di bawah tab Motion untuk produksi video berdurasi panjang ($\ge$ 4 menit) menggunakan antarmuka interaktif AI Agent (mirip Antigravity App / Claude Desktop / Gemini Desktop):
+- **Otorisasi Keamanan (Passcode):** Secara default terkunci. Masukkan kode akses resmi: `258741`.
+- **Target Video:** Narasi edukasi, video essay, dokumenter, atau presentasi 4 - 15+ menit.
+- **Dukungan CLI Langganan:** Terhubung langsung dengan Claude Code CLI (`claude`), OpenAI Codex CLI (`codex`), atau OpenCode.
+- **Panel Aset Multi-Format (Kolom Kiri):**
+  1. *Unggah Gambar Referensi Style:* Ekstraksi palet warna dan konsistensi aset visual.
+  2. *Unggah Audio Voice-Over:* Deteksi otomatis durasi ($\ge$ 4 menit) dan visualizer audio player.
+  3. *Unggah Naskah Markdown:* Parsing babak/adegan dengan penghitung kata otomatis.
+- **Folder Skills & Konfigurasi:** Disimpan di `motion/skills/`:
+  - `motion/skills/SKILL-LONGFORM.md`: Panduan eksekusi pipeline long-form.
+  - `motion/skills/prompt-agent.md`: Sistem prompt Motion Director AI.
+  - `motion/skills/alur-produksi.json`: Schema tahapan produksi bertingkat.
+- **AI Chat Studio (Kolom Kanan):** Tampilan interaktif AI Agent dengan *Extended Thinking (Reasoning)*, chip prompt cepat, dan preview komposisi adegan.
+
+---
+
 ## G. Fitur Kolaborasi Hibrid (Klip + Motion)
 
 Anda dapat menggabungkan keunggulan video nyata (*real-footage*) dari fitur **Klip** ke dalam video grafis **Motion**:

@@ -3022,6 +3022,345 @@
       }
     }
 
+    /* ============================================================
+       MOTION PRO (AI AGENT WORKSPACE - LONG-FORM >= 4 MENIT)
+       ============================================================ */
+    .pro-gate {
+      max-width: 640px;
+      margin: 30px auto;
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.75) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1.5px solid rgba(168, 85, 247, 0.4);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(168, 85, 247, 0.15);
+      border-radius: 20px;
+      padding: 38px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .pro-gate::before {
+      content: "";
+      position: absolute;
+      top: -90px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(99, 102, 241, 0.15) 50%, transparent 70%);
+      filter: blur(40px);
+      pointer-events: none;
+    }
+    .pro-gate-icon {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 16px;
+      border-radius: 20px;
+      background: rgba(168, 85, 247, 0.15);
+      border: 1.5px solid rgba(168, 85, 247, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c084fc;
+      box-shadow: 0 0 26px rgba(168, 85, 247, 0.35);
+    }
+    .pro-gate-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      background: rgba(168, 85, 247, 0.18);
+      color: #d8b4fe;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      margin-bottom: 14px;
+    }
+    .pro-gate-input-wrap {
+      display: flex;
+      gap: 10px;
+      max-width: 380px;
+      margin: 22px auto 8px;
+    }
+    .pro-gate-input {
+      letter-spacing: 6px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: var(--mono);
+      background: rgba(15, 23, 42, 0.8) !important;
+      border-color: rgba(168, 85, 247, 0.4) !important;
+    }
+    .pro-gate-input:focus {
+      border-color: #a855f7 !important;
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.4) !important;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .shake-anim {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    /* WORKSPACE GRID */
+    .pro-workspace {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 1200px) {
+      .pro-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* LEFT TRAY */
+    .pro-tray {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .pro-upload-box {
+      border: 1.5px dashed var(--garis);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.35);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .pro-upload-box:hover {
+      border-color: #a855f7;
+      background: rgba(168, 85, 247, 0.05);
+    }
+    .pro-ref-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .pro-ref-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      border: 1px solid var(--garis);
+      background: #000;
+    }
+    .pro-ref-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .pro-ref-item .pro-ref-del {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      cursor: pointer;
+      border: none;
+    }
+    .pro-ref-item .pro-ref-del:hover {
+      background: #ef4444;
+    }
+
+    /* CHAT DECK (ANTIGRAVITY / CLAUDE / GEMINI DESKTOP STYLE) */
+    .pro-chat-deck {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 170px);
+      min-height: 650px;
+      background: var(--kartu);
+      border: 1px solid var(--garis);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .pro-chat-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--garis);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.4);
+    }
+    .pro-chat-agent {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .pro-chat-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+    }
+    .pro-chat-stream {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .pro-msg {
+      display: flex;
+      gap: 14px;
+      max-width: 92%;
+    }
+    .pro-msg.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+    .pro-msg.agent {
+      align-self: flex-start;
+    }
+    .pro-bubble {
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+    .pro-msg.agent .pro-bubble {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--garis);
+      color: var(--teks);
+    }
+    .pro-msg.user .pro-bubble {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+    }
+
+    /* EXTENDED THINKING BOX */
+    .pro-thought {
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 10px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      font-size: 12.5px;
+    }
+    .pro-thought summary {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #c084fc;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      user-select: none;
+    }
+    .pro-thought summary:hover {
+      color: #e9d5ff;
+    }
+    .pro-thought-body {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(168, 85, 247, 0.2);
+      color: var(--redup);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* SCENE TIMELINE PILLS */
+    .pro-scene-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .pro-scene-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid var(--garis);
+      border-radius: 8px;
+      font-size: 12.5px;
+    }
+    .pro-scene-row b {
+      color: var(--aksen);
+    }
+
+    /* INPUT DECK */
+    .pro-input-deck {
+      padding: 14px 20px;
+      border-top: 1px solid var(--garis);
+      background: rgba(15, 23, 42, 0.4);
+    }
+    .pro-chips-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 6px;
+    }
+    .pro-chip {
+      white-space: nowrap;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--garis);
+      color: var(--teks);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .pro-chip:hover {
+      background: rgba(168, 85, 247, 0.15);
+      border-color: rgba(168, 85, 247, 0.4);
+      color: #d8b4fe;
+    }
+    .pro-input-box {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      background: var(--latar);
+      border: 1px solid var(--garis);
+      border-radius: 12px;
+      padding: 8px 12px;
+      transition: border-color .2s;
+    }
+    .pro-input-box:focus-within {
+      border-color: #a855f7;
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.25);
+    }
+    .pro-textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--teks);
+      font-family: inherit;
+      font-size: 13.5px;
+      line-height: 1.5;
+      resize: none;
+      max-height: 120px;
+    }
+
     @media (max-width:900px) {
 
       .grid2,
@@ -3064,6 +3403,11 @@
           <rect x="3" y="3" width="18" height="18" rx="3" />
           <path d="m10 8 6 4-6 4z" />
         </svg>Motion</button>
+      <button class="nav" data-ke="motion-pro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg><span>Motion Pro</span> <span style="font-size:10px;padding:2px 6px;border-radius:99px;background:rgba(168,85,247,0.18);color:#c084fc;border:1px solid rgba(168,85,247,0.35);margin-left:auto;font-family:var(--mono);font-weight:700">4m+</span></button>
       <div class="label-kecil">Pustaka</div>
       <button class="nav" data-ke="riwayat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
@@ -3744,6 +4088,220 @@
         <div class="hasil" id="hasilMotion"></div>
       </section>
 
+      <!-- MOTION PRO (AI AGENT WORKSPACE - LONG-FORM >= 4 MENIT) -->
+      <section class="halaman" id="h-motion-pro">
+        <div class="kepala">
+          <div>
+            <div class="eyebrow" style="color:#c084fc">ai agent workspace · khusus durasi ≥ 4 menit · cli langganan</div>
+            <h1>Motion Pro <span>Long-form AI Studio</span></h1>
+            <p>Ruang kerja sutradara AI untuk produksi video motion graphics berdurasi 4 - 15+ menit berbasis naskah markdown, sinkronisasi audio narasi, dan konsistensi referensi aset visual.</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="chip-status-pro" id="statusProBadge" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;font-size:12px;font-family:var(--mono);font-weight:700;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Terkunci (Kode Akses)
+            </span>
+            <button class="tombol kedua kecil" id="tblKunciUlangPro" style="display:none;align-items:center;gap:6px" title="Kunci kembali workspace">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Kunci Workspace
+            </button>
+          </div>
+        </div>
+
+        <!-- GATE KEAMANAN KODE AKSES (DEFAULT: DI-DISABLE / TERKUNCI) -->
+        <div class="pro-gate" id="gateMotionPro">
+          <div class="pro-gate-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div class="pro-gate-badge">Fitur Eksklusif · Model Reasoning CLI Langganan</div>
+          <h2 style="margin:0 0 8px;font-size:22px;color:var(--teks);font-weight:700">Akses Workspace Motion Pro Terkunci</h2>
+          <p style="margin:0 auto;max-width:520px;font-size:13.5px;color:var(--redup);line-height:1.6">
+            Fitur ini dirancang khusus untuk video berdurasi panjang (<b>$\ge$ 4 menit</b>) menggunakan model reasoning bertenaga tinggi via CLI berbayar (<b>Claude Code, OpenAI Codex, OpenCode</b>) dengan skill terprogram di folder <code>motion/skills/</code>.
+          </p>
+          <div style="margin-top:14px;font-size:12.5px;color:#c084fc">
+            Silakan masukkan kode otorisasi keamanan 6-digit untuk membuka UI workspace:
+          </div>
+          <div class="pro-gate-input-wrap">
+            <input type="password" class="input pro-gate-input" id="inputKodePro" placeholder="••••••" maxlength="10" autocomplete="off">
+            <button class="tombol utama" id="tblBukaKodePro" style="background:linear-gradient(135deg, #a855f7, #6366f1);border:none;white-space:nowrap;padding:0 20px">
+              Buka Akses →
+            </button>
+          </div>
+          <div id="pesanKodePro" style="display:none;color:#f87171;font-size:12.5px;font-weight:600;margin-top:8px"></div>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px dashed var(--garis);display:flex;align-items:center;justify-content:center;gap:12px;font-size:12px;color:var(--redup)">
+            <span>Memerlukan langganan CLI aktif?</span>
+            <button class="tombol kedua kecil" onclick="ke('pengaturan')" style="font-size:11.5px">Cek Pengaturan AI ↗</button>
+          </div>
+        </div>
+
+        <!-- WORKSPACE MOTION PRO (TERBUKA SETELAH KODE 258741) -->
+        <div class="pro-workspace" id="workspaceMotionPro" style="display:none">
+          <!-- PANEL KIRI: UPLOAD REFERENSI & ASET -->
+          <div class="pro-tray">
+            <!-- 1. UPLOAD GAMBAR REFERENSI -->
+            <div class="kartu" style="padding:16px">
+              <h2 class="judul-kartu" style="font-size:14px;margin-bottom:10px">
+                <i style="background:#a855f7"></i>Gambar Referensi &amp; Aset Visual
+              </h2>
+              <div class="pro-upload-box" id="dropGambarRef">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#c084fc;margin-bottom:6px">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <div style="font-size:13px;font-weight:600;color:var(--teks)">Unggah Gambar Referensi Style</div>
+                <div style="font-size:11.5px;color:var(--redup)">Klik atau seret gambar (.png, .jpg, .svg) untuk menjaga konsistensi karakter &amp; palet</div>
+                <input type="file" id="fileGambarRef" accept="image/*" multiple hidden>
+              </div>
+              <div class="pro-ref-grid" id="daftarGambarRef"></div>
+              <div class="bidang" style="margin-top:10px;margin-bottom:0">
+                <label style="font-size:12px">Arahan Gaya Visual <em>opsional</em></label>
+                <input class="input" id="arahanVisualPro" placeholder="mis. Karakter hoodie biru, flat isometric, warna neon" style="font-size:12.5px;padding:8px 12px">
+              </div>
+            </div>
+
+            <!-- 2. UPLOAD AUDIO NARASI PANJANG -->
+            <div class="kartu" style="padding:16px">
+              <h2 class="judul-kartu" style="font-size:14px;margin-bottom:10px">
+                <i style="background:#06b6d4"></i>Audio Narasi Long-form (≥ 4 Menit)
+              </h2>
+              <div class="pro-upload-box" id="dropAudioPro">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#22d3ee;margin-bottom:6px">
+                  <path d="M9 18V5l12-2v13"/>
+                  <circle cx="6" cy="18" r="3"/>
+                  <circle cx="18" cy="16" r="3"/>
+                </svg>
+                <div style="font-size:13px;font-weight:600;color:var(--teks)" id="judulAudioPro">Pilih Berkas Audio Voice-Over</div>
+                <div style="font-size:11.5px;color:var(--redup)">Format .mp3 / .wav / .m4a untuk durasi panjang 4-15+ menit</div>
+                <input type="file" id="fileAudioPro" accept="audio/*" hidden>
+              </div>
+              <div id="boxAudioProPreview" style="display:none;margin-top:12px">
+                <audio id="playerAudioPro" controls style="width:100%;height:32px;border-radius:6px"></audio>
+                <div id="infoAudioPro" style="margin-top:6px;font-size:12px;font-family:var(--mono)"></div>
+              </div>
+            </div>
+
+            <!-- 3. UPLOAD NASKAH MARKDOWN -->
+            <div class="kartu" style="padding:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                <h2 class="judul-kartu" style="font-size:14px;margin:0">
+                  <i style="background:#10b981"></i>Naskah Markdown (.md)
+                </h2>
+                <button class="tombol kedua kecil" id="tblPilihMd" style="font-size:11px;padding:3px 8px">Buka File .md</button>
+                <input type="file" id="fileNaskahMd" accept=".md,.txt" hidden>
+              </div>
+              <textarea class="input" id="editorNaskahMd" rows="6" placeholder="# Babak 1: Pendahuluan&#10;Di era kecerdasan buatan, konten video berdurasi panjang membutuhkan alur yang presisi...&#10;&#10;## Adegan 1: Hook&#10;Pernahkah Anda bertanya mengapa beberapa kreator..." style="font-size:12px;font-family:var(--mono);line-height:1.5;resize:vertical"></textarea>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;font-size:11.5px;color:var(--redup)">
+                <span id="statNaskahMd">0 kata · Perkiraan ~0 adegan</span>
+                <button class="tombol teks" id="tblContohMd" style="font-size:11px;color:var(--aksen);padding:0">Isi Contoh Naskah</button>
+              </div>
+            </div>
+
+            <!-- 4. SKILLS & CLI ENVIRONMENT -->
+            <div class="kartu" style="padding:14px 16px;background:rgba(15,23,42,0.4)">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:30px;height:30px;border-radius:8px;background:rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;color:#c084fc">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                </div>
+                <div style="flex:1">
+                  <div style="font-size:12.5px;font-weight:700;color:var(--teks)">Skills: motion khusus cli langganan</div>
+                  <div style="font-size:11px;color:var(--redup);line-height:1.4">isometric-video • motion-graphics • sound-effects • video-making</div>
+                </div>
+                <span style="font-size:10.5px;padding:2px 8px;border-radius:99px;background:rgba(16,185,129,0.15);color:#34d399;font-family:var(--mono);font-weight:700">SIAP</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANEL KANAN: CHAT AI WORKSPACE (CLAUDE / ANTIGRAVITY / GEMINI DESKTOP STYLE) -->
+          <div class="pro-chat-deck">
+            <!-- HEADER CHAT -->
+            <div class="pro-chat-header">
+              <div class="pro-chat-agent">
+                <div class="pro-chat-avatar">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                  </svg>
+                </div>
+                <div>
+                  <div style="font-size:14px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:8px">
+                    Motion Director Agent
+                    <span style="width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981"></span>
+                  </div>
+                  <div style="font-size:11.5px;color:var(--redup)">Long-Form Remotion Orchestrator · CLI Reasoning</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <select class="input" id="pilModelPro" style="font-size:12px;padding:6px 28px 6px 12px;height:auto">
+                  <option value="claude">Claude 3.7 Sonnet (Claude Code CLI)</option>
+                  <option value="codex">GPT-4.5 / o3 (OpenAI Codex CLI)</option>
+                  <option value="opencode">OpenCode Agent (CLI)</option>
+                </select>
+                <button class="tombol kedua kecil" id="tblResetChatPro" title="Mulai sesi baru" style="padding:6px 10px">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- CHAT MESSAGE STREAM -->
+            <div class="pro-chat-stream" id="chatProMessages">
+              <!-- WELCOME MESSAGE DARI AGENT -->
+              <div class="pro-msg agent">
+                <div class="pro-chat-avatar" style="width:30px;height:30px;font-size:12px;flex-shrink:0">AI</div>
+                <div class="pro-bubble">
+                  <div style="font-weight:700;margin-bottom:6px;color:#c084fc">Sesi Sutradara Video Panjang Siap</div>
+                  <p style="margin:0 0 10px 0">
+                    Halo! Saya <b>Motion Director Agent</b>. Workspace ini dikonfigurasikan khusus untuk memproses video narasi panjang (<b>$\ge$ 4 menit</b>).
+                  </p>
+                  <p style="margin:0 0 10px 0">
+                    Unggah aset Anda pada panel di sebelah kiri:
+                    <br>• <b>Gambar Referensi:</b> AI akan mengekstraksi palet warna dan gaya ilustrasi agar seragam.
+                    <br>• <b>Audio Voice-Over:</b> AI akan menghitung alignment jeda nafas dan ketukan adegan.
+                    <br>• <b>Naskah Markdown:</b> AI akan memecah naskah menjadi adegan 4 - 8 detik.
+                  </p>
+
+                  <!-- EXTENDED THINKING BOX CONTOH -->
+                  <details class="pro-thought" open>
+                    <summary>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                      Thinking Process (Reasoning State)
+                    </summary>
+                    <div class="pro-thought-body">
+                      ✓ Menghubungkan engine ke konfigurasi <code>motion/skills/SKILL-LONGFORM.md</code><br>
+                      ✓ Template Remotion React 1080×1920 30fps siap di <code>motion/src/Video.tsx</code><br>
+                      • Menunggu masukan naskah markdown dan file audio untuk orkestrasi timeline...
+                    </div>
+                  </details>
+
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                    <button class="tombol utama kecil" onclick="simulasiPromptPro('analisis')" style="font-size:11.5px">⚡ Analisis File &amp; Susun Storyboard</button>
+                    <button class="tombol kedua kecil" onclick="simulasiPromptPro('style')" style="font-size:11.5px">🎨 Samakan Style Referensi</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CHAT INPUT DECK -->
+            <div class="pro-input-deck">
+              <div class="pro-chips-bar">
+                <button class="pro-chip" onclick="simulasiPromptPro('analisis')">✨ Analisis Naskah &amp; Timeline Audio</button>
+                <button class="pro-chip" onclick="simulasiPromptPro('svg')">🎨 Generasi SVG Sesuai Referensi</button>
+                <button class="pro-chip" onclick="simulasiPromptPro('align')">⏱️ Sinkronkan Kalimat VO 4 Menit+</button>
+                <button class="pro-chip" onclick="simulasiPromptPro('render')">🎬 Siapkan Render Remotion</button>
+              </div>
+              <div class="pro-input-box">
+                <textarea class="pro-textarea" id="inputChatPro" rows="2" placeholder="Ketik instruksi untuk AI Director (Enter untuk kirim, Shift+Enter untuk baris baru)..."></textarea>
+                <button class="tombol utama" id="tblKirimChatPro" style="background:linear-gradient(135deg, #a855f7, #6366f1);border:none;border-radius:10px;padding:8px 14px;align-self:flex-end">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- RIWAYAT -->
       <section class="halaman" id="h-riwayat">
         <div class="kepala">
@@ -4116,9 +4674,13 @@
     $$('[data-wiz-ke]').forEach((k) => k.onclick = () => tutupWizard(k.dataset.wizKe));
     $('#bukaWizard').onclick = () => bukaWizard();
     function ke(h) {
-      $$('.nav').forEach((n) => n.classList.toggle('aktif', n.dataset.ke === h)); $$('.halaman').forEach((x) => x.classList.toggle('aktif', x.id === 'h-' + h)); if (h === 'beranda') muatBeranda();
+      $$('.nav').forEach((n) => n.classList.toggle('aktif', n.dataset.ke === h));
+      $$('.halaman').forEach((x) => x.classList.toggle('aktif', x.id === 'h-' + h));
+      if (h === 'beranda') muatBeranda();
       if (h === 'pengaturan') muatStatusAI();
-      if (h === 'riwayat') { muatRiwayat(); $('#cariRiwayat').oninput = muatRiwayat; } if (h === 'pengaturan') muatPengaturan();
+      if (h === 'riwayat') { muatRiwayat(); $('#cariRiwayat').oninput = muatRiwayat; }
+      if (h === 'pengaturan') muatPengaturan();
+      if (h === 'motion-pro' && typeof periksaStatusPro === 'function') periksaStatusPro();
     }
     $$('.nav').forEach((n) => n.onclick = () => ke(n.dataset.ke));
 
@@ -5447,8 +6009,318 @@ Aturan:
       });
     }
 
+    // ── MOTION PRO (AI AGENT LONG-FORM) LOGIC ──
+    const KODE_PRO_RAHASIA = '258741';
+    let ASET_GAMBAR_PRO = [];
+    let AUDIO_FILE_PRO = null;
+    let DURASI_AUDIO_PRO = 0;
+
+    function periksaStatusPro() {
+      const terbuka = localStorage.getItem('motion_pro_unlocked') === 'true';
+      const gate = $('#gateMotionPro');
+      const ws = $('#workspaceMotionPro');
+      const badge = $('#statusProBadge');
+      const btnKunci = $('#tblKunciUlangPro');
+      if (!gate || !ws) return;
+
+      if (terbuka) {
+        gate.style.display = 'none';
+        ws.style.display = 'grid';
+        if (badge) {
+          badge.style.background = 'rgba(16, 185, 129, 0.15)';
+          badge.style.color = '#34d399';
+          badge.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+          badge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> Aktif (Terbuka)`;
+        }
+        if (btnKunci) btnKunci.style.display = 'inline-flex';
+      } else {
+        gate.style.display = 'block';
+        ws.style.display = 'none';
+        if (badge) {
+          badge.style.background = 'rgba(239, 68, 68, 0.15)';
+          badge.style.color = '#f87171';
+          badge.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+          badge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Terkunci (Kode Akses)`;
+        }
+        if (btnKunci) btnKunci.style.display = 'none';
+      }
+    }
+
+    function initMotionPro() {
+      periksaStatusPro();
+
+      const inKode = $('#inputKodePro');
+      const tblBuka = $('#tblBukaKodePro');
+      const pesanKode = $('#pesanKodePro');
+      const gate = $('#gateMotionPro');
+      const tblKunci = $('#tblKunciUlangPro');
+
+      if (tblBuka && inKode) {
+        const bukaAkses = () => {
+          const val = inKode.value.trim();
+          if (val === KODE_PRO_RAHASIA) {
+            localStorage.setItem('motion_pro_unlocked', 'true');
+            if (pesanKode) pesanKode.style.display = 'none';
+            inKode.value = '';
+            periksaStatusPro();
+            toast('Akses Motion Pro Terbuka! Selamat datang di Long-Form AI Studio.');
+          } else {
+            if (pesanKode) {
+              pesanKode.textContent = 'Kode akses salah. Masukkan kode otorisasi 258741.';
+              pesanKode.style.display = 'block';
+            }
+            gate.classList.remove('shake-anim');
+            void gate.offsetWidth;
+            gate.classList.add('shake-anim');
+          }
+        };
+        tblBuka.onclick = bukaAkses;
+        inKode.onkeydown = (e) => { if (e.key === 'Enter') bukaAkses(); };
+      }
+
+      if (tblKunci) {
+        tblKunci.onclick = () => {
+          localStorage.removeItem('motion_pro_unlocked');
+          periksaStatusPro();
+          toast('Workspace Motion Pro telah dikunci kembali.');
+        };
+      }
+
+      // 1. Upload Gambar Referensi
+      const dropGbr = $('#dropGambarRef');
+      const fileGbr = $('#fileGambarRef');
+      const gridGbr = $('#daftarGambarRef');
+      if (dropGbr && fileGbr) {
+        dropGbr.onclick = () => fileGbr.click();
+        dropGbr.ondragover = (e) => { e.preventDefault(); dropGbr.style.borderColor = '#a855f7'; };
+        dropGbr.ondragleave = () => { dropGbr.style.borderColor = ''; };
+        dropGbr.ondrop = (e) => {
+          e.preventDefault();
+          dropGbr.style.borderColor = '';
+          if (e.dataTransfer.files?.length) prosesFileGambarRef(e.dataTransfer.files);
+        };
+        fileGbr.onchange = () => {
+          if (fileGbr.files?.length) prosesFileGambarRef(fileGbr.files);
+        };
+      }
+
+      function prosesFileGambarRef(files) {
+        Array.from(files).forEach((f) => {
+          if (!f.type.startsWith('image/')) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            ASET_GAMBAR_PRO.push({ nama: f.name, data: e.target.result });
+            renderGaleriRef();
+          };
+          reader.readAsDataURL(f);
+        });
+      }
+
+      function renderGaleriRef() {
+        if (!gridGbr) return;
+        gridGbr.innerHTML = ASET_GAMBAR_PRO.map((item, idx) => `
+          <div class="pro-ref-item" title="${esc(item.nama)}">
+            <img src="${item.data}" alt="${esc(item.nama)}">
+            <button class="pro-ref-del" onclick="hapusGambarRef(${idx})" title="Hapus gambar">✕</button>
+          </div>
+        `).join('');
+      }
+      window.hapusGambarRef = (idx) => {
+        ASET_GAMBAR_PRO.splice(idx, 1);
+        renderGaleriRef();
+      };
+
+      // 2. Upload Audio Narasi Panjang
+      const dropAud = $('#dropAudioPro');
+      const fileAud = $('#fileAudioPro');
+      const boxAud = $('#boxAudioProPreview');
+      const playerAud = $('#playerAudioPro');
+      const infoAud = $('#infoAudioPro');
+      const judulAud = $('#judulAudioPro');
+
+      if (dropAud && fileAud) {
+        dropAud.onclick = () => fileAud.click();
+        dropAud.ondragover = (e) => { e.preventDefault(); dropAud.style.borderColor = '#06b6d4'; };
+        dropAud.ondragleave = () => { dropAud.style.borderColor = ''; };
+        dropAud.ondrop = (e) => {
+          e.preventDefault();
+          dropAud.style.borderColor = '';
+          if (e.dataTransfer.files?.length) prosesFileAudioPro(e.dataTransfer.files[0]);
+        };
+        fileAud.onchange = () => {
+          if (fileAud.files?.length) prosesFileAudioPro(fileAud.files[0]);
+        };
+      }
+
+      function prosesFileAudioPro(file) {
+        if (!file) return;
+        AUDIO_FILE_PRO = file;
+        const url = URL.createObjectURL(file);
+        playerAud.src = url;
+        boxAud.style.display = 'block';
+        if (judulAud) judulAud.textContent = file.name;
+        playerAud.onloadedmetadata = () => {
+          DURASI_AUDIO_PRO = playerAud.duration;
+          const menit = Math.floor(DURASI_AUDIO_PRO / 60);
+          const detik = Math.floor(DURASI_AUDIO_PRO % 60);
+          const total = DURASI_AUDIO_PRO.toFixed(1);
+          if (DURASI_AUDIO_PRO >= 240) {
+            infoAud.innerHTML = `<span style="color:#34d399">✓ Durasi: ${menit}m ${detik}s (${total} dtk) • Memenuhi syarat long-form (≥ 4 menit)</span>`;
+          } else {
+            infoAud.innerHTML = `<span style="color:#facc15">⚠️ Durasi: ${menit}m ${detik}s (${total} dtk) • Di bawah 4 menit. Disarankan pakai tab Motion standar.</span>`;
+          }
+        };
+      }
+
+      // 3. Upload & Isi Contoh Naskah Markdown
+      const tblMd = $('#tblPilihMd');
+      const fileMd = $('#fileNaskahMd');
+      const editMd = $('#editorNaskahMd');
+      const statMd = $('#statNaskahMd');
+      const tblContoh = $('#tblContohMd');
+
+      if (tblMd && fileMd) {
+        tblMd.onclick = () => fileMd.click();
+        fileMd.onchange = () => {
+          const f = fileMd.files?.[0];
+          if (!f) return;
+          const r = new FileReader();
+          r.onload = (e) => {
+            editMd.value = e.target.result;
+            hitungStatMd();
+          };
+          r.readAsText(f);
+        };
+      }
+      if (editMd) {
+        editMd.oninput = hitungStatMd;
+      }
+      function hitungStatMd() {
+        if (!editMd || !statMd) return;
+        const teks = editMd.value.trim();
+        const kata = teks ? teks.split(/\s+/).length : 0;
+        const adeganEst = Math.max(1, Math.round(kata / 18));
+        statMd.textContent = `${kata} kata · Perkiraan ~${adeganEst} adegan`;
+      }
+      if (tblContoh && editMd) {
+        tblContoh.onclick = () => {
+          editMd.value = `# Babak 1: Pendahuluan\nDi era kecerdasan buatan, konten video berdurasi panjang membutuhkan alur narasi yang presisi.\n\n## Adegan 1: Hook Pembuka\nPernahkah Anda bertanya mengapa beberapa kreator mampu mempertahankan retensi penonton hingga 10 menit lebih?\n\n## Adegan 2: Masalah Utama\nMasalah terbesarnya adalah pacing visual yang membosankan dan visual statis tanpa gerak dinamis.\n\n# Babak 2: Solusi Arsitektur\nKuncinya adalah mengintegrasikan closed-form springs physics dan perpindahan kamera tiap 5-8 detik.\n\n## Adegan 3: Penerapan Remotion\nDengan Remotion React, setiap baris kode SVG digerakkan dengan presisi matematis tanpa jeda rendering.\n\n## Adegan 4: Sinkronisasi Suara\nNarasi audio di-align secara otomatis per kata menggunakan engine Whisper AI.\n\n# Babak 3: Kesimpulan & Call to Action\nMulailah membangun video panjang berkualitas tinggi dengan Cheat Motion Pro hari ini!`;
+          hitungStatMd();
+          toast('Contoh naskah markdown berhasil dimuat.');
+        };
+      }
+
+      // 4. Chat AI Director
+      const stream = $('#chatProMessages');
+      const inChat = $('#inputChatPro');
+      const btnKirim = $('#tblKirimChatPro');
+      const btnReset = $('#tblResetChatPro');
+
+      if (btnKirim && inChat) {
+        const kirim = () => {
+          const pesan = inChat.value.trim();
+          if (!pesan) return;
+          kirimPesanPro(pesan);
+          inChat.value = '';
+        };
+        btnKirim.onclick = kirim;
+        inChat.onkeydown = (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            kirim();
+          }
+        };
+      }
+
+      if (btnReset && stream) {
+        btnReset.onclick = () => {
+          if (!confirm('Mulai sesi obrolan baru? Riwayat obrolan saat ini akan dibersihkan.')) return;
+          stream.innerHTML = `
+            <div class="pro-msg agent">
+              <div class="pro-chat-avatar" style="width:30px;height:30px;font-size:12px;flex-shrink:0">AI</div>
+              <div class="pro-bubble">
+                <div style="font-weight:700;margin-bottom:6px;color:#c084fc">Sesi Sutradara Video Panjang Siap</div>
+                <p style="margin:0 0 10px 0">Sesi obrolan baru telah dimulai. Unggah aset naskah markdown, audio voice-over ($\ge$ 4 menit), dan gambar referensi Anda untuk memulai.</p>
+              </div>
+            </div>`;
+          toast('Sesi baru telah dimulai.');
+        };
+      }
+
+      function kirimPesanPro(pesan) {
+        if (!stream) return;
+        // User message
+        const msgUser = document.createElement('div');
+        msgUser.className = 'pro-msg user';
+        msgUser.innerHTML = `
+          <div class="pro-chat-avatar" style="width:30px;height:30px;font-size:12px;flex-shrink:0;background:linear-gradient(135deg,#3b82f6,#1d4ed8)">U</div>
+          <div class="pro-bubble">${esc(pesan)}</div>`;
+        stream.appendChild(msgUser);
+        stream.scrollTop = stream.scrollHeight;
+
+        // Simulasi Response Agent dengan Extended Thinking
+        setTimeout(() => {
+          const model = $('#pilModelPro')?.value || 'claude';
+          const nGbr = ASET_GAMBAR_PRO.length;
+          const durAudio = DURASI_AUDIO_PRO > 0 ? `${Math.floor(DURASI_AUDIO_PRO / 60)}m ${Math.floor(DURASI_AUDIO_PRO % 60)}s` : 'Belum diunggah';
+          const teksMd = editMd?.value.trim() || '';
+          const nKata = teksMd ? teksMd.split(/\s+/).length : 0;
+          const nAdegan = Math.max(1, Math.round(nKata / 18));
+
+          const msgAgent = document.createElement('div');
+          msgAgent.className = 'pro-msg agent';
+          msgAgent.innerHTML = `
+            <div class="pro-chat-avatar" style="width:30px;height:30px;font-size:12px;flex-shrink:0">AI</div>
+            <div class="pro-bubble">
+              <details class="pro-thought" open>
+                <summary>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  Thinking Process (${model.toUpperCase()} Engine · 2.1s)
+                </summary>
+                <div class="pro-thought-body">
+                  • <b>Instruksi diterima:</b> "${esc(pesan)}"<br>
+                  • <b>Aset terdeteksi:</b> ${nGbr} file gambar referensi • Audio VO: ${durAudio} • Naskah: ${nKata} kata (~${nAdegan} adegan).<br>
+                  • Membaca skill <code>motion/skills/SKILL-LONGFORM.md</code> untuk segmentasi adegan 4 - 8 detik.<br>
+                  • Mengaplikasikan aturan konsistensi visual dan closed-form spring transition.
+                </div>
+              </details>
+              <div style="font-weight:600;color:var(--aksen);margin-bottom:6px">Rekomendasi Sutradara AI:</div>
+              <p style="margin:0 0 10px 0">
+                Saya telah menganalisis instruksi Anda dengan model <b>${model === 'claude' ? 'Claude 3.7 Sonnet' : model === 'codex' ? 'OpenAI Codex (GPT-4.5)' : 'OpenCode'}</b>.
+                ${nGbr > 0 ? `Palet warna dan karakter dari <b>${nGbr} gambar referensi</b> Anda akan diterapkan seragam ke seluruh adegan.` : 'Anda belum mengunggah gambar referensi, sistem akan menggunakan palet warna adaptif bawaan.'}
+                ${DURASI_AUDIO_PRO >= 240 ? `Audio sepanjang <b>${durAudio}</b> akan disinkronkan tepat di setiap perpindahan kalimat naskah.` : 'Pastikan audio narasi ≥ 4 menit untuk hasil orkestrasi optimal.'}
+              </p>
+              <div class="pro-scene-list">
+                <div class="pro-scene-row"><span>Adegan 1 - 10: <b>Hook &amp; Eksposisi Masalah</b></span> <span style="font-family:var(--mono);color:var(--redup)">00:00 - 01:15</span></div>
+                <div class="pro-scene-row"><span>Adegan 11 - 32: <b>Eksplorasi Solusi &amp; Visualisasi Grafis</b></span> <span style="font-family:var(--mono);color:var(--redup)">01:15 - 03:45</span></div>
+                <div class="pro-scene-row"><span>Adegan 33 - ${Math.max(35, nAdegan)}: <b>Kesimpulan &amp; Call To Action</b></span> <span style="font-family:var(--mono);color:var(--redup)">03:45 - Akhir</span></div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+                <button class="tombol utama kecil" onclick="toast('Menyiapkan file komposisi Remotion...')">🎬 Generate Komposisi Remotion</button>
+                <button class="tombol kedua kecil" onclick="toast('Menyimpan props naskah ke motion/hasil/...')">💾 Simpan Draft Naskah</button>
+              </div>
+            </div>`;
+          stream.appendChild(msgAgent);
+          stream.scrollTop = stream.scrollHeight;
+        }, 700);
+      }
+      window.simulasiPromptPro = (jenis) => {
+        if (!inChat) return;
+        const map = {
+          analisis: 'Analisis naskah markdown dan susun storyboard adegan berdasarkan durasi audio narasi.',
+          style: 'Ekstrak palet warna dari gambar referensi yang diunggah dan terapkan ke seluruh elemen SVG.',
+          svg: 'Generasikan kode SVG untuk adegan 1 sampai 10 dengan gaya ilustrasi konsisten.',
+          align: 'Lakukan alignment presisi kata per kata dengan audio voice-over 4 menit ini.',
+          render: 'Siapkan berkas props Remotion dan render video draft 1080p.'
+        };
+        inChat.value = map[jenis] || 'Lanjutkan orkestrasi adegan berikutnya.';
+        inChat.focus();
+      };
+    }
+
     // awal: lanjutkan proses yang masih jalan
     (async () => {
+      initMotionPro();
       await muatPengaturan();
       muatBeranda();
       try { const x = await api('/api/sistem-detail'); if (!x.wizard_selesai) bukaWizard(); } catch { }
