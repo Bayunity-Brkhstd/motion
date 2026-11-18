@@ -214,17 +214,36 @@ def _cari_cli_dir() -> Path:
     return baru
 
 CLI_DIR = _cari_cli_dir()  # CLI dipasang di sini (tanpa sudo)
-PAKET_CLI = {"codex": "@openai/codex", "opencode": "opencode-ai", "claude": "@anthropic-ai/claude-code"}
-PERINTAH_LOGIN = {"claude": "claude auth login", "codex": "codex login", "opencode": "opencode auth login"}
+PAKET_CLI = {"codex": "@openai/codex", "opencode": "opencode-ai", "claude": "@anthropic-ai/claude-code", "antigravity": "google-antigravity"}
+PERINTAH_LOGIN = {"claude": "claude auth login", "codex": "codex login", "opencode": "opencode auth login", "antigravity": "agy"}
 DOMAIN_BOLEH = ("aistudio.google.com", "share.gemini.google", "gemini.google.com", "github.com", "ollama.com", "nodejs.org", "platform.openai.com",
-                "openrouter.ai", "console.groq.com", "chatgpt.com", "claude.ai", "opencode.ai", "docs.astral.sh")
+                "openrouter.ai", "console.groq.com", "chatgpt.com", "claude.ai", "opencode.ai", "docs.astral.sh", "antigravity.google")
 
 
 def cari_cli(nama: str) -> str | None:
-    for c in (str(CLI_DIR / "bin" / nama), str(CLI_DIR / f"{nama}.cmd"), shutil.which(nama), str(Path.home() / ".local/bin" / nama), f"/opt/homebrew/bin/{nama}",
-              f"/usr/local/bin/{nama}", str(Path.home() / ".npm-global/bin" / nama)):
-        if c and Path(c).exists():
-            return c
+    daftar_nama = [nama]
+    if nama in ("antigravity", "agy"):
+        daftar_nama = ["agy", "antigravity"]
+    for n in daftar_nama:
+        for c in (
+            str(CLI_DIR / "bin" / n),
+            str(CLI_DIR / f"{n}.cmd"),
+            shutil.which(n),
+            str(Path.home() / ".local/bin" / n),
+            f"/opt/homebrew/bin/{n}",
+            f"/usr/local/bin/{n}",
+            str(Path.home() / ".npm-global/bin" / n),
+            str(Path.home() / ".gemini" / "bin" / f"{n}.exe"),
+            str(Path.home() / ".gemini" / "bin" / n),
+            str(Path.home() / ".gemini" / "antigravity" / "bin" / f"{n}.exe"),
+            str(Path.home() / ".gemini" / "antigravity" / "bin" / n),
+        ):
+            if c and Path(c).exists():
+                return c
+        if os.name == "nt":
+            res = shutil.which(f"{n}.cmd") or shutil.which(f"{n}.exe")
+            if res:
+                return res
     return None
 
 
@@ -264,7 +283,7 @@ def status_ai() -> dict:
     out["openai"] = {"ollama": bool(ollama), "hidup": hidup, "model": model}
     # CLI langganan: terpasang? sudah login?
     cli = {}
-    for nama in ("claude", "codex", "opencode"):
+    for nama in ("claude", "codex", "opencode", "antigravity"):
         jalur = cari_cli(nama)
         login = False
         if jalur:
@@ -275,6 +294,8 @@ def status_ai() -> dict:
                 elif nama == "codex":
                     r = subprocess.run([jalur, "login", "status"], capture_output=True, text=True, timeout=20)
                     login = r.returncode == 0 and "not logged" not in (r.stdout + r.stderr).lower()
+                elif nama == "antigravity":
+                    login = bool(jalur) and (Path.home() / ".gemini" / "antigravity").exists()
                 else:
                     r = subprocess.run([jalur, "auth", "list"], capture_output=True, text=True, timeout=20)
                     m = re.search(r"(\d+)\s+credentials?", re.sub(r"\x1b\[[0-9;]*m", "", r.stdout))
@@ -346,6 +367,12 @@ def siapkan(komponen: str) -> dict:
 def pasang_cli(nama: str) -> dict:
     if nama not in PAKET_CLI:
         raise ValueError("CLI tidak dikenal.")
+    if nama == "antigravity":
+        if cari_cli("agy"):
+            return {"ok": True}
+        uv = cari_uv()
+        KERJA.jalankan("pasang", [([uv, "pip", "install", PAKET_CLI[nama]], DATA)], DATA)
+        return {"ok": True}
     npm = shutil.which("npm") or "/usr/local/bin/npm"
     if not Path(npm).exists() and not shutil.which("npm"):
         raise RuntimeError("Node.js belum terpasang. Pasang dari nodejs.org dulu.")
@@ -359,7 +386,9 @@ def buka_login(nama: str) -> dict:
     jalur = cari_cli(nama)
     if not jalur:
         raise ValueError(f"{nama} belum terpasang.")
-    perintah = PERINTAH_LOGIN[nama].replace(nama, f'"{jalur}"', 1)
+    perintah = PERINTAH_LOGIN.get(nama, f"{nama}").replace(nama, f'"{jalur}"', 1)
+    if nama == "antigravity":
+        perintah = f'"{jalur}"'
     if nama == "codex":
         # `codex login` membuka browser untuk "Sign in with ChatGPT" dan menunggu izin di server lokalnya
         subprocess.Popen([jalur, "login"], stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,

@@ -4393,7 +4393,8 @@
             <div class="bidang"><label>Aplikasi langganan <em>harus sudah terpasang & login sekali di
                   Terminal</em></label>
               <div class="pil" id="pilLangganan"><button data-v="claude-code">Claude Code</button><button
-                  data-v="codex">Codex (ChatGPT)</button><button data-v="opencode">OpenCode</button></div>
+                  data-v="codex">Codex (ChatGPT)</button><button data-v="opencode">OpenCode</button><button
+                  data-v="antigravity">Antigravity CLI</button></div>
             </div>
             <div class="ringkas" id="statusCLI" style="margin:4px 0 12px"></div>
             <div class="bidang" data-cli="claude-code"><label>Model Claude Code <em>kosong = bawaan
@@ -4417,9 +4418,20 @@
                 placeholder="bawaan OpenCode">
               <datalist id="dlOpencode"></datalist>
             </div>
+            <div class="bidang" data-cli="antigravity"><label>Model Antigravity <em>kosong = bawaan akun Antigravity (Gemini / Claude / GPT)</em></label><input class="input" id="ANTIGRAVITY_MODEL" list="dlAntigravity"
+                placeholder="bawaan akun">
+              <datalist id="dlAntigravity">
+                <option value="gemini-3.8-flash-high">
+                <option value="gemini-3.8-flash-medium">
+                <option value="gemini-3.8-flash-low">
+                <option value="claude-sonnet-4-6">
+                <option value="claude-opus-4-6-thinking">
+                <option value="gpt-oss-120b-medium">
+              </datalist>
+            </div>
             <div class="catatan">Langganan chat <b>tidak</b> termasuk kunci API, tapi bisa dipakai lewat CLI resminya:
               <b>Claude Code</b> (Claude Pro/Max) · <b>Codex</b> (masuk dengan akun ChatGPT) · <b>OpenCode</b>
-              (sambungkan penyedia/langganan di OpenCode).
+              (sambungkan penyedia/langganan di OpenCode) · <b>Antigravity CLI</b> (login akun Google Antigravity).
               Pemakaian memotong kuota langgananmu. Studio menghapus kunci API dari lingkungan supaya yang terpakai
               benar-benar langganan.
             </div>
@@ -5338,7 +5350,7 @@ Aturan:
       openai: ['AI: Ollama/OpenAI', 'Memakai server AI pilihanmu.', 'AI membaca transkrip lalu memilih momen, memberi skor, judul, dan caption.'],
       langganan: ['AI: langganan', 'Memakai langganan lewat CLI resmi.', 'AI langgananmu (lewat CLI resmi) membaca transkrip lalu memilih momen, memberi skor, judul, dan caption.'],
     };
-    const NAMA_CLI = { 'claude-code': ['claude', 'Claude Code'], codex: ['codex', 'Codex'], opencode: ['opencode', 'OpenCode'] };
+    const NAMA_CLI = { 'claude-code': ['claude', 'Claude Code'], codex: ['codex', 'Codex'], opencode: ['opencode', 'OpenCode'], antigravity: ['antigravity', 'Antigravity CLI'] };
     let SISTEM = {};
     function siapAI(v) {
       if (v === 'gemini') return !!PENG.GEMINI_API_KEY;
@@ -5352,7 +5364,7 @@ Aturan:
     }
     function tampilChip() { const v = PENG.AI || 'lokal'; const [nama, ket] = INFO_AI[v]; $('#namaAI').textContent = v === 'langganan' ? 'AI: ' + NAMA_CLI[PENG.LANGGANAN || 'claude-code'][1] : nama; $('#ketAI').textContent = siapAI(v) ? ket : 'Kunci belum diisi.'; $('#titikAI').classList.toggle('mati', !siapAI(v)); $('#ketSuara').textContent = PENG.SUARA === 'voxcpm' ? 'VoxCPM2 · ' + ({ bawaan: 'netral', desain: 'desain suara', clone: 'clone suaramu' }[PENG.VOXCPM_MODE] || 'netral') : (PENG.SUARA_MAC || 'Damayanti') + ' (bawaan sistem)'; }
     // ── Dropdown model: <select> dari daftar saran + "Lainnya…" (kotak teks asli tetap menyimpan nilainya) ──
-    const BAWAAN_KOSONG = { CLAUDE_CODE_MODEL: 'Bawaan akunmu', CODEX_MODEL: 'Bawaan Codex-mu', OPENCODE_MODEL: 'Bawaan OpenCode' };
+    const BAWAAN_KOSONG = { CLAUDE_CODE_MODEL: 'Bawaan akunmu', CODEX_MODEL: 'Bawaan Codex-mu', OPENCODE_MODEL: 'Bawaan OpenCode', ANTIGRAVITY_MODEL: 'Bawaan akunmu' };
     function pasangDropdown(inp) {
       const dl = document.getElementById(inp.getAttribute('list') || inp.dataset.list);
       if (!dl) return;
@@ -5383,7 +5395,7 @@ Aturan:
       try { if (!localStorage.getItem('tema') && PENG.TEMA && window.pasangTema) pasangTema(PENG.TEMA, false); } catch (e) { }
       tampilSuara(PENG.SUARA || 'bawaan', PENG.VOXCPM_MODE || 'bawaan');
       pilihLangganan(PENG.LANGGANAN || 'claude-code');
-      for (const k of ['GEMINI_MODEL', 'OPENAI_BASE_URL', 'OPENAI_MODEL', 'SUARA_MAC', 'OPENCODE_MODEL', 'CLAUDE_CODE_MODEL', 'CODEX_MODEL', 'VOXCPM_DESAIN']) $('#' + k).value = PENG[k] || '';
+      for (const k of ['GEMINI_MODEL', 'OPENAI_BASE_URL', 'OPENAI_MODEL', 'SUARA_MAC', 'OPENCODE_MODEL', 'CLAUDE_CODE_MODEL', 'CODEX_MODEL', 'ANTIGRAVITY_MODEL', 'VOXCPM_DESAIN']) if ($('#' + k)) $('#' + k).value = PENG[k] || '';
       $$('[data-list]').forEach(sinkronDropdown);
       for (const k of ['GEMINI_API_KEY', 'OPENAI_API_KEY']) { $('#' + k).value = ''; $('#' + k).placeholder = PENG[k] ? `tersimpan (${PENG[k]}) — isi untuk mengganti` : $('#' + k).placeholder; }
 
@@ -5453,6 +5465,9 @@ Aturan:
       if (v === 'opencode' && !$('#dlOpencode').children.length) api('/api/model-opencode').then((j) => {
         $('#dlOpencode').innerHTML = j.model.map((m) => `<option value="${esc(m)}">`).join(''); pasangDropdown($('#OPENCODE_MODEL'));
       }).catch(() => { });
+      if (v === 'antigravity') {
+        pasangDropdown($('#ANTIGRAVITY_MODEL'));
+      }
       const cli = SISTEM.cli || {};
       $('#statusCLI').innerHTML = Object.entries(NAMA_CLI).map(([, [bin, label]]) => `<span class="stat">${cli[bin] ? '✅' : '⚪'} <b>${label}</b> ${cli[bin] ? 'terpasang' : 'belum terpasang'}</span>`).join('');
     }
@@ -5465,12 +5480,12 @@ Aturan:
     function gambarPanduan() {
       const st = STATUS_AI || { cli: {}, openai: {}, gemini: {}, claude: {} };
       const pilihCli = $('#pilLangganan')?.dataset.v || 'claude-code';
-      const bin = { 'claude-code': 'claude', codex: 'codex', opencode: 'opencode' }[pilihCli];
-      const label = { 'claude-code': 'Claude Code', codex: 'Codex', opencode: 'OpenCode' }[pilihCli];
+      const bin = { 'claude-code': 'claude', codex: 'codex', opencode: 'opencode', antigravity: 'antigravity' }[pilihCli];
+      const label = { 'claude-code': 'Claude Code', codex: 'Codex', opencode: 'OpenCode', antigravity: 'Antigravity CLI' }[pilihCli];
       const c = st.cli?.[bin] || {};
-      const PAKET = { claude: 'npm i -g @anthropic-ai/claude-code', codex: 'npm i -g @openai/codex', opencode: 'npm i -g opencode-ai' };
-      const LOGIN = { claude: 'claude auth login', codex: 'codex login', opencode: 'opencode auth login' };
-      const AKUN = { claude: 'akun Claude (Pro/Max)', codex: 'akun ChatGPT (Plus/Pro)', opencode: 'penyedia pilihanmu (Anthropic, OpenAI, GitHub Copilot, dll.)' };
+      const PAKET = { claude: 'npm i -g @anthropic-ai/claude-code', codex: 'npm i -g @openai/codex', opencode: 'npm i -g opencode-ai', antigravity: 'pip install google-antigravity' };
+      const LOGIN = { claude: 'claude auth login', codex: 'codex login', opencode: 'opencode auth login', antigravity: 'agy' };
+      const AKUN = { claude: 'akun Claude (Pro/Max)', codex: 'akun ChatGPT (Plus/Pro)', opencode: 'penyedia pilihanmu (Anthropic, OpenAI, GitHub Copilot, dll.)', antigravity: 'akun Google / Antigravity' };
       const data = {
         lokal: [langkah(1, 'Tidak perlu apa-apa', 'Mode lokal memakai rumus heatmap YouTube, energi suara, dan kata hook. Gratis, tanpa internet untuk AI.', true),
         langkah(2, 'Simpan & uji', 'Pilih Lokal lalu tekan Simpan pengaturan.', PENG.AI === 'lokal')],
@@ -5484,13 +5499,14 @@ Aturan:
         langkah(3, 'Unduh satu model', st.openai.model?.length ? 'Model tersedia: ' + st.openai.model.slice(0, 4).join(', ') : 'Saran: <code>gemma3:4b</code> (±3,3 GB, bagus untuk bahasa Indonesia, cukup untuk RAM 8 GB+).',
           !!st.openai.model?.length, st.openai.hidup && !st.openai.model?.length ? '<button class="tombol kedua kecil" data-tarik="gemma3:4b">Unduh gemma3:4b</button>' : ''),
         langkah(4, 'Simpan & uji koneksi', 'Catatan: model lokal kecil (mis. gemma3:4b) cukup untuk memilih momen klip, tapi naskah lebih sederhana dan gambar objek Motion biasanya dilewati (pakai emoji). Mau pakai OpenAI/OpenRouter/Groq? Isi alamat server & API key mereka di bawah.', PENG.AI === 'openai')],
-        langganan: [langkah(1, `Pasang ${label}`, c.terpasang ? `${label} sudah terpasang.` : (st.node ? `Studio memasangnya otomatis tanpa sudo (setara <code>${PAKET[bin]}</code>).` : 'Butuh Node.js dulu (nodejs.org).'),
-          !!c.terpasang, c.terpasang ? '' : (st.node ? `<button class="tombol kedua kecil" data-pasang="${bin}">Pasang otomatis</button>` : '<button class="tombol kedua kecil" data-url="https://nodejs.org">Unduh Node.js ↗</button>')),
-        langkah(2, `Login dengan ${AKUN[bin]}`, c.lewat_gemini ? 'Memakai kunci Gemini yang sudah kamu simpan — pilih model <code>google/gemini-3.5-flash-lite</code> (bertier gratis) di bawah. Penyedia lain: <code>opencode auth login</code>.' : c.login ? 'Sudah login.' : bin === 'codex' ? 'Browser akan terbuka: pilih <b>Sign in with ChatGPT</b>, izinkan, lalu kembali ke sini. Status berubah otomatis.'
+        langganan: [langkah(1, `Pasang ${label}`, c.terpasang ? `${label} sudah terpasang (${bin === 'antigravity' ? 'agy.exe siap' : 'siap'}).` : (bin === 'antigravity' ? 'Antigravity CLI terpasang di ~/.gemini/bin/agy.exe atau pasang via Google Antigravity.' : st.node ? `Studio memasangnya otomatis tanpa sudo (setara <code>${PAKET[bin]}</code>).` : 'Butuh Node.js dulu (nodejs.org).'),
+          !!c.terpasang, c.terpasang ? '' : (bin === 'antigravity' ? '<button class="tombol kedua kecil" data-url="https://antigravity.google">Unduh Antigravity ↗</button>' : st.node ? `<button class="tombol kedua kecil" data-pasang="${bin}">Pasang otomatis</button>` : '<button class="tombol kedua kecil" data-url="https://nodejs.org">Unduh Node.js ↗</button>')),
+        langkah(2, `Login dengan ${AKUN[bin]}`, c.lewat_gemini ? 'Memakai kunci Gemini yang sudah kamu simpan — pilih model <code>google/gemini-3.5-flash-lite</code> (bertier gratis) di bawah. Penyedia lain: <code>opencode auth login</code>.' : c.login ? 'Sudah login / terhubung.' : bin === 'codex' ? 'Browser akan terbuka: pilih <b>Sign in with ChatGPT</b>, izinkan, lalu kembali ke sini. Status berubah otomatis.'
+          : bin === 'antigravity' ? 'Buka Terminal untuk menjalankan <code>agy</code> dan verifikasi akun Google / Antigravity-mu.'
           : `Terminal akan terbuka berisi <code>${LOGIN[bin]}</code> (browser ikut terbuka untuk izin). Ikuti petunjuknya, lalu kembali ke sini.`, !!c.login,
           c.terpasang && !c.login ? `<button class="tombol kedua kecil" data-login="${bin}">${bin === 'codex' ? 'Login lewat browser' : 'Buka Terminal untuk login'}</button>` : ''),
-        langkah(3, 'Pilih model (opsional)', 'Kosong = model bawaan akunmu.', !!c.login),
-        langkah(4, 'Simpan & uji koneksi', 'Pemakaian memotong kuota langgananmu, bukan tagihan API.', c.login && PENG.AI === 'langganan')],
+        langkah(3, 'Pilih model (opsional)', bin === 'antigravity' ? 'Pilihan: Gemini 3.8 Flash, Claude Sonnet 4.6, GPT-OSS 120B. Kosong = bawaan akunmu.' : 'Kosong = model bawaan akunmu.', !!c.login),
+        langkah(4, 'Simpan & uji koneksi', 'Pemakaian memotong kuota langganan / akun CLI-mu, bukan tagihan API terpisah.', c.login && PENG.AI === 'langganan')],
       };
       for (const [v, daftar] of Object.entries(data)) {
         const el = $('#panduan-' + v); if (!el) continue;
@@ -5546,7 +5562,7 @@ Aturan:
     $('#pilPenyedia').onclick = (e) => { const b = e.target.closest('.pny'); if (b) { pilihPenyedia(b.dataset.v); gambarPanduan(); } };
     $('#tblSimpan').onclick = async () => {
       const d = { AI: $('#pilPenyedia').dataset.v, LANGGANAN: $('#pilLangganan').dataset.v };
-      for (const k of ['GEMINI_MODEL', 'OPENAI_BASE_URL', 'OPENAI_MODEL', 'SUARA_MAC', 'OPENCODE_MODEL', 'CLAUDE_CODE_MODEL', 'CODEX_MODEL']) d[k] = $('#' + k).value;
+      for (const k of ['GEMINI_MODEL', 'OPENAI_BASE_URL', 'OPENAI_MODEL', 'SUARA_MAC', 'OPENCODE_MODEL', 'CLAUDE_CODE_MODEL', 'CODEX_MODEL', 'ANTIGRAVITY_MODEL']) if ($('#' + k)) d[k] = $('#' + k).value;
       for (const k of ['GEMINI_API_KEY', 'OPENAI_API_KEY', 'GEMINI_API_KEYS']) if ($('#' + k) && $('#' + k).value) d[k] = $('#' + k).value;
       await api('/api/pengaturan', d); await muatPengaturan(); muatStatusAI(); toast('Pengaturan tersimpan ✓ — tekan Uji koneksi untuk memastikan');
     };

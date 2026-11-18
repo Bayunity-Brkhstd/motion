@@ -77,19 +77,20 @@ export async function tanyaAI(penyedia, prompt, env, tugas = 'menulis naskah') {
     }
     berhenti('Semua API Key Gemini sedang sibuk atau kuota habis (HTTP 429). Coba lagi nanti.\n' + pesan);
   }
-  if (penyedia === 'claude-code' || penyedia === 'codex' || penyedia === 'opencode') {
-    // Pakai langganan lewat CLI resmi yang sudah login (Claude Pro/Max → Claude Code, ChatGPT Plus/Pro → Codex)
-    const nama = {'claude-code': 'claude', codex: 'codex', opencode: 'opencode'}[penyedia];
-    const label = {claude: 'Claude Code', codex: 'Codex', opencode: 'OpenCode'}[nama];
+  if (penyedia === 'claude-code' || penyedia === 'codex' || penyedia === 'opencode' || penyedia === 'antigravity') {
+    // Pakai langganan lewat CLI resmi yang sudah login (Claude Pro/Max → Claude Code, ChatGPT Plus/Pro → Codex, Antigravity → agy)
+    const nama = {'claude-code': 'claude', codex: 'codex', opencode: 'opencode', antigravity: 'agy'}[penyedia];
+    const label = {claude: 'Claude Code', codex: 'Codex', opencode: 'OpenCode', agy: 'Antigravity CLI'}[nama];
     const WIN = process.platform === 'win32';
     const calon = [
       join(homedir(), '.cheat-clip-and-motion', 'cli', 'bin', nama), join(homedir(), '.cheat-clip-and-motion', 'cli', nama + '.cmd'),
       join(homedir(), '.studio-maliki', 'cli', 'bin', nama), join(homedir(), '.studio-maliki', 'cli', nama + '.cmd'),
+      join(homedir(), '.gemini', 'bin', WIN ? 'agy.exe' : 'agy'),
       join(homedir(), '.local', 'bin', nama), `/opt/homebrew/bin/${nama}`, `/usr/local/bin/${nama}`,
       join(homedir(), '.npm-global', 'bin', nama)];
     const cari = spawnSync(WIN ? 'where' : 'which', [nama], {encoding: 'utf8'});
     const cli = (cari.status === 0 && cari.stdout.split(/\r?\n/)[0].trim()) || calon.find((c) => existsSync(c));
-    if (!cli) berhenti(`CLI '${nama}' belum terpasang. Pasang lalu login sekali di Terminal, kemudian coba lagi.`);
+    if (!cli) berhenti(`CLI '${label}' belum terpasang. Pasang lalu login sekali di Terminal, kemudian coba lagi.`);
     const tmp = mkdtempSync(join(tmpdir(), 'studio-'));
     const envBersih = {...process.env};
     for (const k of ['ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN', 'OPENAI_API_KEY', 'CODEX_API_KEY']) delete envBersih[k];
@@ -101,9 +102,11 @@ export async function tanyaAI(penyedia, prompt, env, tugas = 'menulis naskah') {
         ...(env.CLAUDE_CODE_MODEL ? ['--model', env.CLAUDE_CODE_MODEL] : [])]
       : nama === 'codex'
         ? ['exec', '--skip-git-repo-check', '-o', keluar, ...(env.CODEX_MODEL ? ['--model', env.CODEX_MODEL] : []), '-']
-        : ['run', '--agent', 'plan', ...(env.OPENCODE_MODEL ? ['--model', env.OPENCODE_MODEL] : [])];
+        : nama === 'agy'
+          ? ['--output-format', 'text', ...(env.ANTIGRAVITY_MODEL ? ['--model', env.ANTIGRAVITY_MODEL] : []), '-p', prompt]
+          : ['run', '--agent', 'plan', ...(env.OPENCODE_MODEL ? ['--model', env.OPENCODE_MODEL] : [])];
     console.log(`• Meminta ${label} (langganan) ${tugas}…`);
-    const r = spawnSync(cli, args, {input: prompt, encoding: 'utf8', cwd: tmp, env: envBersih, timeout: 600_000,
+    const r = spawnSync(cli, args, {input: nama === 'agy' ? undefined : prompt, encoding: 'utf8', cwd: tmp, env: envBersih, timeout: 600_000,
       shell: WIN && /\.cmd$/i.test(cli)});
     const teks = existsSync(keluar) ? readFileSync(keluar, 'utf8') : r.stdout;
     rmSync(tmp, {recursive: true, force: true});
@@ -120,5 +123,5 @@ export async function tanyaAI(penyedia, prompt, env, tugas = 'menulis naskah') {
     if (!res.ok) berhenti(`AI ${url} membalas ${res.status}: ${await res.text()}`);
     return (await res.json()).choices[0].message.content;
   }
-  berhenti(`Penyedia AI tidak dikenal: ${penyedia} (pilih gemini, openai, claude-code, codex, opencode)`);
+  berhenti(`Penyedia AI tidak dikenal: ${penyedia} (pilih gemini, openai, claude-code, codex, opencode, antigravity)`);
 }

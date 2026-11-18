@@ -264,7 +264,7 @@ def tanya_ai(penyedia: str, prompt: str) -> str:
                             log(f"Gemini Key #{nomor} {model} tidak menjawab ({type(e).__name__}), mencoba model lain…")
                             break
         sys.exit(f"Semua model / API Key Gemini sedang sibuk atau kuota habis. Coba lagi nanti, atau pakai AI Lokal.\n{pesan}")
-    if penyedia in ("claude-code", "codex", "opencode"):
+    if penyedia in ("claude-code", "codex", "opencode", "antigravity"):
         return tanya_langganan(penyedia, prompt)
     if penyedia == "openai":
         import urllib.request
@@ -275,7 +275,7 @@ def tanya_ai(penyedia: str, prompt: str) -> str:
             "Content-Type": "application/json", "Authorization": f"Bearer {env.get('OPENAI_API_KEY', 'ollama')}"})
         with urllib.request.urlopen(req, timeout=600) as resp:
             return json.loads(resp.read())["choices"][0]["message"]["content"]
-    sys.exit(f"Penyedia AI tidak dikenal: {penyedia} (pilih lokal, gemini, openai, claude-code, codex, opencode)")
+    sys.exit(f"Penyedia AI tidak dikenal: {penyedia} (pilih lokal, gemini, openai, claude-code, codex, opencode, antigravity)")
 
 
 def cari_cli(nama: str) -> str | None:
@@ -284,13 +284,25 @@ def cari_cli(nama: str) -> str | None:
     cli_baru = Path.home() / ".cheat-clip-and-motion" / "cli"
     cli_lama = Path.home() / ".studio-maliki" / "cli"
     studio_cli = cli_baru if cli_baru.exists() else cli_lama
-    for c in (shutil.which(nama), str(studio_cli / "bin" / nama), str(studio_cli / f"{nama}.cmd"),
-              str(Path.home() / ".local/bin" / nama), f"/opt/homebrew/bin/{nama}",
-              f"/usr/local/bin/{nama}", str(Path.home() / ".npm-global/bin" / nama)):
-        if c and Path(c).exists():
-            return c
-    if os.name == "nt":
-        return shutil.which(nama + ".cmd") or shutil.which(nama + ".exe")
+    daftar = [nama]
+    if nama in ("antigravity", "agy"):
+        daftar = ["agy", "antigravity"]
+    for n in daftar:
+        for c in (
+            shutil.which(n), str(studio_cli / "bin" / n), str(studio_cli / f"{n}.cmd"),
+            str(Path.home() / ".local/bin" / n), f"/opt/homebrew/bin/{n}",
+            f"/usr/local/bin/{n}", str(Path.home() / ".npm-global/bin" / n),
+            str(Path.home() / ".gemini" / "bin" / f"{n}.exe"),
+            str(Path.home() / ".gemini" / "bin" / n),
+            str(Path.home() / ".gemini" / "antigravity" / "bin" / f"{n}.exe"),
+            str(Path.home() / ".gemini" / "antigravity" / "bin" / n),
+        ):
+            if c and Path(c).exists():
+                return c
+        if os.name == "nt":
+            res = shutil.which(f"{n}.cmd") or shutil.which(f"{n}.exe")
+            if res:
+                return res
     return None
 
 
@@ -300,15 +312,16 @@ def tanya_langganan(penyedia: str, prompt: str) -> str:
     claude-code: Claude Code (Claude Pro/Max)  → `claude -p` tanpa alat, tanpa menyimpan sesi
     codex:       Codex CLI (ChatGPT Plus/Pro)  → `codex exec -` sandbox read-only bawaan
     opencode:    OpenCode (model/langganan apa pun yang sudah login di OpenCode) → `opencode run --agent plan`
+    antigravity: Antigravity CLI (Google Antigravity) → `agy -p`
     """
     import os
     import tempfile
-    nama = {"claude-code": "claude", "codex": "codex", "opencode": "opencode"}[penyedia]
-    label = {"claude": "Claude Code", "codex": "Codex", "opencode": "OpenCode"}[nama]
+    nama = {"claude-code": "claude", "codex": "codex", "opencode": "opencode", "antigravity": "agy"}[penyedia]
+    label = {"claude": "Claude Code", "codex": "Codex", "opencode": "OpenCode", "agy": "Antigravity CLI"}[nama]
     cli = cari_cli(nama)
     if not cli:
-        sys.exit(f"CLI '{nama}' belum terpasang. Pasang lalu login sekali di Terminal "
-                 f"({ {'claude': 'claude', 'codex': 'codex login', 'opencode': 'opencode auth login'}[nama] }), "
+        sys.exit(f"CLI '{label}' belum terpasang. Pasang lalu login sekali di Terminal "
+                 f"({ {'claude': 'claude auth login', 'codex': 'codex login', 'opencode': 'opencode auth login', 'agy': 'agy'}[nama] }), "
                  "kemudian coba lagi.")
     env = os.environ.copy()
     # kunci API di lingkungan akan membuat CLI menagih API, bukan langganan → buang
@@ -318,6 +331,7 @@ def tanya_langganan(penyedia: str, prompt: str) -> str:
         # OpenCode membaca kunci Google dari nama variabel ini; pakai kunci Gemini yang sudah disimpan pengguna
         env["GOOGLE_GENERATIVE_AI_API_KEY"] = env["GEMINI_API_KEY"]
     with tempfile.TemporaryDirectory() as tmp:
+        masukan = prompt
         if nama == "claude":
             cmd = [cli, "-p", "--tools", "", "--output-format", "text", "--no-session-persistence"]
             if os.environ.get("CLAUDE_CODE_MODEL"):
@@ -327,6 +341,13 @@ def tanya_langganan(penyedia: str, prompt: str) -> str:
             if os.environ.get("CODEX_MODEL"):
                 cmd += ["--model", os.environ["CODEX_MODEL"]]
             cmd.append("-")
+        elif nama == "agy":
+            cmd = [cli, "--output-format", "text"]
+            model = os.environ.get("ANTIGRAVITY_MODEL") or os.environ.get("AGY_MODEL")
+            if model:
+                cmd += ["--model", model]
+            cmd += ["-p", prompt]
+            masukan = None
         else:
             # agent "plan" = hanya membaca/menjawab, tidak mengubah berkas
             cmd = [cli, "run", "--agent", "plan"]
@@ -334,7 +355,7 @@ def tanya_langganan(penyedia: str, prompt: str) -> str:
                 cmd += ["--model", os.environ["OPENCODE_MODEL"]]
         log(f"Meminta {label} (langganan) memilih/menulis…")
         try:
-            r = subprocess.run(cmd, input=prompt, capture_output=True, text=True, encoding="utf-8",
+            r = subprocess.run(cmd, input=masukan, capture_output=True, text=True, encoding="utf-8",
                                cwd=tmp, env=env, timeout=600)
         except subprocess.TimeoutExpired:
             sys.exit(f"{nama} tidak menjawab dalam 10 menit.")
