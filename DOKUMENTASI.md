@@ -298,19 +298,25 @@ Jika opsi ilustrasi AI diaktifkan, engine `gambar.mjs` akan memerintahkan AI men
 
 ### Fitur Khusus: Motion Pro (Long-form AI Studio ≥ 4 Menit)
 
-Workspace khusus di bawah tab Motion untuk produksi video berdurasi panjang ($\ge$ 4 menit) menggunakan antarmuka interaktif AI Agent (mirip Antigravity App / Claude Desktop / Gemini Desktop):
-- **Otorisasi Keamanan (Passcode):** Secara default terkunci. Masukkan kode akses resmi: `258741`.
-- **Target Video:** Narasi edukasi, video essay, dokumenter, atau presentasi 4 - 15+ menit.
-- **Dukungan CLI Langganan:** Terhubung langsung dengan Claude Code CLI (`claude`), OpenAI Codex CLI (`codex`), atau OpenCode.
+Workspace khusus yang memindahkan antarmuka interaktif aplikasi **AI Desktop** (seperti Antigravity App / Claude Desktop / Gemini Desktop) langsung ke dalam web studio aplikasi, ditenagai oleh **CLI AI Agent sebagai mesin utamanya**:
+- **Status Akses:** Saat ini masih dalam **mode pengembangan (belum dibuka untuk umum)**.
+- **Otorisasi Keamanan (Passcode):** Secara default terkunci. Memerlukan kode otorisasi keamanan 6-digit: `258741`.
+- **Persyaratan Langganan:** Membutuhkan akun berlangganan aktif seperti **Gemini Pro / Advanced (Antigravity), Claude Pro / Max, atau ChatGPT Plus / Pro**.
+- **Mesin Utama CLI AI Agent:** Berkomunikasi langsung via CLI resmi di latar belakang:
+  - **Antigravity CLI (`agy`)**
+  - **Claude Code CLI (`claude`)**
+  - **OpenAI Codex CLI (`codex`)**
+  - **OpenCode (`opencode`)**
+- **Target Video:** Narasi edukasi, video essay, dokumenter, atau presentasi berdurasi 4 - 15+ menit.
 - **Panel Aset Multi-Format (Kolom Kiri):**
-  1. *Unggah Gambar Referensi Style:* Ekstraksi palet warna dan konsistensi aset visual.
+  1. *Unggah Gambar Referensi Style:* Ekstraksi palet warna dan menjaga konsistensi aset visual antar adegan.
   2. *Unggah Audio Voice-Over:* Deteksi otomatis durasi ($\ge$ 4 menit) dan visualizer audio player.
   3. *Unggah Naskah Markdown:* Parsing babak/adegan dengan penghitung kata otomatis.
 - **Folder Skills & Konfigurasi:** Disimpan di `motion/skills/`:
   - `motion/skills/SKILL-LONGFORM.md`: Panduan eksekusi pipeline long-form.
   - `motion/skills/prompt-agent.md`: Sistem prompt Motion Director AI.
   - `motion/skills/alur-produksi.json`: Schema tahapan produksi bertingkat.
-- **AI Chat Studio (Kolom Kanan):** Tampilan interaktif AI Agent dengan *Extended Thinking (Reasoning)*, chip prompt cepat, dan preview komposisi adegan.
+- **AI Chat Studio (Kolom Kanan):** Tampilan interaktif AI Agent bergaya Desktop dengan *Extended Thinking (Reasoning)*, chip prompt cepat, dan preview komposisi adegan.
 
 ---
 
