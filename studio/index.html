@@ -1412,6 +1412,89 @@
       box-shadow: 0 6px 24px rgba(239, 68, 68, 0.5) !important;
     }
 
+    /* Motion Pro Section di Beranda */
+    .b-motion-pro {
+      border: 1px solid rgba(168, 85, 247, 0.42) !important;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.12) 0%, rgba(99, 102, 241, 0.10) 45%, rgba(15, 23, 42, 0.7) 100%) !important;
+      box-shadow: 0 8px 30px -4px rgba(168, 85, 247, 0.22) !important;
+    }
+
+    .b-motion-pro:hover {
+      border-color: rgba(192, 132, 252, 0.8) !important;
+      box-shadow: 0 14px 40px -4px rgba(168, 85, 247, 0.4) !important;
+    }
+
+    .b-motion-pro::before {
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.28) 0%, rgba(99, 102, 241, 0.15) 50%, transparent 70%) !important;
+    }
+
+    .tag-pro {
+      background: rgba(168, 85, 247, 0.18) !important;
+      color: #c084fc !important;
+      border-color: rgba(168, 85, 247, 0.4) !important;
+    }
+
+    .tag-pro svg {
+      color: #c084fc !important;
+    }
+
+    .badge-kunci-pro {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      margin-left: 6px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      font-family: var(--mono);
+    }
+
+    .badge-kunci-pro.terbuka {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .pro-beranda-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.28);
+      color: #e9d5ff;
+    }
+
+    .pro-beranda-notice strong {
+      color: #fff;
+    }
+
+    .pro-beranda-notice svg {
+      color: #c084fc;
+      margin-top: 2px;
+    }
+
+    .tombol-pro-beranda {
+      background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%) !important;
+      box-shadow: 0 4px 18px rgba(168, 85, 247, 0.35) !important;
+      border: none !important;
+      color: #fff !important;
+    }
+
+    .tombol-pro-beranda:hover {
+      box-shadow: 0 6px 24px rgba(168, 85, 247, 0.55) !important;
+    }
+
     .b-status {
       grid-column: span 2
     }
@@ -2636,6 +2719,35 @@
       border-color: #fecdd3 !important;
     }
 
+    :root[data-tema="terang"] .b-motion-pro {
+      background: linear-gradient(135deg, #faf5ff 0%, #eef2ff 100%) !important;
+      border-color: #d8b4fe !important;
+    }
+
+    :root[data-tema="terang"] .tag-pro {
+      background: #f3e8ff !important;
+      color: #7e22ce !important;
+      border-color: #d8b4fe !important;
+    }
+
+    :root[data-tema="terang"] .tag-pro svg {
+      color: #7e22ce !important;
+    }
+
+    :root[data-tema="terang"] .pro-beranda-notice {
+      background: #f5f3ff !important;
+      border-color: #ddd6fe !important;
+      color: #581c87 !important;
+    }
+
+    :root[data-tema="terang"] .pro-beranda-notice strong {
+      color: #3b0764 !important;
+    }
+
+    :root[data-tema="terang"] .pro-beranda-notice svg {
+      color: #7e22ce !important;
+    }
+
     :root[data-tema="terang"] .lgk.beres .no {
       color: #fff
     }
@@ -3477,6 +3589,42 @@
             </div>
             <p>Naskah per adegan, suara narator, 24 gaya template, render MP4 1080×1920.</p><span class="panah">buka
               motion →</span>
+          </div>
+
+          <!-- Section Motion Pro (AI Agent Workspace - Durasi >= 4 Menit) -->
+          <div class="kartu b-canvas b-motion-pro" data-buka="motion-pro" title="Buka Workspace Motion Pro">
+            <div class="canvas-info">
+              <div class="canvas-tag tag-pro">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                  <line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+                <span>Motion Pro · Long-Form (≥ 4 Menit)</span>
+                <span class="badge-kunci-pro" id="badgeKunciBeranda">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Kode Akses Khusus
+                </span>
+              </div>
+              <h3>Workspace Sutradara AI Motion Pro</h3>
+              <p>Ruang kerja interaktif gaya AI Chat (Claude Desktop / Antigravity) untuk produksi video berdurasi panjang (4 hingga 15+ menit) berbasis naskah markdown, narasi audio kustom, dan konsistensi visual melalui unggah gambar referensi.</p>
+              <div class="pro-beranda-notice">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span><strong>Memerlukan Kode Akses Khusus:</strong> Fitur Motion Pro diproteksi oleh kode otorisasi 6-digit. Dikhususkan bagi pengguna model reasoning CLI langganan (Claude Code, OpenAI Codex, OpenCode, atau Antigravity CLI).</span>
+              </div>
+            </div>
+            <div class="canvas-aksi">
+              <button class="tombol utama tombol-canvas tombol-pro-beranda" onclick="event.stopPropagation(); ke('motion-pro')">
+                <span id="labelTblProBeranda">Buka Motion Pro (Terkunci)</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
           </div>
 
           <!-- Section Generator Naskah via Canvas Gemini -->
@@ -6037,6 +6185,22 @@ Aturan:
       const ws = $('#workspaceMotionPro');
       const badge = $('#statusProBadge');
       const btnKunci = $('#tblKunciUlangPro');
+      const badgeBeranda = $('#badgeKunciBeranda');
+      const labelTblBeranda = $('#labelTblProBeranda');
+
+      if (badgeBeranda) {
+        if (terbuka) {
+          badgeBeranda.className = 'badge-kunci-pro terbuka';
+          badgeBeranda.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> Akses Terbuka`;
+        } else {
+          badgeBeranda.className = 'badge-kunci-pro';
+          badgeBeranda.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Kode Akses Khusus`;
+        }
+      }
+      if (labelTblBeranda) {
+        labelTblBeranda.textContent = terbuka ? 'Buka Workspace Pro' : 'Buka Motion Pro (Terkunci)';
+      }
+
       if (!gate || !ws) return;
 
       if (terbuka) {
