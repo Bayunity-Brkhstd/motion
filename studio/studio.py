@@ -766,6 +766,105 @@ def simpan_naskah_pro(d: dict) -> dict:
     return {"ok": True, "nama": nama, "jalur": str(target)}
 
 
+def bersihkan_cache_pro() -> dict:
+    """Membersihkan cache rendering, temp frames, dan file unggahan sementara guna membebaskan ruang disk."""
+    total_bytes = 0
+    dirs_to_clean = [
+        MOTION / "node_modules" / ".cache",
+        MOTION / "hasil" / "temp",
+        DATA / "unggahan"
+    ]
+    for d in dirs_to_clean:
+        if d.exists():
+            for p in d.rglob("*"):
+                if p.is_file():
+                    try:
+                        total_bytes += p.stat().st_size
+                        p.unlink()
+                    except Exception:  # noqa: BLE001
+                        pass
+    # Hapus file zip mentah tersisa di folder skills jika ada
+    skill_dir = MOTION / "skills"
+    if skill_dir.exists():
+        for z in skill_dir.glob("*.zip"):
+            try:
+                total_bytes += z.stat().st_size
+                z.unlink()
+            except Exception:  # noqa: BLE001
+                pass
+
+    mb = round(total_bytes / (1024 * 1024), 2)
+    return {"ok": True, "dibersihkan_mb": mb, "pesan": f"Berhasil membersihkan cache & file sementara ({mb} MB dibebaskan)."}
+
+
+def daftar_skills_pro() -> dict:
+    """Daftar modul skills yang aktif di folder motion/skills/."""
+    skill_dir = MOTION / "skills"
+    skill_dir.mkdir(parents=True, exist_ok=True)
+    inti = {"isometric-video", "motion-graphics", "sound-effects", "video-making", "SKILL-LONGFORM.md", "prompt-agent.md", "alur-produksi.json"}
+    daftar = []
+    for item in skill_dir.iterdir():
+        if item.name.startswith("."):
+            continue
+        is_dir = item.is_dir()
+        is_md = item.suffix.lower() == ".md"
+        if is_dir or is_md:
+            daftar.append({
+                "nama": item.stem if is_md else item.name,
+                "inti": item.name in inti or item.stem in inti,
+                "jenis": "folder" if is_dir else "markdown",
+                "siap": True
+            })
+    return {"ok": True, "skills": daftar}
+
+
+def unggah_skill_pro(d: dict) -> dict:
+    """Menerima file skill .zip / .md / .txt, mengekstrak ke motion/skills/, dan auto-purge file mentah."""
+    import base64
+    import zipfile
+    import io
+
+    nama = re.sub(r"[^\w-]", "", d.get("nama") or "custom-skill")
+    konten_b64 = d.get("konten", "")
+    tipe = d.get("tipe", "zip").lower()
+    skill_dir = MOTION / "skills"
+    skill_dir.mkdir(parents=True, exist_ok=True)
+
+    if not konten_b64:
+        raise ValueError("Konten file skill kosong.")
+    data = base64.b64decode(konten_b64)
+
+    if tipe == "zip" or nama.endswith(".zip"):
+        target_folder = skill_dir / nama.replace(".zip", "")
+        target_folder.mkdir(parents=True, exist_ok=True)
+        with zipfile.ZipFile(io.BytesIO(data)) as zf:
+            zf.extractall(target_folder)
+        # Sesuai FR-05: Auto-purge file zip mentah dilakukan karena diekstrak langsung dari memory buffer
+    else:
+        target_file = skill_dir / f"{nama}.md"
+        target_file.write_bytes(data)
+
+    return {"ok": True, "nama": nama, "daftar": daftar_skills_pro()["skills"]}
+
+
+def hapus_skill_pro(d: dict) -> dict:
+    """Menghapus skill eksternal custom dari motion/skills/ (skill bawaan dilindungi)."""
+    nama = re.sub(r"[^\w-]", "", d.get("nama", ""))
+    inti = {"isometric-video", "motion-graphics", "sound-effects", "video-making"}
+    if nama in inti:
+        raise ValueError(f"Skill inti '{nama}' tidak dapat dihapus.")
+    skill_dir = MOTION / "skills"
+    target_dir = skill_dir / nama
+    target_md = skill_dir / f"{nama}.md"
+    if target_dir.is_dir():
+        shutil.rmtree(target_dir)
+    elif target_md.is_file():
+        target_md.unlink()
+    else:
+        raise ValueError("Skill tidak ditemukan.")
+    return {"ok": True, "daftar": daftar_skills_pro()["skills"]}
+
+
 def muat_proyek(jenis: str, nama: str) -> dict:
     f = DATA / jenis / nama
     out = {"jenis": jenis, "nama": nama}
@@ -994,6 +1093,14 @@ class H(BaseHTTPRequestHandler):
                 return self._json(orkestrasi_motion_pro(d))
             if jalur == "/api/motion-pro/simpan-naskah":
                 return self._json(simpan_naskah_pro(d))
+            if jalur == "/api/motion-pro/bersihkan-cache":
+                return self._json(bersihkan_cache_pro())
+            if jalur == "/api/motion-pro/daftar-skills":
+                return self._json(daftar_skills_pro())
+            if jalur == "/api/motion-pro/unggah-skill":
+                return self._json(unggah_skill_pro(d))
+            if jalur == "/api/motion-pro/hapus-skill":
+                return self._json(hapus_skill_pro(d))
             if jalur == "/api/unduh":
                 f = (DATA / d.get("jenis", "") / d.get("nama", "") / d.get("file", "")).resolve()
                 if not f.is_file() or DATA.resolve() not in f.parents:

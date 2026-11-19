@@ -3471,6 +3471,59 @@
       background: rgba(16, 185, 129, 0.1);
       color: #34d399;
     }
+    .pro-asset-sub {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--garis);
+    }
+    .pro-asset-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 10px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--garis);
+      border-radius: 6px;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    .pro-asset-row .nama-file {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+    .pro-btn-del {
+      background: transparent;
+      border: none;
+      color: var(--redup);
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 13px;
+      line-height: 1;
+      transition: color .2s, background .2s;
+    }
+    .pro-btn-del:hover {
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.15);
+    }
+    .pro-video-preview {
+      position: relative;
+      margin-top: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--garis);
+      background: #000;
+    }
+    .pro-video-preview video {
+      width: 100%;
+      max-height: 160px;
+      display: block;
+    }
 
     /* INPUT DECK */
     .pro-input-deck {
@@ -4295,11 +4348,11 @@
       <section class="halaman" id="h-motion-pro">
         <div class="kepala">
           <div>
-            <div class="eyebrow" style="color:#c084fc">ai agent workspace · khusus durasi ≥ 4 menit · cli langganan</div>
+            <div class="eyebrow" style="color:#c084fc">ai agent workspace · khusus durasi ≥ 4 menit · cli langganan · low-ram mode</div>
             <h1>Motion Pro <span>Long-form AI Studio</span></h1>
             <p>Ruang kerja sutradara AI yang memindahkan antarmuka edit seperti aplikasi AI Desktop (Claude Desktop, Antigravity App) ke dalam studio, ditenagai oleh CLI AI Agent sebagai mesin utama untuk video berdurasi panjang (4 - 15+ menit).</p>
           </div>
-          <div style="display:flex;align-items:center;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
             <span class="chip-status-pro" id="statusProBadge" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;font-size:12px;font-family:var(--mono);font-weight:700;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               Terkunci (Mode Pengembangan)
@@ -4307,6 +4360,10 @@
             <button class="tombol kedua kecil" id="tblKunciWorkspacePro" style="display:none;align-items:center;gap:6px" title="Kunci input aset agar tidak sengaja terubah saat eksekusi berjalan">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               <span id="labelKunciWsPro">Kunci Workspace</span>
+            </button>
+            <button class="tombol kedua kecil" id="tblBersihkanCachePro" style="display:none;align-items:center;gap:6px" title="Bersihkan cache render, frame sementara, dan file proxy untuk menghemat ruang disk">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              <span>Bersihkan Cache / Temp</span>
             </button>
             <button class="tombol teks kecil" id="tblKunciUlangPro" style="display:none;font-size:11.5px;color:var(--redup)" title="Kunci kembali dengan kode akses keamanan">
               Keluar (Passcode)
@@ -4348,58 +4405,122 @@
 
         <!-- WORKSPACE MOTION PRO (TERBUKA SETELAH KODE 258741) -->
         <div class="pro-workspace" id="workspaceMotionPro" style="display:none">
-          <!-- PANEL KIRI: UPLOAD REFERENSI & ASET -->
+          <!-- PANEL KIRI: UPLOAD REFERENSI & ASET (4 USER CARDS DENGAN TOMBOL HAPUS) -->
           <div class="pro-tray">
-            <!-- 1. UPLOAD GAMBAR REFERENSI -->
+            <!-- 1. CARD UPLOAD ASSET (WADAH UTAMA ASET MEDIA) -->
             <div class="kartu" style="padding:16px">
-              <h2 class="judul-kartu" style="font-size:14px;margin-bottom:10px">
-                <i style="background:#a855f7"></i>Gambar Referensi &amp; Aset Visual
-              </h2>
-              <div class="pro-upload-box" id="dropGambarRef">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#c084fc;margin-bottom:6px">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                  <circle cx="8.5" cy="8.5" r="1.5"/>
-                  <polyline points="21 15 16 10 5 21"/>
-                </svg>
-                <div style="font-size:13px;font-weight:600;color:var(--teks)">Unggah Gambar Referensi Style</div>
-                <div style="font-size:11.5px;color:var(--redup)">Klik atau seret gambar (.png, .jpg, .svg) untuk menjaga konsistensi karakter &amp; palet</div>
-                <input type="file" id="fileGambarRef" accept="image/*" multiple hidden>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <h2 class="judul-kartu" style="font-size:13.5px;margin:0">
+                  <i style="background:#a855f7"></i>1. Wadah Utama Aset Media
+                </h2>
+                <button class="tombol kedua kecil" id="tblKosongkanAsetPro" style="font-size:10.5px;padding:2px 7px;color:#f87171" title="Hapus semua aset media di kartu ini">Kosongkan Aset</button>
               </div>
-              <div class="pro-ref-grid" id="daftarGambarRef"></div>
-              <div class="bidang" style="margin-top:10px;margin-bottom:0">
-                <label style="font-size:12px">Arahan Gaya Visual <em>opsional</em></label>
-                <input class="input" id="arahanVisualPro" placeholder="mis. Karakter hoodie biru, flat isometric, warna neon" style="font-size:12.5px;padding:8px 12px">
+
+              <!-- 1A. VOICE OVER (>= 4 MENIT) -->
+              <div>
+                <label style="font-size:11.5px;font-weight:600;color:var(--teks);display:flex;align-items:center;justify-content:space-between">
+                  <span>Voice Over (≥ 4 Menit)</span>
+                  <span style="font-size:10.5px;color:var(--redup)">.mp3 / .wav / .m4a</span>
+                </label>
+                <div class="pro-upload-box" id="dropAudioPro" style="padding:12px 10px;margin-top:4px">
+                  <div style="font-size:12px;font-weight:600;color:var(--teks)" id="judulAudioPro">Pilih Audio Voice-Over</div>
+                  <input type="file" id="fileAudioPro" accept="audio/*" hidden>
+                </div>
+                <div id="boxAudioProPreview" style="display:none;margin-top:6px">
+                  <div class="pro-asset-row">
+                    <span class="nama-file" id="labelAudioNamaPro">audio.mp3</span>
+                    <button class="pro-btn-del" id="tblHapusAudioPro" title="Hapus file audio">✕</button>
+                  </div>
+                  <audio id="playerAudioPro" controls style="width:100%;height:30px;border-radius:6px;margin-top:5px"></audio>
+                  <div id="infoAudioPro" style="margin-top:4px;font-size:11.5px;font-family:var(--mono)"></div>
+                </div>
+              </div>
+
+              <!-- 1B. IMAGE ASSET & REFERENSI VISUAL -->
+              <div class="pro-asset-sub">
+                <label style="font-size:11.5px;font-weight:600;color:var(--teks);display:flex;align-items:center;justify-content:space-between">
+                  <span>Image Asset &amp; Referensi Gaya</span>
+                  <span style="font-size:10.5px;color:var(--redup)">.png / .jpg / .svg</span>
+                </label>
+                <div class="pro-upload-box" id="dropGambarRef" style="padding:12px 10px;margin-top:4px">
+                  <div style="font-size:12px;font-weight:600;color:var(--teks)">Unggah Gambar Referensi Style</div>
+                  <input type="file" id="fileGambarRef" accept="image/*" multiple hidden>
+                </div>
+                <div class="pro-ref-grid" id="daftarGambarRef"></div>
+                <div class="bidang" style="margin-top:8px;margin-bottom:0">
+                  <label style="font-size:11.5px">Arahan Gaya Visual <em>opsional</em></label>
+                  <input class="input" id="arahanVisualPro" placeholder="mis. Karakter hoodie biru, flat isometric, warna neon" style="font-size:12px;padding:6px 10px">
+                </div>
+              </div>
+
+              <!-- 1C. BRAND LOGO / WATERMARK -->
+              <div class="pro-asset-sub">
+                <label style="font-size:11.5px;font-weight:600;color:var(--teks);display:flex;align-items:center;justify-content:space-between">
+                  <span>Brand Logo / Watermark</span>
+                  <button class="tombol teks kecil" id="tblPilihLogoPro" style="padding:0;font-size:10.5px;color:var(--aksen)">+ Pilih Logo</button>
+                </label>
+                <input type="file" id="fileLogoPro" accept="image/*" hidden>
+                <div id="rowLogoPro" style="display:none" class="pro-asset-row">
+                  <span class="nama-file" id="labelLogoPro">logo.png</span>
+                  <button class="pro-btn-del" id="tblHapusLogoPro" title="Hapus logo">✕</button>
+                </div>
+              </div>
+
+              <!-- 1D. SFX EXTERNAL & FONT -->
+              <div class="pro-asset-sub">
+                <div style="display:flex;gap:8px">
+                  <button class="tombol kedua kecil" id="tblPilihSfxPro" style="flex:1;font-size:11px;padding:4px 6px">+ SFX External</button>
+                  <button class="tombol kedua kecil" id="tblPilihFontPro" style="flex:1;font-size:11px;padding:4px 6px">+ Font Kustom</button>
+                </div>
+                <input type="file" id="fileSfxPro" accept="audio/*" multiple hidden>
+                <input type="file" id="fileFontPro" accept=".ttf,.otf,.woff,.woff2" multiple hidden>
+                <div id="daftarSfxFontPro" style="margin-top:4px"></div>
               </div>
             </div>
 
-            <!-- 2. UPLOAD AUDIO NARASI PANJANG -->
-            <div class="kartu" style="padding:16px">
-              <h2 class="judul-kartu" style="font-size:14px;margin-bottom:10px">
-                <i style="background:#06b6d4"></i>Audio Narasi Long-form (≥ 4 Menit)
-              </h2>
-              <div class="pro-upload-box" id="dropAudioPro">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#22d3ee;margin-bottom:6px">
-                  <path d="M9 18V5l12-2v13"/>
-                  <circle cx="6" cy="18" r="3"/>
-                  <circle cx="18" cy="16" r="3"/>
-                </svg>
-                <div style="font-size:13px;font-weight:600;color:var(--teks)" id="judulAudioPro">Pilih Berkas Audio Voice-Over</div>
-                <div style="font-size:11.5px;color:var(--redup)">Format .mp3 / .wav / .m4a untuk durasi panjang 4-15+ menit</div>
-                <input type="file" id="fileAudioPro" accept="audio/*" hidden>
-              </div>
-              <div id="boxAudioProPreview" style="display:none;margin-top:12px">
-                <audio id="playerAudioPro" controls style="width:100%;height:32px;border-radius:6px"></audio>
-                <div id="infoAudioPro" style="margin-top:6px;font-size:12px;font-family:var(--mono)"></div>
-              </div>
-            </div>
-
-            <!-- 3. UPLOAD NASKAH MARKDOWN -->
+            <!-- 2. CARD REFERENSI CONTOH VIDEO -->
             <div class="kartu" style="padding:16px">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-                <h2 class="judul-kartu" style="font-size:14px;margin:0">
-                  <i style="background:#10b981"></i>Naskah Markdown (.md)
+                <h2 class="judul-kartu" style="font-size:13.5px;margin:0">
+                  <i style="background:#f59e0b"></i>2. Referensi Contoh Video
                 </h2>
-                <button class="tombol kedua kecil" id="tblPilihMd" style="font-size:11px;padding:3px 8px">Buka File .md</button>
+                <button class="tombol kedua kecil" id="tblHapusVideoRefPro" style="font-size:10.5px;padding:2px 7px;display:none;color:#f87171" title="Hapus video referensi">Hapus Video</button>
+              </div>
+              <div class="pro-upload-box" id="dropVideoRefPro" style="padding:14px 10px">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#f59e0b;margin-bottom:4px">
+                  <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                  <line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                </svg>
+                <div style="font-size:12px;font-weight:600;color:var(--teks)" id="judulVideoRefPro">Pilih Video Contoh Referensi</div>
+                <div style="font-size:11px;color:var(--redup)">Format .mp4 / .mov / .webm untuk ditiru gaya editing &amp; pacing-nya</div>
+                <input type="file" id="fileVideoRefPro" accept="video/*" hidden>
+              </div>
+              <div id="boxVideoRefPreview" style="display:none;margin-top:8px">
+                <div class="pro-asset-row">
+                  <span class="nama-file" id="labelVideoRefPro">video-ref.mp4</span>
+                  <button class="pro-btn-del" id="tblHapusVideoRefPro2" title="Hapus video">✕</button>
+                </div>
+                <div class="pro-video-preview">
+                  <video id="playerVideoRefPro" controls playsinline></video>
+                </div>
+              </div>
+              <label class="saklar" style="font-size:11px;margin-top:8px;color:var(--redup);display:flex;align-items:center;gap:6px">
+                <input type="checkbox" id="gAutoPurgeVideoRef" checked>
+                <span>Auto-Hapus video mentah setelah gaya diekstrak (hemat disk)</span>
+              </label>
+            </div>
+
+            <!-- 3. CARD NASKAH MARKDOWN -->
+            <div class="kartu" style="padding:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                <h2 class="judul-kartu" style="font-size:13.5px;margin:0">
+                  <i style="background:#10b981"></i>3. Naskah Markdown (.md)
+                </h2>
+                <div style="display:flex;gap:5px">
+                  <button class="tombol kedua kecil" id="tblPilihMd" style="font-size:10.5px;padding:2px 7px">Buka .md</button>
+                  <button class="tombol kedua kecil" id="tblResetMd" style="font-size:10.5px;padding:2px 7px;color:#f87171" title="Hapus isi naskah">Reset</button>
+                </div>
                 <input type="file" id="fileNaskahMd" accept=".md,.txt" hidden>
               </div>
               <textarea class="input" id="editorNaskahMd" rows="6" placeholder="# Babak 1: Pendahuluan&#10;Di era kecerdasan buatan, konten video berdurasi panjang membutuhkan alur yang presisi...&#10;&#10;## Adegan 1: Hook&#10;Pernahkah Anda bertanya mengapa beberapa kreator..." style="font-size:12px;font-family:var(--mono);line-height:1.5;resize:vertical"></textarea>
@@ -4409,22 +4530,26 @@
               </div>
             </div>
 
-            <!-- 4. SKILLS & CLI ENVIRONMENT -->
+            <!-- 4. CARD UPLOAD SKILL / PLUGIN EKSTERNAL -->
             <div class="kartu" style="padding:14px 16px;background:rgba(15,23,42,0.4)">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
                 <div style="display:flex;align-items:center;gap:8px">
                   <div style="width:26px;height:26px;border-radius:6px;background:rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;color:#c084fc">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
                   </div>
-                  <div style="font-size:12px;font-weight:700;color:var(--teks)">Skills: Motion Khusus CLI Langganan</div>
+                  <div style="font-size:12.5px;font-weight:700;color:var(--teks)">4. Skills &amp; Plugin Eksternal</div>
                 </div>
-                <span style="font-size:10px;padding:2px 7px;border-radius:99px;background:rgba(16,185,129,0.15);color:#34d399;font-family:var(--mono);font-weight:700">SIAP</span>
+                <button class="tombol kedua kecil" id="tblUnggahSkillPro" style="font-size:10.5px;padding:2px 7px">+ Tambah Skill</button>
+                <input type="file" id="fileUploadSkillPro" accept=".zip,.md,.txt" hidden>
               </div>
               <div style="display:flex;flex-wrap:wrap;gap:6px" id="listSkillsPro">
                 <span class="pro-skill-badge aktif" title="Fisika pegas closed-form & pergerakan 3D isometrik">● isometric-video</span>
                 <span class="pro-skill-badge aktif" title="17 gaya visual, motion blur 180° shutter">● motion-graphics</span>
                 <span class="pro-skill-badge aktif" title="110 SFX CC0, beat grid, mixing -16 LUFS">● sound-effects</span>
                 <span class="pro-skill-badge aktif" title="Otomasi render Remotion React & SVG assembly">● video-making</span>
+              </div>
+              <div style="font-size:10.5px;color:var(--redup);line-height:1.4;margin-top:8px">
+                Format didukung: <code>.zip</code> (auto-ekstrak &amp; auto-purge file mentah), <code>.md</code>, <code>.txt</code>. Jika skill kosong, AI akan mencari skill animasi open-source mandiri.
               </div>
             </div>
           </div>
@@ -6284,6 +6409,8 @@ Aturan:
         if (btnKunci) btnKunci.style.display = 'inline-flex';
         const btnKunciWs = $('#tblKunciWorkspacePro');
         if (btnKunciWs) btnKunciWs.style.display = 'inline-flex';
+        const btnClean = $('#tblBersihkanCachePro');
+        if (btnClean) btnClean.style.display = 'inline-flex';
       } else {
         gate.style.display = 'block';
         ws.style.display = 'none';
@@ -6296,6 +6423,8 @@ Aturan:
         if (btnKunci) btnKunci.style.display = 'none';
         const btnKunciWs = $('#tblKunciWorkspacePro');
         if (btnKunciWs) btnKunciWs.style.display = 'none';
+        const btnClean = $('#tblBersihkanCachePro');
+        if (btnClean) btnClean.style.display = 'none';
       }
     }
 
@@ -6383,13 +6512,36 @@ Aturan:
         renderGaleriRef();
       };
 
-      // 2. Upload Audio Narasi Panjang
+      // Quick Action: Bersihkan Cache / Temp (PRD 1.2 Low-RAM & Storage Management)
+      const btnCleanCache = $('#tblBersihkanCachePro');
+      if (btnCleanCache) {
+        btnCleanCache.onclick = async () => {
+          if (!confirm('Bersihkan file cache rendering, frame sementara, dan file proxy untuk membebaskan ruang disk?')) return;
+          try {
+            const res = await api('/api/motion-pro/bersihkan-cache');
+            if (res.ok) {
+              toast(`Disk dibersihkan! Bebas ${res.dibebaskan_mb} MB dari ${res.total_dihapus} file/folder.`);
+            }
+          } catch (e) {
+            toast('Gagal membersihkan cache: ' + e.message, true);
+          }
+        };
+      }
+
+      // 1. Upload Audio Narasi Panjang & Manajemen Aset Card 1
+      let LOGO_PRO = null;
+      let SFX_FONTS_PRO = [];
+      let VIDEO_REF_PRO = null;
+
       const dropAud = $('#dropAudioPro');
       const fileAud = $('#fileAudioPro');
       const boxAud = $('#boxAudioProPreview');
       const playerAud = $('#playerAudioPro');
       const infoAud = $('#infoAudioPro');
       const judulAud = $('#judulAudioPro');
+      const labelAud = $('#labelAudioNamaPro');
+      const btnHapusAud = $('#tblHapusAudioPro');
+      const btnKosongkanAset = $('#tblKosongkanAsetPro');
 
       if (dropAud && fileAud) {
         dropAud.onclick = () => fileAud.click();
@@ -6405,6 +6557,23 @@ Aturan:
         };
       }
 
+      function resetAudioPro() {
+        AUDIO_FILE_PRO = null;
+        DURASI_AUDIO_PRO = 0;
+        if (fileAud) fileAud.value = '';
+        if (playerAud) { playerAud.pause(); playerAud.src = ''; }
+        if (boxAud) boxAud.style.display = 'none';
+        if (infoAud) infoAud.textContent = '';
+        if (judulAud) judulAud.textContent = 'Pilih Audio Voice-Over';
+      }
+
+      if (btnHapusAud) {
+        btnHapusAud.onclick = () => {
+          resetAudioPro();
+          toast('Audio voice-over dihapus.');
+        };
+      }
+
       function prosesFileAudioPro(file) {
         if (!file) return;
         AUDIO_FILE_PRO = file;
@@ -6412,6 +6581,7 @@ Aturan:
         playerAud.src = url;
         boxAud.style.display = 'block';
         if (judulAud) judulAud.textContent = file.name;
+        if (labelAud) labelAud.textContent = file.name;
         playerAud.onloadedmetadata = () => {
           DURASI_AUDIO_PRO = playerAud.duration;
           const menit = Math.floor(DURASI_AUDIO_PRO / 60);
@@ -6425,12 +6595,151 @@ Aturan:
         };
       }
 
+      // Brand Logo / Watermark
+      const tblPilihLogo = $('#tblPilihLogoPro');
+      const fileLogo = $('#fileLogoPro');
+      const rowLogo = $('#rowLogoPro');
+      const labelLogo = $('#labelLogoPro');
+      const btnHapusLogo = $('#tblHapusLogoPro');
+
+      if (tblPilihLogo && fileLogo) {
+        tblPilihLogo.onclick = (e) => { e.preventDefault(); fileLogo.click(); };
+        fileLogo.onchange = () => {
+          const f = fileLogo.files?.[0];
+          if (!f) return;
+          LOGO_PRO = f;
+          if (labelLogo) labelLogo.textContent = f.name;
+          if (rowLogo) rowLogo.style.display = 'flex';
+          toast('Logo brand dipilih: ' + f.name);
+        };
+      }
+      if (btnHapusLogo) {
+        btnHapusLogo.onclick = () => {
+          LOGO_PRO = null;
+          if (fileLogo) fileLogo.value = '';
+          if (rowLogo) rowLogo.style.display = 'none';
+          toast('Logo brand dihapus.');
+        };
+      }
+
+      // SFX External & Custom Fonts
+      const tblPilihSfx = $('#tblPilihSfxPro');
+      const fileSfx = $('#fileSfxPro');
+      const tblPilihFont = $('#tblPilihFontPro');
+      const fileFont = $('#fileFontPro');
+      const boxSfxFont = $('#daftarSfxFontPro');
+
+      if (tblPilihSfx && fileSfx) {
+        tblPilihSfx.onclick = () => fileSfx.click();
+        fileSfx.onchange = () => {
+          if (fileSfx.files?.length) {
+            Array.from(fileSfx.files).forEach((f) => SFX_FONTS_PRO.push({ type: 'sfx', file: f, name: f.name }));
+            renderDaftarSfxFont();
+            fileSfx.value = '';
+          }
+        };
+      }
+      if (tblPilihFont && fileFont) {
+        tblPilihFont.onclick = () => fileFont.click();
+        fileFont.onchange = () => {
+          if (fileFont.files?.length) {
+            Array.from(fileFont.files).forEach((f) => SFX_FONTS_PRO.push({ type: 'font', file: f, name: f.name }));
+            renderDaftarSfxFont();
+            fileFont.value = '';
+          }
+        };
+      }
+      function renderDaftarSfxFont() {
+        if (!boxSfxFont) return;
+        if (!SFX_FONTS_PRO.length) {
+          boxSfxFont.innerHTML = '';
+          return;
+        }
+        boxSfxFont.innerHTML = SFX_FONTS_PRO.map((item, idx) => `
+          <div class="pro-asset-row" style="margin-top:4px">
+            <span class="nama-file" title="${esc(item.name)}">${item.type === 'sfx' ? '🔊 [SFX]' : '🔤 [FONT]'} ${esc(item.name)}</span>
+            <button class="pro-btn-del" onclick="hapusSfxFontPro(${idx})" title="Hapus aset">✕</button>
+          </div>
+        `).join('');
+      }
+      window.hapusSfxFontPro = (idx) => {
+        SFX_FONTS_PRO.splice(idx, 1);
+        renderDaftarSfxFont();
+      };
+
+      // Tombol Kosongkan Semua Aset di Card 1
+      if (btnKosongkanAset) {
+        btnKosongkanAset.onclick = () => {
+          if (!confirm('Kosongkan semua aset media di kartu ini (Voice Over, Gambar, Logo, SFX & Font)?')) return;
+          resetAudioPro();
+          ASET_GAMBAR_PRO = [];
+          if (fileGbr) fileGbr.value = '';
+          renderGaleriRef();
+          LOGO_PRO = null;
+          if (fileLogo) fileLogo.value = '';
+          if (rowLogo) rowLogo.style.display = 'none';
+          SFX_FONTS_PRO = [];
+          if (fileSfx) fileSfx.value = '';
+          if (fileFont) fileFont.value = '';
+          renderDaftarSfxFont();
+          const arahan = $('#arahanVisualPro');
+          if (arahan) arahan.value = '';
+          toast('Semua aset media telah dikosongkan.');
+        };
+      }
+
+      // 2. Card Referensi Contoh Video
+      const dropVidRef = $('#dropVideoRefPro');
+      const fileVidRef = $('#fileVideoRefPro');
+      const boxVidRef = $('#boxVideoRefPreview');
+      const playerVidRef = $('#playerVideoRefPro');
+      const labelVidRef = $('#labelVideoRefPro');
+      const btnHapusVidRef = $('#tblHapusVideoRefPro');
+      const btnHapusVidRef2 = $('#tblHapusVideoRefPro2');
+
+      if (dropVidRef && fileVidRef) {
+        dropVidRef.onclick = () => fileVidRef.click();
+        dropVidRef.ondragover = (e) => { e.preventDefault(); dropVidRef.style.borderColor = '#f59e0b'; };
+        dropVidRef.ondragleave = () => { dropVidRef.style.borderColor = ''; };
+        dropVidRef.ondrop = (e) => {
+          e.preventDefault();
+          dropVidRef.style.borderColor = '';
+          if (e.dataTransfer.files?.length) prosesFileVideoRef(e.dataTransfer.files[0]);
+        };
+        fileVidRef.onchange = () => {
+          if (fileVidRef.files?.length) prosesFileVideoRef(fileVidRef.files[0]);
+        };
+      }
+
+      function prosesFileVideoRef(file) {
+        if (!file) return;
+        VIDEO_REF_PRO = file;
+        const url = URL.createObjectURL(file);
+        if (playerVidRef) playerVidRef.src = url;
+        if (labelVidRef) labelVidRef.textContent = file.name;
+        if (boxVidRef) boxVidRef.style.display = 'block';
+        if (btnHapusVidRef) btnHapusVidRef.style.display = 'inline-block';
+        toast('Video referensi dimuat: ' + file.name);
+      }
+
+      const hapusVideoRef = () => {
+        VIDEO_REF_PRO = null;
+        if (fileVidRef) fileVidRef.value = '';
+        if (playerVidRef) { playerVidRef.pause(); playerVidRef.src = ''; }
+        if (boxVidRef) boxVidRef.style.display = 'none';
+        if (btnHapusVidRef) btnHapusVidRef.style.display = 'none';
+        toast('Video referensi dihapus.');
+      };
+      if (btnHapusVidRef) btnHapusVidRef.onclick = hapusVideoRef;
+      if (btnHapusVidRef2) btnHapusVidRef2.onclick = hapusVideoRef;
+
       // 3. Upload & Isi Contoh Naskah Markdown
       const tblMd = $('#tblPilihMd');
       const fileMd = $('#fileNaskahMd');
       const editMd = $('#editorNaskahMd');
       const statMd = $('#statNaskahMd');
       const tblContoh = $('#tblContohMd');
+      const btnResetMd = $('#tblResetMd');
 
       if (tblMd && fileMd) {
         tblMd.onclick = () => fileMd.click();
@@ -6462,6 +6771,83 @@ Aturan:
           toast('Contoh naskah markdown berhasil dimuat.');
         };
       }
+      if (btnResetMd && editMd) {
+        btnResetMd.onclick = () => {
+          if (!editMd.value.trim() || confirm('Hapus isi naskah markdown?')) {
+            editMd.value = '';
+            if (fileMd) fileMd.value = '';
+            hitungStatMd();
+            toast('Naskah berhasil dikosongkan.');
+          }
+        };
+      }
+
+      // 4. Card Upload Skills & Plugin Eksternal
+      const tblUnggahSkill = $('#tblUnggahSkillPro');
+      const fileUnggahSkill = $('#fileUploadSkillPro');
+      const listSkills = $('#listSkillsPro');
+
+      async function muatDaftarSkillsPro() {
+        if (!listSkills) return;
+        try {
+          const res = await api('/api/motion-pro/daftar-skills');
+          if (res.ok && res.skills) {
+            listSkills.innerHTML = res.skills.map((s) => `
+              <span class="pro-skill-badge ${s.aktif ? 'aktif' : ''}" title="${esc(s.deskripsi || '')}">
+                ● ${esc(s.id)}
+                ${!s.inti ? `<button onclick="hapusSkillEksternalPro('${esc(s.id)}')" style="background:none;border:none;color:#f87171;font-weight:bold;cursor:pointer;padding:0 2px;margin-left:4px" title="Hapus skill eksternal">✕</button>` : ''}
+              </span>
+            `).join('');
+          }
+        } catch {}
+      }
+
+      window.hapusSkillEksternalPro = async (idSkill) => {
+        if (!confirm(`Hapus skill eksternal "${idSkill}"?`)) return;
+        try {
+          const res = await api('/api/motion-pro/hapus-skill', { id: idSkill });
+          if (res.ok) {
+            toast(`Skill "${idSkill}" berhasil dihapus.`);
+            muatDaftarSkillsPro();
+          }
+        } catch (e) {
+          toast('Gagal menghapus skill: ' + e.message, true);
+        }
+      };
+
+      if (tblUnggahSkill && fileUnggahSkill) {
+        tblUnggahSkill.onclick = () => fileUnggahSkill.click();
+        fileUnggahSkill.onchange = () => {
+          const f = fileUnggahSkill.files?.[0];
+          if (!f) return;
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            try {
+              const raw = e.target.result;
+              let base64 = '';
+              if (typeof raw === 'string' && raw.startsWith('data:')) {
+                base64 = raw.split(',')[1];
+              } else {
+                base64 = btoa(raw);
+              }
+              toast(`Mengunggah skill "${f.name}"...`);
+              const res = await api('/api/motion-pro/unggah-skill', {
+                nama: f.name,
+                data: base64
+              });
+              if (res.ok) {
+                toast(res.pesan || 'Skill berhasil dipasang!');
+                fileUnggahSkill.value = '';
+                muatDaftarSkillsPro();
+              }
+            } catch (err) {
+              toast('Gagal mengunggah skill: ' + err.message, true);
+            }
+          };
+          reader.readAsDataURL(f);
+        };
+      }
+      muatDaftarSkillsPro();
 
       // Workspace Locking (FR-06)
       let WORKSPACE_PRO_LOCKED = false;
