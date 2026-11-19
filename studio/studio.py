@@ -709,12 +709,42 @@ def orkestrasi_motion_pro(d: dict) -> dict:
     detik = int(current_time % 60)
     durasi_label = f"{menit}m {detik}s ({round(current_time, 1)} detik)"
 
-    model_label = {
-        "claude": "Claude 3.7 Sonnet (Claude Code CLI)",
-        "antigravity": "Antigravity CLI (Google Antigravity)",
-        "codex": "OpenAI Codex CLI (GPT-4.5 / o3)",
-        "opencode": "OpenCode Agent (CLI)"
-    }.get(model, model)
+    p_cfg = baca_pengaturan()
+    ai_aktif = (p_cfg.get("AI") or "lokal").lower()
+    cli_aktif = p_cfg.get("LANGGANAN") or "antigravity"
+    nama_mesin = {
+        "antigravity": "Antigravity CLI",
+        "claude-code": "Claude Code CLI",
+        "codex": "OpenAI Codex CLI",
+        "opencode": "OpenCode Agent"
+    }.get(cli_aktif, "Antigravity CLI") if ai_aktif == "langganan" else (
+        "Google Gemini API" if ai_aktif == "gemini" else ("Ollama / OpenAI" if ai_aktif == "openai" else "AI Lokal")
+    )
+
+    KAMUS_MODEL = {
+        "gemini-3.8-flash-high": "Gemini 3.8 Flash (High Effort)",
+        "gemini-3.8-flash-medium": "Gemini 3.8 Flash (Medium Effort)",
+        "gemini-3.8-flash-low": "Gemini 3.8 Flash (Low Effort)",
+        "claude-sonnet-4-6": "Claude Sonnet 4.6 (Thinking)",
+        "claude-opus-4-6-thinking": "Claude Opus 4.6 (Thinking)",
+        "gpt-oss-120b-medium": "GPT-OSS 120B (Medium)",
+        "sonnet": "Claude 3.7 Sonnet",
+        "opus": "Claude 3 Opus",
+        "haiku": "Claude 3.5 Haiku",
+        "o3-mini": "OpenAI o3-mini",
+        "o1": "OpenAI o1",
+        "gpt-4.5-preview": "GPT-4.5 Preview",
+        "gpt-4o": "GPT-4o",
+        "gemini-2.5-flash": "Gemini 2.5 Flash",
+        "gemini-2.5-pro": "Gemini 2.5 Pro",
+        "gemini-2.0-flash": "Gemini 2.0 Flash",
+        "claude": "Claude 3.7 Sonnet",
+        "antigravity": "Antigravity Engine",
+        "codex": "OpenAI Codex Engine",
+        "opencode": "OpenCode Engine"
+    }
+    nama_model_murni = KAMUS_MODEL.get(model, model or "Bawaan Akun")
+    model_label = f"{nama_model_murni} ({nama_mesin})"
 
     reasoning_steps = [
         "✓ Membaca konfigurasi pipeline: motion/skills/SKILL-LONGFORM.md",
@@ -926,6 +956,116 @@ def cek_sistem() -> dict:
             "voxcpm": voxcpm_terpasang(), "referensi": ref_suara().name if ref_suara() else ""}
 
 
+def daftar_model_mesin_aktif() -> dict:
+    p = baca_pengaturan()
+    ai = (p.get("AI") or "lokal").lower()
+    langganan = p.get("LANGGANAN") or "antigravity"
+
+    hasil = {
+        "penyedia": ai,
+        "langganan": langganan,
+        "mesin_label": "",
+        "model_tersimpan": "",
+        "models": []
+    }
+
+    if ai == "langganan":
+        if langganan == "antigravity":
+            hasil["mesin_label"] = "Antigravity CLI (Google Antigravity)"
+            hasil["model_tersimpan"] = p.get("ANTIGRAVITY_MODEL", "")
+            models_list = [("", "Bawaan Akun Antigravity")]
+            agy = cari_cli("antigravity")
+            if agy:
+                try:
+                    r = subprocess.run([agy, "models"], capture_output=True, text=True, timeout=5)
+                    for line in r.stdout.splitlines():
+                        line = line.strip()
+                        if not line or "Fetching" in line:
+                            continue
+                        parts = line.split("\t")
+                        if len(parts) >= 2:
+                            models_list.append((parts[0].strip(), parts[1].strip()))
+                        elif parts:
+                            models_list.append((parts[0].strip(), parts[0].strip()))
+                except Exception:
+                    pass
+            if len(models_list) <= 1:
+                models_list = [
+                    ("", "Bawaan Akun Antigravity"),
+                    ("gemini-3.8-flash-high", "Gemini 3.8 Flash (High)"),
+                    ("gemini-3.8-flash-medium", "Gemini 3.8 Flash (Medium)"),
+                    ("gemini-3.8-flash-low", "Gemini 3.8 Flash (Low)"),
+                    ("claude-sonnet-4-6", "Claude Sonnet 4.6 (Thinking)"),
+                    ("claude-opus-4-6-thinking", "Claude Opus 4.6 (Thinking)"),
+                    ("gpt-oss-120b-medium", "GPT-OSS 120B (Medium)")
+                ]
+            hasil["models"] = [{"id": m[0], "nama": m[1]} for m in models_list]
+
+        elif langganan == "claude-code":
+            hasil["mesin_label"] = "Claude Code CLI"
+            hasil["model_tersimpan"] = p.get("CLAUDE_CODE_MODEL", "")
+            hasil["models"] = [
+                {"id": "", "nama": "Bawaan Akun Claude"},
+                {"id": "sonnet", "nama": "Claude 3.7 Sonnet (Bawaan Akun)"},
+                {"id": "opus", "nama": "Claude 3 Opus (Deep Reasoning)"},
+                {"id": "haiku", "nama": "Claude 3.5 Haiku (Cepat)"}
+            ]
+        elif langganan == "codex":
+            hasil["mesin_label"] = "OpenAI Codex CLI"
+            hasil["model_tersimpan"] = p.get("CODEX_MODEL", "")
+            hasil["models"] = [
+                {"id": "", "nama": "Bawaan Akun Codex"},
+                {"id": "o3-mini", "nama": "OpenAI o3-mini (Reasoning)"},
+                {"id": "o1", "nama": "OpenAI o1"},
+                {"id": "gpt-4.5-preview", "nama": "GPT-4.5 Preview"},
+                {"id": "gpt-4o", "nama": "GPT-4o"}
+            ]
+        elif langganan == "opencode":
+            hasil["mesin_label"] = "OpenCode Agent"
+            hasil["model_tersimpan"] = p.get("OPENCODE_MODEL", "")
+            models_list = [("", "Bawaan OpenCode")]
+            cli = cari_cli("opencode")
+            if cli:
+                try:
+                    r = subprocess.run([cli, "models"], capture_output=True, text=True, timeout=5)
+                    for b in r.stdout.splitlines():
+                        b = b.strip()
+                        if re.match(r"^[\w.-]+/[\w.:@/-]+$", b):
+                            models_list.append((b, b))
+                except Exception:
+                    pass
+            if len(models_list) <= 1:
+                models_list += [
+                    ("anthropic/claude-3-7-sonnet", "anthropic/claude-3-7-sonnet"),
+                    ("openai/gpt-4o", "openai/gpt-4o"),
+                    ("google/gemini-2.5-flash", "google/gemini-2.5-flash")
+                ]
+            hasil["models"] = [{"id": m[0], "nama": m[1]} for m in models_list]
+
+    elif ai == "gemini":
+        hasil["mesin_label"] = "Google Gemini API"
+        hasil["model_tersimpan"] = p.get("GEMINI_MODEL", "gemini-2.5-flash")
+        hasil["models"] = [
+            {"id": "gemini-2.5-flash", "nama": "Gemini 2.5 Flash (Cepat & Direkomendasikan)"},
+            {"id": "gemini-2.5-pro", "nama": "Gemini 2.5 Pro (Penalaran Kompleks)"},
+            {"id": "gemini-2.0-flash", "nama": "Gemini 2.0 Flash"}
+        ]
+    elif ai == "openai":
+        hasil["mesin_label"] = "Ollama / OpenAI API"
+        hasil["model_tersimpan"] = p.get("OPENAI_MODEL", "")
+        st = status_ai().get("openai", {})
+        m_list = st.get("model", [])
+        if m_list:
+            hasil["models"] = [{"id": m, "nama": m} for m in m_list]
+        else:
+            hasil["models"] = [{"id": p.get("OPENAI_MODEL", "gemma3:4b"), "nama": p.get("OPENAI_MODEL", "gemma3:4b")}]
+    else:
+        hasil["mesin_label"] = "AI Lokal"
+        hasil["models"] = [{"id": "lokal", "nama": "Rumus Heuristik Lokal (Tanpa Internet)"}]
+
+    return hasil
+
+
 # ── HTTP ────────────────────────────────────────────────────────────────────
 class H(BaseHTTPRequestHandler):
     def log_message(self, *a):
@@ -983,6 +1123,8 @@ class H(BaseHTTPRequestHandler):
                 return self._json(KERJA.ringkas())
             if jalur == "/api/pengaturan":
                 return self._json({"pengaturan": samarkan(baca_pengaturan()), "sistem": cek_sistem()})
+            if jalur == "/api/model-aktif":
+                return self._json(daftar_model_mesin_aktif())
             if jalur == "/api/model-opencode":
                 # daftar model dari OpenCode milik pengguna (`opencode models`)
                 cli = cari_cli("opencode")

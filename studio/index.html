@@ -4569,15 +4569,12 @@
                     Motion Director Agent
                     <span style="width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981"></span>
                   </div>
-                  <div style="font-size:11.5px;color:var(--redup)">Long-Form Remotion Orchestrator · CLI Reasoning</div>
+                  <div style="font-size:11.5px;color:var(--redup)" id="subLabelProMesin">Long-Form Remotion Orchestrator · CLI Reasoning</div>
                 </div>
               </div>
               <div style="display:flex;align-items:center;gap:10px">
-                <select class="input" id="pilModelPro" style="font-size:12px;padding:6px 28px 6px 12px;height:auto">
-                  <option value="claude">Claude 3.7 Sonnet (Claude Code CLI)</option>
-                  <option value="antigravity">Antigravity CLI (Google Antigravity)</option>
-                  <option value="codex">GPT-4.5 / o3 (OpenAI Codex CLI)</option>
-                  <option value="opencode">OpenCode Agent (CLI)</option>
+                <select class="input" id="pilModelPro" style="font-size:12px;padding:6px 28px 6px 12px;height:auto" title="Model AI yang digunakan oleh Motion Director Agent">
+                  <option value="">Memuat model mesin aktif...</option>
                 </select>
                 <button class="tombol kedua kecil" id="tblResetChatPro" title="Mulai sesi baru" style="padding:6px 10px">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
@@ -4763,12 +4760,12 @@
             <div class="bidang" data-cli="antigravity"><label>Model Antigravity <em>kosong = bawaan akun Antigravity (Gemini / Claude / GPT)</em></label><input class="input" id="ANTIGRAVITY_MODEL" list="dlAntigravity"
                 placeholder="bawaan akun">
               <datalist id="dlAntigravity">
-                <option value="gemini-3.8-flash-high">
-                <option value="gemini-3.8-flash-medium">
-                <option value="gemini-3.8-flash-low">
-                <option value="claude-sonnet-4-6">
-                <option value="claude-opus-4-6-thinking">
-                <option value="gpt-oss-120b-medium">
+                <option value="gemini-3.8-flash-high">Gemini 3.8 Flash (High)</option>
+                <option value="gemini-3.8-flash-medium">Gemini 3.8 Flash (Medium)</option>
+                <option value="gemini-3.8-flash-low">Gemini 3.8 Flash (Low)</option>
+                <option value="claude-sonnet-4-6">Claude Sonnet 4.6 (Thinking)</option>
+                <option value="claude-opus-4-6-thinking">Claude Opus 4.6 (Thinking)</option>
+                <option value="gpt-oss-120b-medium">GPT-OSS 120B (Medium)</option>
               </datalist>
             </div>
             <div class="catatan">Langganan chat <b>tidak</b> termasuk kunci API, tapi bisa dipakai lewat CLI resminya:
@@ -5034,7 +5031,10 @@
       if (h === 'pengaturan') muatStatusAI();
       if (h === 'riwayat') { muatRiwayat(); $('#cariRiwayat').oninput = muatRiwayat; }
       if (h === 'pengaturan') muatPengaturan();
-      if (h === 'motion-pro' && typeof periksaStatusPro === 'function') periksaStatusPro();
+      if (h === 'motion-pro') {
+        if (typeof periksaStatusPro === 'function') periksaStatusPro();
+        if (typeof muatModelAktifPro === 'function') muatModelAktifPro();
+      }
     }
     $$('.nav').forEach((n) => n.onclick = () => ke(n.dataset.ke));
 
@@ -5713,9 +5713,12 @@ Aturan:
       inp.dataset.list = dl.id; inp.removeAttribute('list');
       let sel = inp.previousElementSibling?.tagName === 'SELECT' ? inp.previousElementSibling : null;
       if (!sel) { sel = document.createElement('select'); sel.className = 'input'; inp.before(sel); inp.classList.add('lain'); }
-      const opsi = [...dl.querySelectorAll('option')].map((o) => o.value).filter(Boolean);
+      const opsi = [...dl.querySelectorAll('option')].map((o) => ({
+        v: o.value,
+        t: o.textContent?.trim() || o.getAttribute('label') || o.value
+      })).filter((x) => x.v);
       sel.innerHTML = (BAWAAN_KOSONG[inp.id] ? `<option value="">${BAWAAN_KOSONG[inp.id]}</option>` : '') +
-        opsi.map((v) => `<option value="${esc(v)}">${esc(v)}</option>`).join('') + '<option value="__lain">Lainnya… (ketik sendiri)</option>';
+        opsi.map((x) => `<option value="${esc(x.v)}">${esc(x.t)}</option>`).join('') + '<option value="__lain">Lainnya… (ketik sendiri)</option>';
       sel.onchange = () => {
         const lain = sel.value === '__lain';
         inp.hidden = !lain;
@@ -6849,6 +6852,35 @@ Aturan:
       }
       muatDaftarSkillsPro();
 
+      // Sinkronisasi Model Mesin AI Aktif (PRD Dynamic Agent Engine)
+      async function muatModelAktifPro() {
+        const sel = $('#pilModelPro');
+        const sub = $('#subLabelProMesin');
+        if (!sel) return;
+        try {
+          const res = await api('/api/model-aktif');
+          if (res && res.models) {
+            sel.innerHTML = res.models.map((m) => `<option value="${esc(m.id)}">${esc(m.nama)}</option>`).join('');
+            if (res.model_tersimpan && res.models.some((m) => m.id === res.model_tersimpan)) {
+              sel.value = res.model_tersimpan;
+            }
+            if (sub && res.mesin_label) {
+              sub.textContent = `Mesin: ${res.mesin_label} · Long-Form Remotion Orchestrator`;
+            }
+          }
+        } catch {}
+      }
+      window.muatModelAktifPro = muatModelAktifPro;
+      muatModelAktifPro();
+
+      const selModelPro = $('#pilModelPro');
+      if (selModelPro) {
+        selModelPro.onchange = () => {
+          const nama = selModelPro.options[selModelPro.selectedIndex]?.text || selModelPro.value;
+          toast(`Model sutradara disetel ke: ${nama}`);
+        };
+      }
+
       // Workspace Locking (FR-06)
       let WORKSPACE_PRO_LOCKED = false;
       let LAST_PRO_NASKAH_JSON = null;
@@ -6937,7 +6969,8 @@ Aturan:
         if (!instruksi) return;
         if (inChat) inChat.value = '';
 
-        const model = $('#pilModelPro')?.value || 'claude';
+        const model = $('#pilModelPro')?.value || '';
+        const labelModelAktif = $('#pilModelPro')?.options[$('#pilModelPro')?.selectedIndex]?.text || model || 'Mesin AI Aktif';
         const naskah = editMd?.value.trim() || '';
         const arahan = $('#arahanVisualPro')?.value.trim() || '';
         const namaAudio = AUDIO_FILE_PRO?.name || '';
@@ -6961,7 +6994,7 @@ Aturan:
           <div class="pro-bubble">
             <div style="display:flex;align-items:center;gap:8px;color:#c084fc;font-weight:600;font-size:12.5px">
               <span class="pk-putar" style="width:14px;height:14px;border:2px solid rgba(168,85,247,0.3);border-top-color:#c084fc;border-radius:50%;display:inline-block;animation:spin .8s linear infinite"></span>
-              Sutradara AI sedang memproses orkestrasi via ${esc(model.toUpperCase())}...
+              Sutradara AI sedang memproses orkestrasi via ${esc(labelModelAktif)}...
             </div>
           </div>`;
         stream.appendChild(msgThinking);
