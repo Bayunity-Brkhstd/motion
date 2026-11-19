@@ -330,7 +330,9 @@ def tanya_langganan(penyedia: str, prompt: str) -> str:
     if nama == "opencode" and env.get("GEMINI_API_KEY") and not env.get("GOOGLE_GENERATIVE_AI_API_KEY"):
         # OpenCode membaca kunci Google dari nama variabel ini; pakai kunci Gemini yang sudah disimpan pengguna
         env["GOOGLE_GENERATIVE_AI_API_KEY"] = env["GEMINI_API_KEY"]
-    with tempfile.TemporaryDirectory() as tmp:
+    import shutil
+    tmp = tempfile.mkdtemp(prefix="cli_langganan_")
+    try:
         masukan = prompt
         if nama == "claude":
             cmd = [cli, "-p", "--tools", "", "--output-format", "text", "--no-session-persistence"]
@@ -364,6 +366,8 @@ def tanya_langganan(penyedia: str, prompt: str) -> str:
             sys.exit(f"{nama} gagal (kode {r.returncode}). Pastikan sudah login dan kuota langganan masih ada.\n{alasan}")
         f = Path(tmp) / "jawab.txt"
         return f.read_text(encoding="utf-8") if f.exists() else r.stdout
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def ambil_json(teks: str):

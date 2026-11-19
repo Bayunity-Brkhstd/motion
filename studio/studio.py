@@ -922,7 +922,7 @@ def cek_sistem() -> dict:
     return {"uv": bool(shutil.which("uv") or (Path.home() / ".local/bin/uv").exists()),
             "node": bool(shutil.which("node") or Path("/usr/local/bin/node").exists()),
             "mac": sys.platform == "darwin", "win": os.name == "nt", "data": str(DATA),
-            "cli": {n: bool(cari_cli(n)) for n in ("claude", "codex", "opencode")},
+            "cli": {n: bool(cari_cli(n)) for n in ("claude", "codex", "opencode", "antigravity")},
             "voxcpm": voxcpm_terpasang(), "referensi": ref_suara().name if ref_suara() else ""}
 
 
