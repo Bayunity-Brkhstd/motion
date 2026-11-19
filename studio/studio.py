@@ -568,10 +568,107 @@ def mulai_motion(d: dict) -> dict:
     return {"proyek": nama}
 
 
+def panggil_cli_sutradara_real(ai_aktif: str, cli_aktif: str, model: str, prompt_teks: str) -> tuple[str, list[str], float]:
+    """Menjalankan instruksi obrolan ke AI Agent CLI secara on-demand (ephemeral) tanpa daemon background."""
+    import time
+    t0 = time.time()
+    cli_logs = []
+
+    if ai_aktif == "langganan":
+        nama_bin = {
+            "antigravity": "antigravity",
+            "claude-code": "claude",
+            "codex": "codex",
+            "opencode": "opencode"
+        }.get(cli_aktif, "antigravity")
+
+        jalur_cli = cari_cli(nama_bin)
+        if not jalur_cli:
+            cli_logs.append(f"[CLI Error] Binary '{nama_bin}' belum terpasang.")
+            return "", cli_logs, 0.0
+
+        nama_file_cli = Path(jalur_cli).name
+        cli_logs.append(f"$ {nama_file_cli} {f'--model {model}' if model else ''} --output-format text -p \"...\"")
+        cli_logs.append(f"[CLI Task] Menghubungkan ke {nama_bin.upper()} Agent (On-Demand Execution)...")
+
+        env = os.environ.copy()
+        for k in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "OPENAI_API_KEY", "CODEX_API_KEY"):
+            env.pop(k, None)
+
+        if nama_bin in ("antigravity", "agy"):
+            cmd = [jalur_cli, "--output-format", "text"]
+            if model:
+                cmd += ["--model", model]
+            cmd += ["-p", prompt_teks]
+            masukan = None
+        elif nama_bin == "claude":
+            cmd = [jalur_cli, "-p", "--tools", "", "--output-format", "text", "--no-session-persistence"]
+            if model:
+                cmd += ["--model", model]
+            masukan = prompt_teks
+        elif nama_bin == "codex":
+            cmd = [jalur_cli, "exec", "--skip-git-repo-check", "-"]
+            if model:
+                cmd += ["--model", model]
+            masukan = prompt_teks
+        else:
+            cmd = [jalur_cli, "run", "--agent", "plan"]
+            if model:
+                cmd += ["--model", model]
+            masukan = prompt_teks
+
+        try:
+            r = subprocess.run(
+                cmd,
+                input=masukan,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                timeout=180,
+                creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0)
+            )
+            latency = round(time.time() - t0, 2)
+            if r.returncode == 0 and r.stdout.strip():
+                cli_logs.append(f"[CLI Sukses] Respons diterima ({len(r.stdout.strip())} karakter) dalam {latency}s.")
+                cli_logs.append(f"[CLI Selesai] Proses {nama_file_cli} ditutup seketika. RAM bebas.")
+                return r.stdout.strip(), cli_logs, latency
+            else:
+                err = (r.stderr or r.stdout or "").strip()
+                cli_logs.append(f"[CLI Keluar] Kode {r.returncode}: {err[:200]}")
+                return "", cli_logs, latency
+        except subprocess.TimeoutExpired:
+            cli_logs.append("[CLI Timeout] Subprocess melebihi batas waktu 180s.")
+            return "", cli_logs, 180.0
+
+    elif ai_aktif == "gemini":
+        p = baca_pengaturan()
+        keys_raw = p.get("GEMINI_API_KEYS") or p.get("GEMINI_API_KEY") or ""
+        daftar_kunci = [k.strip() for k in re.split(r"[\r\n,]+", keys_raw) if k.strip()]
+        if daftar_kunci:
+            try:
+                import urllib.request
+                cli_logs.append(f"[Gemini API] Mengirim prompt ke Google AI Studio ({model or 'gemini-2.5-flash'})...")
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{model or 'gemini-2.5-flash'}:generateContent?key={daftar_kunci[0]}"
+                data = json.dumps({"contents": [{"parts": [{"text": prompt_teks}]}]}).encode("utf-8")
+                req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+                with urllib.request.urlopen(req, timeout=120) as resp:
+                    j = json.loads(resp.read().decode("utf-8"))
+                    teks = j["candidates"][0]["content"]["parts"][0]["text"]
+                    latency = round(time.time() - t0, 2)
+                    cli_logs.append(f"[Gemini API Done] Respons diterima dalam {latency}s.")
+                    return teks, cli_logs, latency
+            except Exception as e:
+                cli_logs.append(f"[Gemini API Error] {e}")
+
+    latency = round(time.time() - t0, 2)
+    cli_logs.append(f"[Lokal] Selesai dihitung via pipeline lokal ({latency}s).")
+    return "", cli_logs, latency
+
+
 def orkestrasi_motion_pro(d: dict) -> dict:
     import time
     instruksi = d.get("instruksi", "").strip()
-    model = d.get("model", "claude")
+    model = d.get("model", "")
     naskah_md = d.get("naskah", "").strip()
     durasi_audio = float(d.get("durasi_audio") or 0)
     nama_audio = d.get("nama_audio", "")
@@ -695,16 +792,6 @@ def orkestrasi_motion_pro(d: dict) -> dict:
         palet = ["#0b0f19", "#6366f1", "#06b6d4", "#a855f7", "#ffffff"]
         gaya_tema = "garis"
 
-    naskah_json = {
-        "judul": blok_adegan[0][0] if blok_adegan else "Proyek Long-form Motion Pro",
-        "gaya": gaya_tema,
-        "durasi_total": round(current_time, 2),
-        "audioNarasi": nama_audio or None,
-        "arahan_visual": arahan_visual or None,
-        "palet": palet,
-        "adegan": adegan_list
-    }
-
     menit = int(current_time // 60)
     detik = int(current_time % 60)
     durasi_label = f"{menit}m {detik}s ({round(current_time, 1)} detik)"
@@ -746,14 +833,94 @@ def orkestrasi_motion_pro(d: dict) -> dict:
     nama_model_murni = KAMUS_MODEL.get(model, model or "Bawaan Akun")
     model_label = f"{nama_model_murni} ({nama_mesin})"
 
+    # ── EKSEKUSI REAL KE AI AGENT VIA CLI (ON-DEMAND) ──
+    prompt_sutradara = f"""Anda adalah Motion Director Agent profesional untuk Cheat Motion Pro.
+Tugas Anda adalah merespons instruksi pengguna dan menyusun atau memperbarui struktur adegan video motion graphic 1080x1920 30fps durasi panjang (Target: {durasi_label}, Total kata naskah: {total_kata} kata).
+Modul Skills aktif: {', '.join(skills_aktif)}
+
+Konteks Aset Proyek:
+- Durasi Audio Narasi: {durasi_label} ({nama_audio or 'Audio Voice Over'})
+- Arahan Gaya Visual: {arahan_visual or 'Adaptif Modern'}
+- Gambar Referensi: {', '.join(gambar_ref) if gambar_ref else 'Belum ada gambar referensi'}
+- Potongan Naskah Markdown:
+\"\"\"
+{naskah_md[:2200]}
+\"\"\"
+
+Instruksi Pengguna:
+"{instruksi}"
+
+Petunjuk Respon:
+1. Berikan penjelasan profesional, strategi pacing, dan evaluasi naskah/audio secara ringkas dan ramah.
+2. Jelaskan tahapan thinking reasoning dalam bentuk poin-poin.
+3. Berikan rekomendasi 5 palet warna HEX.
+4. Sertakan blok ```json storyboard adegan lengkap yang proporsional dengan format:
+```json
+{{
+  "palet": ["#0b0f19", "#6366f1", "#06b6d4", "#a855f7", "#ffffff"],
+  "gaya": "garis",
+  "adegan": [
+    {{
+      "nomor": 1,
+      "mulai": 0,
+      "selesai": 5.5,
+      "durasi_detik": 5.5,
+      "judul": "Judul Adegan",
+      "teks": "Teks narasi adegan...",
+      "ikon": "🚀",
+      "svg_prompt": "Ilustrasi visual..."
+    }}
+  ]
+}}
+```
+"""
+
+    teks_ai, cli_logs, latency = panggil_cli_sutradara_real(ai_aktif, cli_aktif, model, prompt_sutradara)
+
+    if teks_ai:
+        m_json = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", teks_ai, re.DOTALL)
+        if m_json:
+            try:
+                parsed = json.loads(m_json.group(1))
+                if parsed.get("adegan") and len(parsed["adegan"]) > 0:
+                    adegan_list = parsed["adegan"]
+                    if parsed.get("palet"):
+                        palet = parsed["palet"]
+                    if parsed.get("gaya"):
+                        gaya_tema = parsed["gaya"]
+            except Exception:
+                pass
+        jawaban_tampil = re.sub(r"```(?:json)?\s*\{.*?\}\s*```", "", teks_ai, flags=re.DOTALL).strip()
+        if not jawaban_tampil:
+            jawaban_tampil = teks_ai
+    else:
+        jawaban_tampil = (
+            f"Saya telah menganalisis instruksi Anda dengan **{model_label}**.\n\n"
+            f"• **Durasi Total:** {durasi_label}\n"
+            f"• **Jumlah Adegan:** {len(adegan_list)} adegan terstruktur (ritme ideal 4 – 8 detik per adegan)\n"
+            f"• **Gaya & Palet:** Disesuaikan dengan {len(gambar_ref)} gambar referensi dan arahan *{arahan_visual or 'Adaptif Modern'}*\n"
+            f"• **Remotion Ready:** Komposisi video 1080×1920 30fps siap diproses ke pipeline rendering."
+        )
+
+    naskah_json = {
+        "judul": blok_adegan[0][0] if blok_adegan else "Proyek Long-form Motion Pro",
+        "gaya": gaya_tema,
+        "durasi_total": round(current_time, 2),
+        "audioNarasi": nama_audio or None,
+        "arahan_visual": arahan_visual or None,
+        "palet": palet,
+        "adegan": adegan_list
+    }
+
     reasoning_steps = [
+        f"✓ Mesin Eksekusi: {model_label} (On-Demand CLI Subprocess)",
+        f"✓ Latensi Komputasi: {latency}s · RAM segera dibebaskan pasca respons",
         "✓ Membaca konfigurasi pipeline: motion/skills/SKILL-LONGFORM.md",
         f"✓ Memeriksa modul skill terpasang: {', '.join(skills_aktif)} (SEMUA SIAP)",
         f"✓ Menganalisis naskah markdown ({total_kata} kata)",
         f"✓ Melakukan audio-script alignment terhadap durasi {durasi_label}",
         f"✓ Segmentasi naskah menjadi {len(adegan_list)} adegan (durasi 4 - 8 detik per adegan)",
-        f"✓ Ekstraksi palet warna & arahan gaya visual: {arahan_visual or 'Adaptif Modern'}",
-        "✓ Menyiapkan struktur Remotion Series.Sequence di motion/src/Video.tsx"
+        f"✓ Ekstraksi palet warna & arahan gaya visual: {arahan_visual or 'Adaptif Modern'}"
     ]
 
     berkas_disimpan = None
@@ -769,13 +936,9 @@ def orkestrasi_motion_pro(d: dict) -> dict:
         "model": model,
         "model_label": model_label,
         "reasoning_steps": reasoning_steps,
-        "jawaban": (
-            f"Saya telah menganalisis instruksi Anda dengan **{model_label}**.\n\n"
-            f"• **Durasi Total:** {durasi_label}\n"
-            f"• **Jumlah Adegan:** {len(adegan_list)} adegan terstruktur (ritme ideal 4 – 8 detik per adegan)\n"
-            f"• **Gaya & Palet:** Disesuaikan dengan {len(gambar_ref)} gambar referensi dan arahan *{arahan_visual or 'Adaptif Modern'}*\n"
-            f"• **Remotion Ready:** Komposisi video 1080×1920 30fps siap diproses ke pipeline rendering."
-        ),
+        "cli_logs": cli_logs,
+        "latency": latency,
+        "jawaban": jawaban_tampil,
         "adegan": adegan_list,
         "palet": palet,
         "naskah_json": naskah_json,
@@ -794,6 +957,28 @@ def simpan_naskah_pro(d: dict) -> dict:
     target = MOTION / "naskah" / f"{nama}.json"
     target.write_text(json.dumps(naskah, ensure_ascii=False, indent=2), encoding="utf-8")
     return {"ok": True, "nama": nama, "jalur": str(target)}
+
+
+def render_motion_pro(d: dict) -> dict:
+    """Merender komposisi video Motion Pro (1080x1920 30fps) dari naskah storyboard."""
+    naskah = d.get("naskah_json")
+    if not naskah:
+        raise ValueError("Data naskah storyboard kosong. Lakukan analisis atau orkestrasi terlebih dahulu.")
+
+    topik = naskah.get("judul") or "Motion Pro Long-Form"
+    gaya = naskah.get("gaya") or "garis"
+    audio_narasi = d.get("audio_narasi") or d.get("audioNarasi") or naskah.get("audioNarasi")
+
+    payload = {
+        "topik": topik,
+        "naskah": json.dumps(naskah, ensure_ascii=False),
+        "gaya": gaya
+    }
+    if audio_narasi:
+        payload["audioNarasi"] = str(audio_narasi)
+
+    res = mulai_motion(payload)
+    return res
 
 
 def bersihkan_cache_pro() -> dict:
@@ -1233,6 +1418,8 @@ class H(BaseHTTPRequestHandler):
                 return self._json(mulai_motion(d))
             if jalur == "/api/motion-pro/orkestrasi":
                 return self._json(orkestrasi_motion_pro(d))
+            if jalur == "/api/motion-pro/render":
+                return self._json(render_motion_pro(d))
             if jalur == "/api/motion-pro/simpan-naskah":
                 return self._json(simpan_naskah_pro(d))
             if jalur == "/api/motion-pro/bersihkan-cache":

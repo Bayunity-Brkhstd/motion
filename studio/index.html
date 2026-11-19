@@ -3471,6 +3471,40 @@
       background: rgba(16, 185, 129, 0.1);
       color: #34d399;
     }
+    .pro-cli-log {
+      background: rgba(2, 6, 23, 0.65);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      padding: 6px 12px;
+      margin-bottom: 10px;
+      font-size: 11.5px;
+    }
+    .pro-cli-log summary {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #34d399;
+      font-family: var(--mono);
+      font-weight: 600;
+      user-select: none;
+    }
+    .pro-cli-log summary:hover {
+      color: #6ee7b7;
+    }
+    .pro-cli-log-body {
+      margin-top: 6px;
+      padding: 8px 10px;
+      background: #020617;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #a7f3d0;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      max-height: 180px;
+      overflow-y: auto;
+    }
     .pro-asset-sub {
       margin-top: 10px;
       padding-top: 10px;
@@ -4572,13 +4606,47 @@
                   <div style="font-size:11.5px;color:var(--redup)" id="subLabelProMesin">Long-Form Remotion Orchestrator · CLI Reasoning</div>
                 </div>
               </div>
-              <div style="display:flex;align-items:center;gap:10px">
+              <div style="display:flex;align-items:center;gap:8px">
                 <select class="input" id="pilModelPro" style="font-size:12px;padding:6px 28px 6px 12px;height:auto" title="Model AI yang digunakan oleh Motion Director Agent">
                   <option value="">Memuat model mesin aktif...</option>
                 </select>
+                <button class="tombol kedua kecil" id="tblTogglePreviewPro" style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:6px 10px" title="Buka Pratinjau Render Video">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <span>Preview Video</span>
+                </button>
                 <button class="tombol kedua kecil" id="tblResetChatPro" title="Mulai sesi baru" style="padding:6px 10px">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
                 </button>
+              </div>
+            </div>
+
+            <!-- KOTAK PRATINJAU RENDER VIDEO DI PANEL KANAN -->
+            <div class="pro-preview-box" id="boxPreviewRenderPro" style="display:none;background:rgba(15,23,42,0.85);border-bottom:1px solid rgba(255,255,255,0.08);padding:14px 18px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:24px;height:24px;border-radius:6px;background:rgba(16,185,129,0.2);color:#34d399;display:flex;align-items:center;justify-content:center">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-size:12.5px;font-weight:700;color:var(--teks)" id="judulPreviewRenderPro">Pratinjau Video Motion Pro</div>
+                    <div style="font-size:11px;color:var(--redup)" id="infoPreviewRenderPro">Remotion React · 1080×1920 30fps</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:6px">
+                  <button class="tombol utama kecil" id="tblMulaiRenderPro" style="font-size:11px;padding:4px 10px">🎬 Render Video</button>
+                  <a class="tombol kedua kecil" id="linkUnduhVideoPro" href="#" download style="display:none;font-size:11px;padding:4px 10px;text-decoration:none">⬇️ Unduh MP4</a>
+                  <button class="tombol kedua kecil" id="tblTutupPreviewPro" style="font-size:11px;padding:4px 8px">✕</button>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:center;background:#000;border-radius:10px;overflow:hidden;max-height:280px;position:relative">
+                <video id="playerPreviewRenderPro" controls playsinline style="max-height:280px;width:auto;border-radius:8px;display:none"></video>
+                <div id="placeholderPreviewPro" style="padding:40px 20px;text-align:center;color:var(--redup);font-size:12px">
+                  Belum ada video yang dirender.<br>Klik tombol <b>🎬 Render Video</b> untuk memproses storyboard ke format MP4.
+                </div>
+              </div>
+              <div id="barisStatusRenderPro" style="display:none;margin-top:8px;font-size:11.5px;font-family:var(--mono);color:#34d399;display:flex;align-items:center;gap:8px">
+                <span class="pk-putar" style="width:12px;height:12px;border:2px solid rgba(52,211,153,0.3);border-top-color:#34d399;border-radius:50%;display:inline-block;animation:spin .8s linear infinite"></span>
+                <span id="labelStatusRenderPro">Sedang merender video...</span>
               </div>
             </div>
 
@@ -7030,6 +7098,15 @@ Aturan:
             msgAgent.innerHTML = `
               <div class="pro-chat-avatar" style="width:30px;height:30px;font-size:12px;flex-shrink:0">AI</div>
               <div class="pro-bubble">
+                ${res.cli_logs?.length ? `
+                  <details class="pro-cli-log" open>
+                    <summary>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                      Log Eksekusi CLI (${res.latency || 0}s · On-Demand Engine)
+                    </summary>
+                    <div class="pro-cli-log-body">${res.cli_logs.map(esc).join('<br>')}</div>
+                  </details>
+                ` : ''}
                 <details class="pro-thought" open>
                   <summary>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -7053,9 +7130,10 @@ Aturan:
                   ${(res.adegan?.length || 0) > 12 ? `<div style="text-align:center;font-size:11.5px;color:var(--redup);padding:4px">... dan ${(res.adegan.length - 12)} adegan lainnya terkonfigurasi ...</div>` : ''}
                 </div>
                 <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-                  <button class="tombol utama kecil" onclick="siapkanKomposisiPro()" style="font-size:11.5px">🎬 Siapkan Komposisi Remotion</button>
+                  <button class="tombol utama kecil" onclick="renderVideoMotionPro()" style="font-size:11.5px">🎬 Render Video Motion Pro</button>
+                  <button class="tombol kedua kecil" onclick="bukaPreviewVideoPro()" style="font-size:11.5px">▶️ Pratinjau Video</button>
                   <button class="tombol kedua kecil" onclick="unduhNaskahPro()" style="font-size:11.5px">💾 Simpan Naskah JSON</button>
-                  <button class="tombol kedua kecil" onclick="bukaDiMotionStandar()" style="font-size:11.5px">▶️ Buka di Motion Tab</button>
+                  <button class="tombol kedua kecil" onclick="bukaDiMotionStandar()" style="font-size:11.5px">Tab Motion ↗</button>
                 </div>
               </div>`;
             stream.appendChild(msgAgent);
@@ -7082,6 +7160,114 @@ Aturan:
       }
       window.eksekusiPromptPro = eksekusiPromptPro;
       window.simulasiPromptPro = eksekusiPromptPro;
+
+      window.bukaPreviewVideoPro = (url) => {
+        const box = $('#boxPreviewRenderPro');
+        const player = $('#playerPreviewRenderPro');
+        const placeholder = $('#placeholderPreviewPro');
+        const linkUnduh = $('#linkUnduhVideoPro');
+        if (box) box.style.display = 'block';
+        if (url && player) {
+          player.src = url;
+          player.style.display = 'block';
+          if (placeholder) placeholder.style.display = 'none';
+          if (linkUnduh) {
+            linkUnduh.href = url;
+            linkUnduh.style.display = 'inline-flex';
+          }
+          player.play().catch(() => {});
+        }
+      };
+
+      window.renderVideoMotionPro = async () => {
+        if (!LAST_PRO_NASKAH_JSON) {
+          toast('Belum ada naskah storyboard. Kirim pesan instruksi ke AI Director terlebih dahulu.');
+          return;
+        }
+        const box = $('#boxPreviewRenderPro');
+        if (box) box.style.display = 'block';
+        const player = $('#playerPreviewRenderPro');
+        const placeholder = $('#placeholderPreviewPro');
+        const barisStatus = $('#barisStatusRenderPro');
+        const labelStatus = $('#labelStatusRenderPro');
+        const linkUnduh = $('#linkUnduhVideoPro');
+
+        if (placeholder) {
+          placeholder.style.display = 'block';
+          placeholder.innerHTML = '🎬 <b>Sedang merender video motion Remotion React...</b><br>Menyusun frame 1080×1920 30fps. Proses berjalan di background, silakan pantau status di bawah.';
+        }
+        if (player) {
+          player.pause();
+          player.style.display = 'none';
+        }
+        if (barisStatus) barisStatus.style.display = 'flex';
+        if (labelStatus) labelStatus.textContent = 'Menyiapkan aset & komposisi Remotion...';
+
+        toast('Memulai proses render video Motion Pro...');
+
+        try {
+          const res = await api('/api/motion-pro/render', {
+            naskah_json: LAST_PRO_NASKAH_JSON,
+            audio_narasi: AUDIO_FILE_PRO?.name
+          });
+
+          if (res && res.nama) {
+            const namaProyek = res.nama;
+            const t = setInterval(async () => {
+              try {
+                const st = await api('/api/status');
+                if (st.status === 'jalan') {
+                  const logAkhir = (st.log || []).slice(-1)[0] || 'Merender video...';
+                  if (labelStatus) labelStatus.textContent = logAkhir;
+                } else {
+                  clearInterval(t);
+                  if (barisStatus) barisStatus.style.display = 'none';
+                  const videoUrl = `/berkas/motion/${namaProyek}/video.mp4`;
+                  if (player) {
+                    player.src = videoUrl;
+                    player.style.display = 'block';
+                    if (placeholder) placeholder.style.display = 'none';
+                    player.play().catch(() => {});
+                  }
+                  if (linkUnduh) {
+                    linkUnduh.href = videoUrl;
+                    linkUnduh.download = `motion-${namaProyek}.mp4`;
+                    linkUnduh.style.display = 'inline-flex';
+                  }
+                  toast('Video selesai dirender! Pratinjau otomatis diputar.');
+                }
+              } catch {
+                clearInterval(t);
+              }
+            }, 1500);
+          }
+        } catch (err) {
+          if (barisStatus) barisStatus.style.display = 'none';
+          if (placeholder) {
+            placeholder.style.display = 'block';
+            placeholder.innerHTML = `<span style="color:#f87171">Gagal merender: ${esc(err.message)}</span>`;
+          }
+          toast('Gagal memulai render: ' + err.message, true);
+        }
+      };
+
+      // Handler Tombol Pratinjau
+      const tblTogglePrev = $('#tblTogglePreviewPro');
+      const boxPrev = $('#boxPreviewRenderPro');
+      const tblTutupPrev = $('#tblTutupPreviewPro');
+      const tblMulaiRend = $('#tblMulaiRenderPro');
+
+      if (tblTogglePrev && boxPrev) {
+        tblTogglePrev.onclick = () => {
+          boxPrev.style.display = boxPrev.style.display === 'none' ? 'block' : 'none';
+        };
+      }
+      if (tblTutupPrev && boxPrev) {
+        tblTutupPrev.onclick = () => { boxPrev.style.display = 'none'; };
+      }
+      if (tblMulaiRend) {
+        tblMulaiRend.onclick = () => renderVideoMotionPro();
+      }
 
       window.siapkanKomposisiPro = async () => {
         if (!LAST_PRO_NASKAH_JSON) {
