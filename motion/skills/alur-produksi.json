@@ -2,7 +2,7 @@
   "versi": "1.0.0",
   "nama": "Pipeline Motion Pro Long-form",
   "durasi_minimal_detik": 240,
-  "engine_cli": ["claude", "codex", "opencode"],
+  "engine_cli": ["claude", "antigravity", "codex", "opencode"],
   "tahapan": [
     {
       "fase": 1,

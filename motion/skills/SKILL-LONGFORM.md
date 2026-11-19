@@ -1,6 +1,6 @@
 # Skill: Long-Form Motion Graphics Production (>= 4 Menit)
 
-Panduan operasional dan instruksi pipeline produksi video motion graphics durasi panjang ($\ge$ 4 menit) menggunakan CLI Langganan berbayar (**Claude Code CLI**, **OpenAI Codex CLI**, atau **OpenCode**) yang terhubung dengan engine **Remotion** dan **Cheat Motion**.
+Panduan operasional dan instruksi pipeline produksi video motion graphics durasi panjang ($\ge$ 4 menit) menggunakan CLI Langganan berbayar (**Claude Code CLI**, **Antigravity CLI**, **OpenAI Codex CLI**, atau **OpenCode**) yang terhubung dengan engine **Remotion** dan **Cheat Motion**.
 
 ## Spesifikasi Long-Form Video:
 - **Target Durasi:** 4 hingga 15+ menit (240 - 900+ detik).
