@@ -217,7 +217,8 @@ CLI_DIR = _cari_cli_dir()  # CLI dipasang di sini (tanpa sudo)
 PAKET_CLI = {"codex": "@openai/codex", "opencode": "opencode-ai", "claude": "@anthropic-ai/claude-code", "antigravity": "google-antigravity"}
 PERINTAH_LOGIN = {"claude": "claude auth login", "codex": "codex login", "opencode": "opencode auth login", "antigravity": "agy"}
 DOMAIN_BOLEH = ("aistudio.google.com", "share.gemini.google", "gemini.google.com", "github.com", "ollama.com", "nodejs.org", "platform.openai.com",
-                "openrouter.ai", "console.groq.com", "chatgpt.com", "claude.ai", "opencode.ai", "docs.astral.sh", "antigravity.google")
+                "openrouter.ai", "console.groq.com", "chatgpt.com", "claude.ai", "opencode.ai", "docs.astral.sh", "antigravity.google",
+                "wa.me", "api.whatsapp.com", "web.whatsapp.com")
 
 
 def cari_cli(nama: str) -> str | None:

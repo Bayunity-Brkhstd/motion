@@ -209,3 +209,17 @@ graph TD
 | `motion/src/presets/index.ts` | Indeks sentral yang mengekspor seluruh preset ke `STYLE_PRESETS`. |
 | `motion/src/Video.tsx` | Komposisi inti Remotion dengan *dynamic lookup* gaya. |
 | `motion/svg-aman.mjs` | Filter validator keamanan SVG (mencegah `<script>` dan atribut event). |
+| `studio/index.html#h-faq` | Halaman Tutorial Penggunaan, FAQ terstruktur (Motion, Motion Pro, Ekstrak Gaya), dan integrasi bantuan resmi via WhatsApp (`wa.me/6283862300495`). |
+
+---
+
+## 6. Pusat Bantuan & Kontak WhatsApp Resmi
+
+Untuk kebutuhan:
+1. **Otorisasi Kode Akses Motion Pro**: Aktivasi workspace video panjang $\ge 4$ menit.
+2. **Request Template Remotion Kustom**: Pembuatan preset animasi khusus.
+3. **Troubleshooting & Tanya Jawab Teknis**: Bantuan konfigurasi AI CLI, Remotion, dan audio.
+
+Hubungi admin/developer langsung melalui WhatsApp resmi:  
+👉 **[WhatsApp Admin: +62 838-6230-0495 (wa.me/6283862300495)](https://wa.me/6283862300495?text=Halo%20Admin%20Cheat%20Clip%20%26%20Motion,%20saya%20ingin%20akses%20Motion%20Pro%20dan%20ada%20pertanyaan)**
+
