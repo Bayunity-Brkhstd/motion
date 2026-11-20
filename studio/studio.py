@@ -1142,46 +1142,72 @@ def ekstrak_gaya_video_pro(d: dict) -> dict:
     elif video_path_str:
         video_target = Path(video_path_str)
         if not video_target.is_absolute():
-            video_target = AKAR / video_path_str
+            video_target = ALAT / video_path_str
     else:
         raise ValueError("Tidak ada file video yang disertakan.")
 
     if not video_target.exists():
         raise ValueError(f"File video '{video_target}' tidak ditemukan.")
 
+    # Cari folder scripts di ALAT (root proyek) atau AKAR (studio)
+    scripts_dir = ALAT / "scripts"
+    if not (scripts_dir / "extract_video_style.py").exists():
+        scripts_dir = AKAR / "scripts"
+
+    py_bin = sys.executable
+    if py_bin.lower().endswith("pythonw.exe"):
+        cand = py_bin[:-5] + ".exe"
+        if Path(cand).exists():
+            py_bin = cand
+
     # 1. Jalankan scripts/extract_video_style.py
     cmd_extract = [
-        sys.executable,
-        str(AKAR / "scripts" / "extract_video_style.py"),
+        py_bin,
+        str(scripts_dir / "extract_video_style.py"),
         "--video", str(video_target),
         "--slug", slug,
     ]
     if auto_purge:
         cmd_extract.append("--purge")
 
-    res1 = subprocess.run(cmd_extract, capture_output=True, text=True, cwd=str(AKAR))
+    res1 = subprocess.run(cmd_extract, capture_output=True, text=True, cwd=str(ALAT))
     if res1.returncode != 0:
         raise RuntimeError(f"Gagal ekstraksi gaya: {res1.stderr or res1.stdout}")
 
     # 2. Jalankan scripts/generate_style_artifacts.py
     cmd_gen = [
-        sys.executable,
-        str(AKAR / "scripts" / "generate_style_artifacts.py"),
+        py_bin,
+        str(scripts_dir / "generate_style_artifacts.py"),
         "--slug", slug,
         "--purge-frames"
     ]
-    res2 = subprocess.run(cmd_gen, capture_output=True, text=True, cwd=str(AKAR))
+    res2 = subprocess.run(cmd_gen, capture_output=True, text=True, cwd=str(ALAT))
     if res2.returncode != 0:
         raise RuntimeError(f"Gagal generate template & skill: {res2.stderr or res2.stdout}")
 
     # 3. Baca metrics hasil generasi
-    metrics_file = AKAR / "tmp_style_frames" / slug / "metrics.json"
+    metrics_file = ALAT / "tmp_style_frames" / slug / "metrics.json"
+    if not metrics_file.exists():
+        metrics_file = AKAR / "tmp_style_frames" / slug / "metrics.json"
+
     metrics = {}
     if metrics_file.exists():
         try:
             metrics = json.loads(metrics_file.read_text(encoding="utf-8"))
         except Exception:
             pass
+
+    return {
+        "ok": True,
+        "slug": slug,
+        "display_name": metrics.get("display_name", slug.title()),
+        "palette_hex": metrics.get("palette_hex", []),
+        "avg_pacing_sec": metrics.get("avg_pacing_sec", 3.5),
+        "skill_md": f"motion/skills/{slug}/SKILL.md",
+        "preset_tsx": f"motion/src/presets/{slug}.tsx",
+        "metrics": metrics,
+        "daftar": daftar_skills_pro()["skills"]
+    }
 
     return {
         "ok": True,
@@ -1540,13 +1566,13 @@ class H(BaseHTTPRequestHandler):
                 return self._json(simpan_naskah_pro(d))
             if jalur == "/api/motion-pro/bersihkan-cache":
                 return self._json(bersihkan_cache_pro())
-            if jalur == "/api/motion-pro/daftar-skills":
+            if jalur in ("/api/motion-pro/daftar-skills", "/api/daftar-skills-global"):
                 return self._json(daftar_skills_pro())
             if jalur == "/api/motion-pro/unggah-skill":
                 return self._json(unggah_skill_pro(d))
             if jalur == "/api/motion-pro/hapus-skill":
                 return self._json(hapus_skill_pro(d))
-            if jalur == "/api/motion-pro/ekstrak-gaya-video":
+            if jalur in ("/api/motion-pro/ekstrak-gaya-video", "/api/ekstrak-gaya-video"):
                 return self._json(ekstrak_gaya_video_pro(d))
             if jalur == "/api/unduh":
                 f = (DATA / d.get("jenis", "") / d.get("nama", "") / d.get("file", "")).resolve()

@@ -3662,6 +3662,9 @@
           <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
           <line x1="12" y1="22.08" x2="12" y2="12"/>
         </svg><span>Motion Pro</span> <span style="font-size:10px;padding:2px 6px;border-radius:99px;background:rgba(168,85,247,0.18);color:#c084fc;border:1px solid rgba(168,85,247,0.35);margin-left:auto;font-family:var(--mono);font-weight:700">4m+</span></button>
+      <button class="nav" data-ke="ekstrak-gaya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg><span>Ekstrak Gaya</span> <span style="font-size:10px;padding:2px 6px;border-radius:99px;background:rgba(245,158,11,0.18);color:#f59e0b;border:1px solid rgba(245,158,11,0.35);margin-left:auto;font-family:var(--mono);font-weight:700">Tools</span></button>
       <div class="label-kecil">Pustaka</div>
       <button class="nav" data-ke="riwayat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
@@ -3731,6 +3734,16 @@
             </div>
             <p>Naskah per adegan, suara narator, 24 gaya template, render MP4 1080×1920.</p><span class="panah">buka
               motion →</span>
+          </div>
+
+          <div class="kartu b-aksi" data-buka="ekstrak-gaya" style="--w:#f59e0b">
+            <div class="b-kepala"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              <h2>Ekstrak Gaya Video</h2>
+            </div>
+            <p>Tools mandiri: ubah video referensi jadi AI Skill &amp; Template Remotion global. Ekstrak pacing, palet 5 HEX, dan motion physics.</p>
+            <span class="panah" style="color:#f59e0b">buka tools ekstrak gaya →</span>
           </div>
 
           <!-- Section Motion Pro (AI Agent Workspace - Durasi >= 4 Menit) -->
@@ -4551,6 +4564,11 @@
                 <button class="tombol utama kecil" id="tblEkstrakGayaPro" style="width:100%;justify-content:center;gap:6px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-weight:600">
                   ✨ Ekstrak Jadi Skill &amp; Template Global
                 </button>
+                <div style="margin-top:6px;text-align:right">
+                  <button type="button" class="tombol teks kecil" onclick="ke('ekstrak-gaya')" style="font-size:10.5px;color:#f59e0b;padding:0">
+                    Buka Tools Ekstrak Gaya Mandiri →
+                  </button>
+                </div>
                 <div id="statusEkstrakVideoPro" style="display:none;margin-top:8px;font-size:11.5px;color:var(--redup);background:var(--kartu-hover);padding:8px 10px;border-radius:6px;border:1px solid #f59e0b33"></div>
               </div>
             </div>
@@ -4713,6 +4731,95 @@
                 <button class="tombol utama" id="tblKirimChatPro" style="background:linear-gradient(135deg, #a855f7, #6366f1);border:none;border-radius:10px;padding:8px 14px;align-self:flex-end">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOOLS MANDIRI: EKSTRAKSI GAYA VIDEO TO GLOBAL SKILL & REMOTION TEMPLATE -->
+      <section class="halaman" id="h-ekstrak-gaya">
+        <div class="kepala">
+          <div>
+            <div class="eyebrow" style="color:#f59e0b">tools mandiri · video reference to global skill &amp; template generator</div>
+            <h1>Ekstrak Gaya <span>Video Global</span></h1>
+            <p>Unggah video referensi (.mp4 / .mov / .webm) untuk mengekstrak DNA visual (pacing adegan, 5 warna HEX dominan, stroke SVG, dan fisika pegas) menjadi <b>Skill AI baru</b> dan <b>Template Remotion baru</b> yang terdaftar secara global.</p>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+          <!-- KOLOM KIRI: INPUT & EKSTRAKSI VIDEO -->
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="kartu" style="padding:18px">
+              <h2 class="judul-kartu" style="font-size:14px;margin-bottom:12px">
+                <i style="background:#f59e0b"></i>1. Unggah Video Referensi
+              </h2>
+
+              <div class="pro-upload-box" id="dropVideoGlobal" style="padding:28px 16px;text-align:center;border:2px dashed var(--garis);border-radius:12px;cursor:pointer;background:var(--kartu-hover);transition:all .2s">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:#f59e0b;margin-bottom:8px">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                <div style="font-size:13px;font-weight:700;color:var(--teks)" id="judulVideoGlobal">Pilih atau Tarik File Video ke Sini</div>
+                <div style="font-size:11.5px;color:var(--redup);margin-top:4px">Format .mp4 / .mov / .webm (disarankan durasi 15s – 2m)</div>
+                <input type="file" id="fileVideoGlobal" accept="video/*" hidden>
+              </div>
+
+              <!-- Pratinjau Video -->
+              <div id="boxVideoGlobalPreview" style="display:none;margin-top:12px">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);border-radius:8px;margin-bottom:10px">
+                  <span class="nama-file" id="labelVideoGlobal" style="font-size:12px;font-weight:600;color:#f59e0b">video-ref.mp4</span>
+                  <button class="pro-btn-del" id="tblHapusVideoGlobal" style="background:none;border:none;color:#f87171;cursor:pointer;font-weight:bold;font-size:13px" title="Hapus video">✕</button>
+                </div>
+                <div style="border-radius:8px;overflow:hidden;background:#000;max-height:300px;display:flex;align-items:center;justify-content:center">
+                  <video id="playerVideoGlobal" controls playsinline style="max-height:300px;width:100%;object-fit:contain"></video>
+                </div>
+              </div>
+
+              <!-- Konfigurasi Nama Gaya -->
+              <div style="margin-top:14px">
+                <label style="font-size:12px;font-weight:600;display:block;margin-bottom:5px;color:var(--teks)">
+                  Nama / Slug Gaya Unik
+                </label>
+                <input type="text" class="input" id="slugGayaGlobal" placeholder="misal: toon-3d-celshaded atau cyberpunk-neon" style="font-size:12px;width:100%;padding:8px 10px">
+                <small style="font-size:10.5px;color:var(--redup);margin-top:4px;display:block">
+                  Akan menjadi nama folder skill <code>motion/skills/&lt;slug&gt;</code> dan preset <code>motion/src/presets/&lt;slug&gt;.tsx</code>.
+                </small>
+              </div>
+
+              <!-- Checkbox Auto-Purge -->
+              <label class="saklar" style="font-size:11.5px;margin-top:12px;color:var(--redup);display:flex;align-items:center;gap:8px;cursor:pointer">
+                <input type="checkbox" id="checkAutoPurgeGlobal" checked>
+                <span><b>Auto-Hapus video mentah</b> setelah gaya diekstrak (hemat ruang disk)</span>
+              </label>
+
+              <!-- Tombol Ekstraksi -->
+              <button class="tombol utama" id="tblProsesEkstrakGlobal" style="width:100%;margin-top:16px;padding:10px;font-size:13px;font-weight:700;justify-content:center;gap:8px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border-radius:8px">
+                ✨ Mulai Ekstraksi Gaya &amp; Daftarkan Global
+              </button>
+
+              <!-- Progress & Status Box -->
+              <div id="boxStatusEkstrakGlobal" style="display:none;margin-top:14px;padding:12px;border-radius:8px;background:var(--kartu-hover);border:1px solid #f59e0b33;font-size:12px">
+              </div>
+            </div>
+          </div>
+
+          <!-- KOLOM KANAN: PUSTAKA SKILL & PRESET GLOBAL TERDAFTAR -->
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="kartu" style="padding:18px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <h2 class="judul-kartu" style="font-size:14px;margin:0">
+                  <i style="background:#10b981"></i>2. Pustaka Skill &amp; Template Global
+                </h2>
+                <button class="tombol kedua kecil" id="tblSegarkanSkillsGlobal" style="font-size:11px;padding:3px 8px">
+                  🔄 Segarkan
+                </button>
+              </div>
+              <p style="font-size:11.5px;color:var(--redup);margin:0 0 12px">
+                Daftar template dan skill AI yang aktif secara global di seluruh sistem Studio dan dapat langsung dipanggil oleh AI Agent.
+              </p>
+
+              <!-- Daftar Kartu Skill Global -->
+              <div id="gridSkillsGlobal" style="display:flex;flex-direction:column;gap:10px;max-height:560px;overflow-y:auto;padding-right:4px">
               </div>
             </div>
           </div>
@@ -5112,6 +5219,9 @@
       if (h === 'motion-pro') {
         if (typeof periksaStatusPro === 'function') periksaStatusPro();
         if (typeof muatModelAktifPro === 'function') muatModelAktifPro();
+      }
+      if (h === 'ekstrak-gaya') {
+        if (typeof muatPustakaSkillsGlobal === 'function') muatPustakaSkillsGlobal();
       }
     }
     $$('.nav').forEach((n) => n.onclick = () => ke(n.dataset.ke));
@@ -7436,9 +7546,213 @@ Aturan:
       };
     }
 
+    // ── TOOLS MANDIRI: EKSTRAK GAYA VIDEO TO GLOBAL SKILL & TEMPLATE ──
+    function initToolsEkstrakGaya() {
+      let VIDEO_GLOBAL_FILE = null;
+      const dropVid = $('#dropVideoGlobal');
+      const fileVid = $('#fileVideoGlobal');
+      const boxPreview = $('#boxVideoGlobalPreview');
+      const playerVid = $('#playerVideoGlobal');
+      const labelVid = $('#labelVideoGlobal');
+      const btnHapusVid = $('#tblHapusVideoGlobal');
+      const inputSlug = $('#slugGayaGlobal');
+      const btnProses = $('#tblProsesEkstrakGlobal');
+      const boxStatus = $('#boxStatusEkstrakGlobal');
+      const checkPurge = $('#checkAutoPurgeGlobal');
+      const gridSkills = $('#gridSkillsGlobal');
+      const btnSegarkan = $('#tblSegarkanSkillsGlobal');
+
+      if (dropVid && fileVid) {
+        dropVid.onclick = () => fileVid.click();
+        dropVid.ondragover = (e) => { e.preventDefault(); dropVid.style.borderColor = '#f59e0b'; };
+        dropVid.ondragleave = () => { dropVid.style.borderColor = ''; };
+        dropVid.ondrop = (e) => {
+          e.preventDefault();
+          dropVid.style.borderColor = '';
+          if (e.dataTransfer.files?.length) muatFileVideoGlobal(e.dataTransfer.files[0]);
+        };
+        fileVid.onchange = () => {
+          if (fileVid.files?.length) muatFileVideoGlobal(fileVid.files[0]);
+        };
+      }
+
+      function muatFileVideoGlobal(file) {
+        if (!file) return;
+        VIDEO_GLOBAL_FILE = file;
+        const url = URL.createObjectURL(file);
+        if (playerVid) playerVid.src = url;
+        if (labelVid) labelVid.textContent = file.name;
+        if (boxPreview) boxPreview.style.display = 'block';
+        if (inputSlug && !inputSlug.value) {
+          const auto = file.name.replace(/\.[^/.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+          inputSlug.value = auto;
+        }
+        toast('Video referensi berhasil dimuat: ' + file.name);
+      }
+
+      const bersihkanVideoGlobal = () => {
+        VIDEO_GLOBAL_FILE = null;
+        if (fileVid) fileVid.value = '';
+        if (playerVid) { playerVid.pause(); playerVid.src = ''; }
+        if (boxPreview) boxPreview.style.display = 'none';
+        if (boxStatus) { boxStatus.style.display = 'none'; boxStatus.innerHTML = ''; }
+      };
+      if (btnHapusVid) btnHapusVid.onclick = bersihkanVideoGlobal;
+
+      // Fungsi muat pustaka skills & preset global
+      window.muatPustakaSkillsGlobal = async () => {
+        if (!gridSkills) return;
+        try {
+          const res = await api('/api/daftar-skills-global');
+          if (res.ok && res.skills) {
+            gridSkills.innerHTML = res.skills.map((s) => {
+              const paletHtml = (s.palette_hex && s.palette_hex.length)
+                ? s.palette_hex.map((c) => `<span style="display:inline-block;width:16px;height:16px;border-radius:3px;background:${c};border:1px solid #ffffff33;cursor:pointer" title="Klik untuk salin ${c}" onclick="navigator.clipboard.writeText('${c}');toast('Warna ${c} disalin!')"></span>`).join('')
+                : '<span style="color:var(--redup);font-size:11px">Default</span>';
+              return `
+                <div class="kartu" style="padding:12px;background:var(--kartu);border:1px solid var(--garis);border-radius:8px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                    <div style="display:flex;align-items:center;gap:6px">
+                      <b style="font-size:12.5px;color:var(--teks)">${esc(s.nama || s.id)}</b>
+                      <span style="font-size:9.5px;padding:1px 6px;border-radius:99px;font-family:var(--mono);font-weight:700;background:${s.inti ? 'rgba(59,130,246,0.15)' : 'rgba(245,158,11,0.15)'};color:${s.inti ? '#60a5fa' : '#f59e0b'};border:1px solid ${s.inti ? 'rgba(59,130,246,0.3)' : 'rgba(245,158,11,0.3)'}">
+                        ${s.inti ? 'Bawaan' : 'Kustom Video'}
+                      </span>
+                    </div>
+                    ${!s.inti ? `<button onclick="hapusSkillGlobal('${esc(s.id)}')" style="background:none;border:none;color:#f87171;font-weight:bold;cursor:pointer;font-size:12px;padding:2px 6px" title="Hapus skill & preset">✕ Hapus</button>` : ''}
+                  </div>
+                  <div style="font-size:11px;color:var(--redup);margin-bottom:8px;line-height:1.4">
+                    ${esc(s.deskripsi || 'Skill modul animasi terintegrasi global.')}
+                  </div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--garis);padding-top:8px">
+                    <div style="display:flex;align-items:center;gap:4px">
+                      <small style="font-size:10px;color:var(--redup)">Palet:</small>
+                      ${paletHtml}
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px">
+                      <span style="font-size:10.5px;font-family:var(--mono);color:var(--redup)">~${s.avg_pacing_sec || 3.5}s</span>
+                      <button class="tombol kedua kecil" style="font-size:10px;padding:2px 6px" onclick="navigator.clipboard.writeText('${esc(s.id)}');toast('Slug gaya \\'${esc(s.id)}\\' disalin!')">
+                        Salin Slug
+                      </button>
+                    </div>
+                  </div>
+                </div>`;
+            }).join('');
+          }
+        } catch {}
+      };
+
+      window.hapusSkillGlobal = async (idSkill) => {
+        if (!confirm(`Hapus skill & preset "${idSkill}" secara permanen?`)) return;
+        try {
+          const res = await api('/api/motion-pro/hapus-skill', { id: idSkill });
+          if (res.ok) {
+            toast(`Skill & preset "${idSkill}" berhasil dihapus.`);
+            muatPustakaSkillsGlobal();
+            if (typeof muatDaftarSkillsPro === 'function') muatDaftarSkillsPro();
+          }
+        } catch (e) {
+          toast('Gagal menghapus: ' + e.message, true);
+        }
+      };
+
+      if (btnSegarkan) btnSegarkan.onclick = () => muatPustakaSkillsGlobal();
+
+      if (btnProses) {
+        btnProses.onclick = async () => {
+          if (!VIDEO_GLOBAL_FILE) {
+            toast('Silakan pilih file video referensi terlebih dahulu.', true);
+            return;
+          }
+          const rawSlug = (inputSlug?.value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+          const slug = rawSlug || 'style-' + Date.now();
+          const autoPurge = checkPurge ? checkPurge.checked : true;
+
+          btnProses.disabled = true;
+          if (boxStatus) {
+            boxStatus.style.display = 'block';
+            boxStatus.innerHTML = `
+              <div style="display:flex;align-items:center;gap:8px;color:#f59e0b;font-weight:700">
+                <span style="width:14px;height:14px;border:2px solid rgba(245,158,11,0.3);border-top-color:#f59e0b;border-radius:50%;display:inline-block;animation:spin .8s linear infinite"></span>
+                Sedang Mengekstrak DNA Visual &amp; Pacing...
+              </div>
+              <div style="font-size:11px;color:var(--redup);margin-top:6px;line-height:1.4">
+                1. Menganalisis pergantian adegan (scene cut gt(scene,0.35))<br>
+                2. Mengekstrak keyframe &amp; kuantisasi 5 palet warna HEX<br>
+                3. Menyusun Remotion Preset (.tsx) &amp; Global AI Skill (.md)
+              </div>`;
+          }
+
+          try {
+            const base64 = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const res = reader.result;
+                resolve(typeof res === 'string' && res.includes(',') ? res.split(',')[1] : res);
+              };
+              reader.onerror = reject;
+              reader.readAsDataURL(VIDEO_GLOBAL_FILE);
+            });
+
+            const res = await api('/api/ekstrak-gaya-video', {
+              video: base64,
+              slug: slug,
+              auto_purge: autoPurge
+            });
+
+            if (res.ok) {
+              toast(`Gaya '${res.slug}' berhasil dibuat & terdaftar secara global!`);
+              if (boxStatus) {
+                const paletHtml = (res.palette_hex || []).map((c) => `
+                  <span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:${c};border:1px solid #ffffff33;cursor:pointer" title="${c}" onclick="navigator.clipboard.writeText('${c}');toast('Warna ${c} disalin!')"></span>
+                `).join('');
+                boxStatus.innerHTML = `
+                  <div style="color:#10b981;font-weight:700;font-size:13px;margin-bottom:6px">
+                    ✓ Sukses Didaftarkan Secara Global!
+                  </div>
+                  <div style="font-size:11.5px;color:var(--teks);margin-bottom:4px">
+                    <b>Nama Gaya:</b> <code>${esc(res.slug)}</code> · <b>Pacing:</b> ~${res.avg_pacing_sec} detik
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;margin:8px 0">
+                    <span style="font-size:11px;color:var(--redup)">Palet HEX:</span> ${paletHtml}
+                  </div>
+                  <div style="font-size:10.5px;color:var(--redup);background:var(--kartu);padding:8px;border-radius:6px;line-height:1.4;margin-top:6px">
+                    📄 Skill Global: <code>${esc(res.skill_md)}</code><br>
+                    🎬 Remotion Preset: <code>${esc(res.preset_tsx)}</code>
+                  </div>
+                  <div style="margin-top:10px;display:flex;gap:8px">
+                    <button class="tombol kedua kecil" onclick="navigator.clipboard.writeText('${esc(res.slug)}');toast('Slug gaya disalin!')">
+                      Salin Slug Gaya
+                    </button>
+                    <button class="tombol utama kecil" onclick="ke('motion-pro')" style="background:linear-gradient(135deg,#a855f7,#6366f1)">
+                      Buka di Motion Pro →
+                    </button>
+                  </div>`;
+              }
+
+              // Segarkan pustaka global dan Card 4
+              muatPustakaSkillsGlobal();
+              if (typeof muatDaftarSkillsPro === 'function') muatDaftarSkillsPro();
+
+              if (autoPurge) {
+                bersihkanVideoGlobal();
+              }
+            }
+          } catch (err) {
+            toast('Gagal mengekstrak gaya: ' + err.message, true);
+            if (boxStatus) {
+              boxStatus.innerHTML = `<span style="color:#f87171;font-weight:600">✕ Gagal: ${esc(err.message)}</span>`;
+            }
+          } finally {
+            btnProses.disabled = false;
+          }
+        };
+      }
+    }
+
     // awal: lanjutkan proses yang masih jalan
     (async () => {
       initMotionPro();
+      initToolsEkstrakGaya();
       await muatPengaturan();
       muatBeranda();
       try { const x = await api('/api/sistem-detail'); if (!x.wizard_selesai) bukaWizard(); } catch { }
