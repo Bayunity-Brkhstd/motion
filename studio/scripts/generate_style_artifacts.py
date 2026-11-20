@@ -267,6 +267,15 @@ def update_skills_registry(metrics: dict, registry_path: Path):
     registry_path.write_text(json.dumps(registry, indent=2), encoding="utf-8")
 
 
+def find_repo_root() -> Path:
+    """Mencari root folder repository secara dinamis agar path otomatis valid jika folder dipindah."""
+    cur = Path(__file__).resolve().parent
+    for p in [Path.cwd(), cur, cur.parent, cur.parent.parent]:
+        if (p / "motion").exists() and (p / "motion" / "src").exists():
+            return p
+    return Path.cwd()
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generator Skill & Template dari metrics video.")
     parser.add_argument("--metrics", help="Path ke file metrics.json")
@@ -274,12 +283,15 @@ def main():
     parser.add_argument("--purge-frames", action="store_true", help="Bersihkan folder frame sementara setelah generasi selesai")
 
     args = parser.parse_args()
+    repo_root = find_repo_root()
 
     metrics_file = None
     if args.metrics:
         metrics_file = Path(args.metrics)
+        if not metrics_file.is_absolute():
+            metrics_file = repo_root / metrics_file
     elif args.slug:
-        metrics_file = Path("tmp_style_frames") / args.slug / "metrics.json"
+        metrics_file = repo_root / "tmp_style_frames" / args.slug / "metrics.json"
 
     if not metrics_file or not metrics_file.exists():
         sys.stderr.write(f"[ERROR] File metrics '{metrics_file}' tidak ditemukan.\n")
@@ -292,30 +304,30 @@ def main():
         sys.exit(1)
 
     # 1. Generate Global Skill: motion/skills/<slug>/SKILL.md
-    skill_md_path = Path("motion") / "skills" / slug / "SKILL.md"
+    skill_md_path = repo_root / "motion" / "skills" / slug / "SKILL.md"
     generate_skill_md(metrics, skill_md_path)
 
     # Sinkronisasi ke .agent/skills/<slug>/SKILL.md jika folder .agent/skills ada
-    agent_skills_dir = Path(".agent") / "skills"
+    agent_skills_dir = repo_root / ".agent" / "skills"
     if agent_skills_dir.exists():
         agent_skill_path = agent_skills_dir / slug / "SKILL.md"
         generate_skill_md(metrics, agent_skill_path)
 
     # 2. Generate Preset Remotion: motion/src/presets/<slug>.tsx
-    preset_tsx_path = Path("motion") / "src" / "presets" / f"{slug}.tsx"
+    preset_tsx_path = repo_root / "motion" / "src" / "presets" / f"{slug}.tsx"
     generate_preset_tsx(metrics, preset_tsx_path)
 
     # 3. Update Preset Registry: motion/src/presets/index.ts
-    presets_index_path = Path("motion") / "src" / "presets" / "index.ts"
+    presets_index_path = repo_root / "motion" / "src" / "presets" / "index.ts"
     update_presets_index(slug, presets_index_path)
 
     # 4. Update Global Skills Manifest: motion/skills/registry.json
-    registry_path = Path("motion") / "skills" / "registry.json"
+    registry_path = repo_root / "motion" / "skills" / "registry.json"
     update_skills_registry(metrics, registry_path)
 
     # 5. Purge frames jika diminta
     if args.purge_frames:
-        frames_dir = Path("tmp_style_frames") / slug
+        frames_dir = repo_root / "tmp_style_frames" / slug
         if frames_dir.exists():
             shutil.rmtree(frames_dir, ignore_errors=True)
 

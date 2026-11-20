@@ -218,6 +218,15 @@ def generate_metrics(slug: str, durasi: float, scene_count: int, aspect: str, pa
     return metrics
 
 
+def find_repo_root() -> Path:
+    """Mencari root folder repository secara dinamis agar path otomatis valid jika folder dipindah."""
+    cur = Path(__file__).resolve().parent
+    for p in [Path.cwd(), cur, cur.parent, cur.parent.parent]:
+        if (p / "motion").exists() and (p / "motion" / "src").exists():
+            return p
+    return Path.cwd()
+
+
 def main():
     parser = argparse.ArgumentParser(description="Ekstraksi DNA visual dan pacing dari video referensi.")
     parser.add_argument("--video", required=False, help="Path ke file video referensi (.mp4, .mov, .webm)")
@@ -226,11 +235,13 @@ def main():
     parser.add_argument("--mock", action="store_true", help="Gunakan mock metrics tanpa video fisik")
 
     args = parser.parse_args()
+    repo_root = find_repo_root()
+
     slug = re.sub(r"[^\w-]", "-", args.slug.lower()).strip("-")
     if not slug:
         slug = "style-custom"
 
-    out_dir = Path("tmp_style_frames") / slug
+    out_dir = repo_root / "tmp_style_frames" / slug
     out_dir.mkdir(parents=True, exist_ok=True)
     metrics_path = out_dir / "metrics.json"
 
@@ -243,6 +254,8 @@ def main():
         return
 
     video_path = Path(args.video)
+    if not video_path.is_absolute():
+        video_path = repo_root / video_path
     if not video_path.exists():
         sys.stderr.write(f"[ERROR] File video '{video_path}' tidak ditemukan.\n")
         sys.exit(1)
