@@ -4,6 +4,7 @@ import {
   AbsoluteFill, Audio, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig,
 } from 'remotion';
 import {TEMA, Tema} from './tema';
+import {STYLE_PRESETS, StylePreset} from './presets';
 import {FilterIlustrasi} from './ilustrasi';
 
 export const FPS = 30;
@@ -46,7 +47,7 @@ export const frameIntro = (p: Props) => {
 
 export const totalFrame = (p: Props) => frameIntro(p) + p.adegan.reduce((s, a) => s + frameAdegan(a, !!p.audioNarasi), 0);
 
-const temaDari = (p: Props): Tema => TEMA[p.gaya] ?? TEMA.garis;
+const temaDari = (p: Props): StylePreset => (STYLE_PRESETS[p.gaya] ?? TEMA[p.gaya] ?? STYLE_PRESETS.garis ?? TEMA.garis) as StylePreset;
 const warnaAdegan = (t: Tema, i: number, aksenProp?: string) => {
   const pn = t.panel?.[i % t.panel.length];
   return {bg: pn?.bg, teks: pn?.teks ?? t.teks, aksen: aksenProp ?? pn?.aksen ?? t.aksen,

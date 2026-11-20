@@ -1,4 +1,7 @@
-# Dependencies
+# Temporary processing
+tmp_style_frames/
+data/tmp_extract/
+
 node_modules/
 .venv/
 venv/

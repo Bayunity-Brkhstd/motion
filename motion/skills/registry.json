@@ -1,0 +1,77 @@
+[
+  {
+    "slug": "isometric-video",
+    "name": "Isometric Video 3D",
+    "description": "Motion graphics 3D isometrik dengan motion blur 180 shutter dan closed-form springs physics.",
+    "palette_hex": [
+      "#0B1B2B",
+      "#4FC3F7",
+      "#FACC15",
+      "#FFFFFF",
+      "#1E293B"
+    ],
+    "avg_pacing_sec": 4.5,
+    "created_at": "2026-11-18T20:50:00Z",
+    "inti": true
+  },
+  {
+    "slug": "motion-graphics",
+    "name": "Motion Graphics Pro",
+    "description": "Motion graphics dan video berbasis kode deterministik dengan 17 gaya visual.",
+    "palette_hex": [
+      "#111111",
+      "#F2C230",
+      "#3FAE3F",
+      "#FFFFFF",
+      "#6E1414"
+    ],
+    "avg_pacing_sec": 3.8,
+    "created_at": "2026-11-18T20:50:00Z",
+    "inti": true
+  },
+  {
+    "slug": "sound-effects",
+    "name": "Sound Effects & Audio Mix",
+    "description": "Sound design dengan beat alignment dan mixing terukur -16 LUFS.",
+    "palette_hex": [
+      "#0F172A",
+      "#38BDF8",
+      "#818CF8",
+      "#F43F5E",
+      "#E2E8F0"
+    ],
+    "avg_pacing_sec": 3.0,
+    "created_at": "2026-11-18T20:50:00Z",
+    "inti": true
+  },
+  {
+    "slug": "video-making",
+    "name": "Video Making Engine",
+    "description": "Produksi video motion graphic flat-3D terprogram menggunakan Remotion & Playwright.",
+    "palette_hex": [
+      "#1D1A16",
+      "#E4572E",
+      "#F3C969",
+      "#FFFFFF",
+      "#2F3E46"
+    ],
+    "avg_pacing_sec": 4.0,
+    "created_at": "2026-11-18T20:50:00Z",
+    "inti": true
+  },
+  {
+    "slug": "toon-3d-celshaded",
+    "name": "Toon 3D Celshaded",
+    "description": "Preset gaya visual dinamis diekstrak dari video referensi dengan pacing 3.2s dan palet warna #14427A, #0B0B0B, #FACC15, #38BDF8, #F97316.",
+    "palette_hex": [
+      "#14427A",
+      "#0B0B0B",
+      "#FACC15",
+      "#38BDF8",
+      "#F97316"
+    ],
+    "avg_pacing_sec": 3.2,
+    "created_at": "2026-11-20T16:53:24.464154+00:00",
+    "inti": false
+  }
+]

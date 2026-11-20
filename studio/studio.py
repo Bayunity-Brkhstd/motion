@@ -1016,18 +1016,39 @@ def daftar_skills_pro() -> dict:
     """Daftar modul skills yang aktif di folder motion/skills/."""
     skill_dir = MOTION / "skills"
     skill_dir.mkdir(parents=True, exist_ok=True)
-    inti = {"isometric-video", "motion-graphics", "sound-effects", "video-making", "SKILL-LONGFORM.md", "prompt-agent.md", "alur-produksi.json"}
+    reg_file = skill_dir / "registry.json"
+    reg_map = {}
+    if reg_file.exists():
+        try:
+            items = json.loads(reg_file.read_text(encoding="utf-8"))
+            if isinstance(items, list):
+                for it in items:
+                    if isinstance(it, dict) and "slug" in it:
+                        reg_map[it["slug"]] = it
+        except Exception:
+            pass
+
+    inti = {"isometric-video", "motion-graphics", "sound-effects", "video-making", "SKILL-LONGFORM.md", "prompt-agent.md", "alur-produksi.json", "registry.json"}
     daftar = []
     for item in skill_dir.iterdir():
         if item.name.startswith("."):
             continue
         is_dir = item.is_dir()
         is_md = item.suffix.lower() == ".md"
+        slug = item.stem if is_md else item.name
+        if slug in {"registry", "prompt-agent", "alur-produksi"}:
+            continue
         if is_dir or is_md:
+            info = reg_map.get(slug, {})
             daftar.append({
-                "nama": item.stem if is_md else item.name,
+                "id": slug,
+                "nama": info.get("name") or (item.stem if is_md else item.name),
+                "deskripsi": info.get("description", ""),
+                "palette_hex": info.get("palette_hex", []),
+                "avg_pacing_sec": info.get("avg_pacing_sec", 3.5),
                 "inti": item.name in inti or item.stem in inti,
                 "jenis": "folder" if is_dir else "markdown",
+                "aktif": True,
                 "siap": True
             })
     return {"ok": True, "skills": daftar}
@@ -1064,7 +1085,7 @@ def unggah_skill_pro(d: dict) -> dict:
 
 def hapus_skill_pro(d: dict) -> dict:
     """Menghapus skill eksternal custom dari motion/skills/ (skill bawaan dilindungi)."""
-    nama = re.sub(r"[^\w-]", "", d.get("nama", ""))
+    nama = re.sub(r"[^\w-]", "", d.get("nama", "") or d.get("id", ""))
     inti = {"isometric-video", "motion-graphics", "sound-effects", "video-making"}
     if nama in inti:
         raise ValueError(f"Skill inti '{nama}' tidak dapat dihapus.")
@@ -1075,9 +1096,104 @@ def hapus_skill_pro(d: dict) -> dict:
         shutil.rmtree(target_dir)
     elif target_md.is_file():
         target_md.unlink()
-    else:
-        raise ValueError("Skill tidak ditemukan.")
+
+    # Hapus dari registry.json jika ada
+    reg_file = skill_dir / "registry.json"
+    if reg_file.exists():
+        try:
+            items = json.loads(reg_file.read_text(encoding="utf-8"))
+            items = [it for it in items if it.get("slug") != nama]
+            reg_file.write_text(json.dumps(items, indent=2), encoding="utf-8")
+        except Exception:
+            pass
+
+    # Hapus preset .tsx jika ada
+    preset_file = MOTION / "src" / "presets" / f"{nama}.tsx"
+    if preset_file.is_file():
+        try:
+            preset_file.unlink()
+        except Exception:
+            pass
+
     return {"ok": True, "daftar": daftar_skills_pro()["skills"]}
+
+
+def ekstrak_gaya_video_pro(d: dict) -> dict:
+    """Ekstraksi gaya visual video referensi -> Buat AI Skill & Preset Remotion Global."""
+    import base64
+    slug = re.sub(r"[^\w-]", "-", (d.get("slug") or "style-custom").lower()).strip("-")
+    if not slug:
+        slug = f"style-{int(time.time())}"
+
+    video_b64 = d.get("video", "") or d.get("data", "")
+    video_path_str = d.get("video_path", "")
+    auto_purge = bool(d.get("auto_purge", True))
+
+    tmp_video = None
+    if video_b64:
+        if "," in video_b64:
+            video_b64 = video_b64.split(",", 1)[1]
+        raw_bytes = base64.b64decode(video_b64)
+        tmp_dir = DATA / "tmp_extract"
+        tmp_dir.mkdir(parents=True, exist_ok=True)
+        tmp_video = tmp_dir / f"ref_{slug}_{int(time.time())}.mp4"
+        tmp_video.write_bytes(raw_bytes)
+        video_target = tmp_video
+    elif video_path_str:
+        video_target = Path(video_path_str)
+        if not video_target.is_absolute():
+            video_target = AKAR / video_path_str
+    else:
+        raise ValueError("Tidak ada file video yang disertakan.")
+
+    if not video_target.exists():
+        raise ValueError(f"File video '{video_target}' tidak ditemukan.")
+
+    # 1. Jalankan scripts/extract_video_style.py
+    cmd_extract = [
+        sys.executable,
+        str(AKAR / "scripts" / "extract_video_style.py"),
+        "--video", str(video_target),
+        "--slug", slug,
+    ]
+    if auto_purge:
+        cmd_extract.append("--purge")
+
+    res1 = subprocess.run(cmd_extract, capture_output=True, text=True, cwd=str(AKAR))
+    if res1.returncode != 0:
+        raise RuntimeError(f"Gagal ekstraksi gaya: {res1.stderr or res1.stdout}")
+
+    # 2. Jalankan scripts/generate_style_artifacts.py
+    cmd_gen = [
+        sys.executable,
+        str(AKAR / "scripts" / "generate_style_artifacts.py"),
+        "--slug", slug,
+        "--purge-frames"
+    ]
+    res2 = subprocess.run(cmd_gen, capture_output=True, text=True, cwd=str(AKAR))
+    if res2.returncode != 0:
+        raise RuntimeError(f"Gagal generate template & skill: {res2.stderr or res2.stdout}")
+
+    # 3. Baca metrics hasil generasi
+    metrics_file = AKAR / "tmp_style_frames" / slug / "metrics.json"
+    metrics = {}
+    if metrics_file.exists():
+        try:
+            metrics = json.loads(metrics_file.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+
+    return {
+        "ok": True,
+        "slug": slug,
+        "display_name": metrics.get("display_name", slug.title()),
+        "palette_hex": metrics.get("palette_hex", []),
+        "avg_pacing_sec": metrics.get("avg_pacing_sec", 3.5),
+        "skill_md": f"motion/skills/{slug}/SKILL.md",
+        "preset_tsx": f"motion/src/presets/{slug}.tsx",
+        "metrics": metrics,
+        "daftar": daftar_skills_pro()["skills"]
+    }
 
 
 def muat_proyek(jenis: str, nama: str) -> dict:
@@ -1430,6 +1546,8 @@ class H(BaseHTTPRequestHandler):
                 return self._json(unggah_skill_pro(d))
             if jalur == "/api/motion-pro/hapus-skill":
                 return self._json(hapus_skill_pro(d))
+            if jalur == "/api/motion-pro/ekstrak-gaya-video":
+                return self._json(ekstrak_gaya_video_pro(d))
             if jalur == "/api/unduh":
                 f = (DATA / d.get("jenis", "") / d.get("nama", "") / d.get("file", "")).resolve()
                 if not f.is_file() or DATA.resolve() not in f.parents:
