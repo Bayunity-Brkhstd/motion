@@ -195,6 +195,7 @@ def generate_metrics(slug: str, durasi: float, scene_count: int, aspect: str, pa
         "avg_pacing_sec": avg_pacing,
         "aspect_ratio": aspect,
         "palette_hex": palette_hex,
+        "thumbnail": f"/aset/gaya/{slug}.jpg",
         "visual_grammar": {
             "rendering_style": "3D cel-shaded toon outline / flat kinetic vector",
             "stroke_rule": f"stroke='{palette_hex[1]}' stroke-width='3.5' stroke-linejoin='round' stroke-linecap='round'",
@@ -216,6 +217,74 @@ def generate_metrics(slug: str, durasi: float, scene_count: int, aspect: str, pa
         }
     }
     return metrics
+
+
+def save_template_thumbnail(keyframes: List[Path], video_path: Path, durasi: float, out_thumb_path: Path, palette: List[str] = None):
+    """Menyimpan 1 screenshot representatif rasio 9:16 (270x480) ke folder studio/aset/gaya/<slug>.jpg."""
+    out_thumb_path.parent.mkdir(parents=True, exist_ok=True)
+    target_w, target_h = 270, 480
+    target_ratio = target_w / target_h  # 0.5625
+
+    # 1. Coba ambil dari keyframes (ambil keyframe pada ~35% durasi)
+    chosen_frame = None
+    if keyframes:
+        idx = max(0, min(len(keyframes) - 1, len(keyframes) // 3))
+        chosen_frame = keyframes[idx]
+
+    if chosen_frame and chosen_frame.exists() and Image:
+        try:
+            with Image.open(chosen_frame) as img:
+                im = img.convert("RGB")
+                w, h = im.size
+                current_ratio = w / h
+                if current_ratio > target_ratio:
+                    new_w = int(h * target_ratio)
+                    left = (w - new_w) // 2
+                    im_cropped = im.crop((left, 0, left + new_w, h))
+                else:
+                    new_h = int(w / target_ratio)
+                    top = (h - new_h) // 2
+                    im_cropped = im.crop((0, top, w, top + new_h))
+
+                im_final = im_cropped.resize((target_w, target_h), Image.Resampling.LANCZOS)
+                im_final.save(out_thumb_path, "JPEG", quality=90)
+                return out_thumb_path
+        except Exception as e:
+            sys.stderr.write(f"[WARN] Gagal crop thumbnail via PIL: {e}\n")
+
+    # 2. Coba via ffmpeg jika video_path ada
+    if video_path and video_path.exists():
+        midpoint = max(1.0, durasi / 3.0)
+        cmd = [
+            "ffmpeg", "-y",
+            "-ss", f"{midpoint:.2f}",
+            "-i", str(video_path),
+            "-vframes", "1",
+            "-vf", "crop=ih*9/16:ih,scale=270:480",
+            "-q:v", "2",
+            str(out_thumb_path)
+        ]
+        try:
+            subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+            if out_thumb_path.exists():
+                return out_thumb_path
+        except Exception:
+            pass
+
+    # 3. Fallback placeholder visual jika mock atau gagal
+    if Image and palette:
+        try:
+            from PIL import ImageDraw
+            img = Image.new("RGB", (target_w, target_h), color=palette[0])
+            draw = ImageDraw.Draw(img)
+            draw.ellipse([30, 80, 240, 290], outline=palette[2], width=4)
+            draw.rectangle([40, 320, 230, 390], fill=palette[1])
+            img.save(out_thumb_path, "JPEG", quality=85)
+            return out_thumb_path
+        except Exception:
+            pass
+
+    return out_thumb_path
 
 
 def find_repo_root() -> Path:
@@ -245,9 +314,12 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
     metrics_path = out_dir / "metrics.json"
 
+    thumb_path = repo_root / "studio" / "aset" / "gaya" / f"{slug}.jpg"
+
     if args.mock or not args.video:
         # Mock mode
         palette = ["#14427A", "#0B0B0B", "#FACC15", "#38BDF8", "#F97316"]
+        save_template_thumbnail([], None, 32.0, thumb_path, palette)
         metrics = generate_metrics(slug, 32.0, 10, "9:16", palette)
         metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
         print(json.dumps(metrics, indent=2))
@@ -275,11 +347,14 @@ def main():
     # 4. Dominant color extraction
     palette_hex = extract_dominant_palette(keyframes)
 
-    # 5. Build metrics
+    # 5. Simpan 1 screenshot representatif ke studio/aset/gaya/<slug>.jpg
+    save_template_thumbnail(keyframes, video_path, durasi, thumb_path, palette_hex)
+
+    # 6. Build metrics
     metrics = generate_metrics(slug, durasi, scene_count, aspect, palette_hex)
     metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
 
-    # 6. Auto-purge if requested
+    # 7. Auto-purge if requested
     if args.purge:
         try:
             if video_path.is_file():

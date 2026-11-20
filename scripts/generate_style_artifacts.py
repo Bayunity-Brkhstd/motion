@@ -248,6 +248,7 @@ def update_skills_registry(metrics: dict, registry_path: Path):
         "description": metrics.get("description", ""),
         "palette_hex": metrics.get("palette_hex", []),
         "avg_pacing_sec": metrics.get("avg_pacing_sec", 3.5),
+        "thumbnail": metrics.get("thumbnail") or f"/aset/gaya/{slug}.jpg",
         "created_at": now_iso,
         "inti": False
     }

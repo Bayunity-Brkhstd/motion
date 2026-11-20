@@ -1046,6 +1046,7 @@ def daftar_skills_pro() -> dict:
                 "deskripsi": info.get("description", ""),
                 "palette_hex": info.get("palette_hex", []),
                 "avg_pacing_sec": info.get("avg_pacing_sec", 3.5),
+                "thumbnail": info.get("thumbnail") or f"/aset/gaya/{slug}.jpg",
                 "inti": item.name in inti or item.stem in inti,
                 "jenis": "folder" if is_dir else "markdown",
                 "aktif": True,
@@ -1112,6 +1113,14 @@ def hapus_skill_pro(d: dict) -> dict:
     if preset_file.is_file():
         try:
             preset_file.unlink()
+        except Exception:
+            pass
+
+    # Hapus thumbnail jika ada
+    thumb_file = AKAR / "aset" / "gaya" / f"{nama}.jpg"
+    if thumb_file.is_file():
+        try:
+            thumb_file.unlink()
         except Exception:
             pass
 

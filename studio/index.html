@@ -7616,19 +7616,26 @@ Aturan:
                 : '<span style="color:var(--redup);font-size:11px">Default</span>';
               return `
                 <div class="kartu" style="padding:12px;background:var(--kartu);border:1px solid var(--garis);border-radius:8px">
-                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-                    <div style="display:flex;align-items:center;gap:6px">
-                      <b style="font-size:12.5px;color:var(--teks)">${esc(s.nama || s.id)}</b>
-                      <span style="font-size:9.5px;padding:1px 6px;border-radius:99px;font-family:var(--mono);font-weight:700;background:${s.inti ? 'rgba(59,130,246,0.15)' : 'rgba(245,158,11,0.15)'};color:${s.inti ? '#60a5fa' : '#f59e0b'};border:1px solid ${s.inti ? 'rgba(59,130,246,0.3)' : 'rgba(245,158,11,0.3)'}">
-                        ${s.inti ? 'Bawaan' : 'Kustom Video'}
-                      </span>
+                  <div style="display:flex;gap:12px;align-items:flex-start">
+                    <div style="width:54px;aspect-ratio:9/16;border-radius:6px;overflow:hidden;background:#000;flex-shrink:0;border:1px solid var(--garis);display:flex;align-items:center;justify-content:center">
+                      <img src="/aset/gaya/${s.id}.jpg" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.style.display='none'">
                     </div>
-                    ${!s.inti ? `<button onclick="hapusSkillGlobal('${esc(s.id)}')" style="background:none;border:none;color:#f87171;font-weight:bold;cursor:pointer;font-size:12px;padding:2px 6px" title="Hapus skill & preset">✕ Hapus</button>` : ''}
+                    <div style="flex:1;min-width:0">
+                      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                        <div style="display:flex;align-items:center;gap:6px">
+                          <b style="font-size:12.5px;color:var(--teks)">${esc(s.nama || s.id)}</b>
+                          <span style="font-size:9.5px;padding:1px 6px;border-radius:99px;font-family:var(--mono);font-weight:700;background:${s.inti ? 'rgba(59,130,246,0.15)' : 'rgba(245,158,11,0.15)'};color:${s.inti ? '#60a5fa' : '#f59e0b'};border:1px solid ${s.inti ? 'rgba(59,130,246,0.3)' : 'rgba(245,158,11,0.3)'}">
+                            ${s.inti ? 'Bawaan' : 'Kustom Video'}
+                          </span>
+                        </div>
+                        ${!s.inti ? `<button onclick="hapusSkillGlobal('${esc(s.id)}')" style="background:none;border:none;color:#f87171;font-weight:bold;cursor:pointer;font-size:12px;padding:2px 6px" title="Hapus skill & preset">✕ Hapus</button>` : ''}
+                      </div>
+                      <div style="font-size:11px;color:var(--redup);margin-bottom:8px;line-height:1.4">
+                        ${esc(s.deskripsi || 'Skill modul animasi terintegrasi global.')}
+                      </div>
+                    </div>
                   </div>
-                  <div style="font-size:11px;color:var(--redup);margin-bottom:8px;line-height:1.4">
-                    ${esc(s.deskripsi || 'Skill modul animasi terintegrasi global.')}
-                  </div>
-                  <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--garis);padding-top:8px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--garis);padding-top:8px;margin-top:8px">
                     <div style="display:flex;align-items:center;gap:4px">
                       <small style="font-size:10px;color:var(--redup)">Palet:</small>
                       ${paletHtml}
@@ -7686,7 +7693,8 @@ Aturan:
             card.dataset.v = s.id;
             card.title = s.nama || s.id;
             card.innerHTML = `
-              <div style="aspect-ratio:9/16;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%, ${bg}, #050505 85%);position:relative;padding:8px;box-sizing:border-box;overflow:hidden">
+              <img src="/aset/gaya/${s.id}.jpg?t=${Date.now()}" alt="${esc(s.nama || s.id)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="kustom-fallback" style="display:none;aspect-ratio:9/16;width:100%;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%, ${bg}, #050505 85%);position:relative;padding:8px;box-sizing:border-box;overflow:hidden">
                 <div style="display:flex;gap:3px;margin-bottom:8px">
                   ${palet.slice(0, 5).map(c => `<span style="width:10px;height:10px;border-radius:2px;background:${c};border:1px solid #ffffff44" title="${c}"></span>`).join('')}
                 </div>
