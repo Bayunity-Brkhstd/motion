@@ -216,7 +216,7 @@ flowchart TD
 #### Step 1: Menentukan Materi & Mode Input
 Pilih salah satu metode input naskah di aplikasi:
 - **Aplikasi Canvas Gemini (Akses Cepat di Beranda):**
-  - Klik kartu *Aplikasi Canvas Gemini* di Beranda atau buka [Gemini Canvas Naskah](https://share.gemini.google/E7p6uXgwoxzS) untuk merancang, mengedit, dan memformat naskah hook serta adegan secara visual dan kolaboratif. Naskah yang dihasilkan langsung siap disalin dan ditempel ke tab Motion.
+  - Klik kartu *Aplikasi Canvas Gemini* di Beranda atau buka [Gemini Canvas Naskah](https://share.gemini.google/3dn27OWTHgaF) untuk merancang, mengedit, dan memformat naskah hook serta adegan secara visual dan kolaboratif. Naskah yang dihasilkan langsung siap disalin dan ditempel ke tab Motion.
   - Klik kartu *Generated SEO for YT dan Social Media* atau buka [Gemini Canvas SEO](https://share.gemini.google/BVWFVYHdez50) untuk riset kata kunci, judul ber-CTR tinggi, deskripsi algoritma, dan tag/hashtag viral bagi YouTube Shorts, TikTok, serta Instagram Reels.
 1. **Mode A: Dari Topik (AI Otomatis):**
    - Masukkan topik bahasan (contoh: *"3 Alasan Mengapa Bangun Jam 5 Pagi Mengubah Hidup"*).

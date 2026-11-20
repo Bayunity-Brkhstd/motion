@@ -1,6 +1,9 @@
 LISENSI NONKOMERSIAL MALIKI STUDIO 1.0
 Hak cipta (c) 2026 Maliki Saputra (@malikisaputra) — https://malikisaputra.biz.id
-kredit-maliki: Template oleh Maliki Saputra (@malikisaputra) — https://malikisaputra.biz.id
+kredit-maliki: Template dan rangka proyek oleh Maliki Saputra (@malikisaputra) — https://malikisaputra.biz.id
+Pengembangan Lanjutan & Fitur Ekstensi: Bayunity (BRKH Studio)
+
+Proyek ini adalah kelanjutan dari rangka proyek asli milik Maliki Saputra, dengan pengembangan dan modifikasi oleh Bayunity untuk kebutuhan internal BRKH Studio dengan tetap menyertakan kredit utuh sesuai ketentuan lisensi asli di bawah ini.
 
 Template, source code, desain, dan aset di repositori/paket ini ("Karya") dibagikan
 GRATIS oleh Maliki Saputra ("Kreator"). Dengan mengunduh, menyalin, atau memakai Karya,

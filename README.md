@@ -32,3 +32,15 @@ uv run studio.py --browser
 ```
 
 Studio akan berjalan di `http://127.0.0.1:8787`.
+
+---
+
+## ⚖️ Lisensi & Atribusi
+
+Project **Cheat Clip and Motion** ini adalah proyek kelanjutan (*fork* / pengembangan lanjutan) dari rangka proyek asli karya **Maliki Saputra (@malikisaputra)** — https://malikisaputra.biz.id, dengan modifikasi, penambahan fitur (*Motion Pro Long-Form*, *Dynamic Agent Engine*, *Ekstraksi Gaya Video*, *Slash Skill Command*, dsb.) serta pengembangan yang dilakukan oleh **Bayunity** (BRKH Studio).
+
+Proyek ini tetap menyertakan kredit utuh sesuai ketentuan dari pemilik asli rangka proyek di bawah **Lisensi Nonkomersial Maliki Studio 1.0**:
+- Boleh dipakai untuk belajar, keperluan pribadi, atau kebutuhan operasional internal usaha/organisasi sendiri.
+- Boleh diubah dan dibagikan secara gratis dengan kredit utuh pemilik asli tetap disertakan.
+- **Dilarang keras dijual, dijual ulang, disewakan, diunggah ke marketplace komersial, atau dipakai untuk jasa berbayar ke pihak lain**.
+- Teks lisensi lengkap: [`LISENSI.md`](LISENSI.md). Pustaka pihak ketiga (Remotion, faster-whisper, VoxCPM2, font OFL, dll.) tetap mengikuti lisensinya masing-masing.

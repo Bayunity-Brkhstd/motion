@@ -45,11 +45,13 @@ yang cukup dipasang dan login sekali di Terminal. Di pengaturan AI: **Pengaturan
 |---|---|---|---|
 | Claude Pro/Max | Claude Code | `claude -p` (tanpa alat, sesi tidak disimpan) | `sonnet`, `opus`, `haiku`, `fable`, atau nama lengkap |
 | ChatGPT Plus/Pro | Codex CLI (masuk dengan ChatGPT) | `codex exec -` (sandbox read-only) | `--model`, nama lihat `/model` di Codex |
+| Google AI / Antigravity | Antigravity CLI | `agy` (eksekusi on-demand) | `gemini-3.8-flash-high`, `gemini-3.8-flash-medium`, `claude-sonnet-4-6`, `gpt-oss-120b`, dll. |
 | Model/penyedia apa pun | OpenCode | `opencode run --agent plan` | daftar otomatis dari `opencode models` |
 
 Pemakaian memotong kuota langgananmu. Cheat Clip and Motion membuang kunci API dari lingkungan saat memanggil CLI, supaya yang terpakai benar-benar langganan.
-Google AI Pro belum disediakan: Gemini CLI sudah tidak melayani akun gratis/AI Pro (pindah ke Antigravity CLI), dan izin memanggilnya dari alat
-pihak ketiga belum jelas. Pakai kunci Gemini gratis saja.
+
+> ⚠️ **Catatan Khusus Penggunaan Antigravity CLI:**  
+> Antigravity CLI (`agy`) ini aslinya adalah terminal agentic AI yang dirancang untuk pengodean (*coding / software development*), bukan secara khusus didesain untuk orchestrator video motion seperti ini. Oleh karena itu, ketika dijalankan untuk kebutuhan ini, Antigravity CLI sedikit memakan alokasi RAM yang lebih besar. Harap pahami risikonya jika terjadi kendala atau bug yang bisa terjadi di PC/laptop lain (**di PC saya juga kadang terjadi bug**). Jika terjadi hal demikian, maka itu menjadi urusan user dan CLI-nya masing-masing, karena Antigravity (AGY) berbeda dengan CLI lainnya.
 
 ### Suara AI lokal: VoxCPM2 (opsional)
 Di **Pengaturan AI → suara narator motion**, pilih **VoxCPM2 · AI lokal** lalu klik **Pasang suara AI (±5 GB)**.
@@ -88,8 +90,10 @@ bingkai 9:16 mengikuti pembicara. Cocok untuk podcast multi-kamera.
 - Hanya potong video milikmu sendiri atau video yang sudah diberi izin.
 
 ## Lisensi & Atribusi
-Cheat Clip and Motion dikembangkan berbasis karya/template dari Maliki Saputra (@malikisaputra) — https://malikisaputra.biz.id.
-Gratis dengan **Lisensi Nonkomersial Maliki Studio 1.0**: boleh dipakai untuk belajar, keperluan pribadi, atau usaha/organisasimu sendiri,
-boleh diubah dan dibagikan gratis dengan kredit utuh; **dilarang dijual, dijual ulang, disewakan, diunggah ke marketplace, atau dipakai
-untuk jasa berbayar ke pihak lain**. Teks lengkap: [`LISENSI.md`](LISENSI.md). Pustaka pihak ketiga (Remotion, faster-whisper, VoxCPM2,
-font OFL, dll.) tetap mengikuti lisensinya masing-masing.
+Project **Cheat Clip and Motion** ini adalah proyek kelanjutan (*fork* / pengembangan lanjutan) dari rangka proyek asli karya **Maliki Saputra (@malikisaputra)** — https://malikisaputra.biz.id, dengan modifikasi, penambahan fitur (*Motion Pro Long-Form*, *Dynamic Agent Engine*, *Ekstraksi Gaya Video*, *Slash Skill Command*, dsb.) serta pengembangan yang dilakukan oleh **Bayunity** (BRKH Studio).
+
+Proyek ini tetap menyertakan kredit utuh sesuai ketentuan dari pemilik asli rangka proyek di bawah **Lisensi Nonkomersial Maliki Studio 1.0**:
+- Boleh dipakai untuk belajar, keperluan pribadi, atau operasional internal usaha/organisasi sendiri.
+- Boleh diubah dan dibagikan secara gratis dengan kredit utuh pemilik asli tetap disertakan.
+- **Dilarang keras dijual, dijual ulang, disewakan, diunggah ke marketplace komersial, atau dipakai untuk jasa berbayar ke pihak lain**.
+- Teks lisensi lengkap: [`LISENSI.md`](LISENSI.md). Pustaka pihak ketiga (Remotion, faster-whisper, VoxCPM2, font OFL, dll.) tetap mengikuti lisensinya masing-masing.
