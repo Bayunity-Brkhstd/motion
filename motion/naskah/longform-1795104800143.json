@@ -1,0 +1,82 @@
+{
+  "judul": "Hook Pembuka",
+  "gaya": "garis",
+  "durasi_total": 25.2,
+  "audioNarasi": null,
+  "arahan_visual": null,
+  "palet": [
+    "#0b0f19",
+    "#6366f1",
+    "#06b6d4",
+    "#a855f7",
+    "#ffffff"
+  ],
+  "adegan": [
+    {
+      "nomor": 1,
+      "mulai": 0,
+      "selesai": 4.8,
+      "durasi_detik": 4.8,
+      "durasi": 4.8,
+      "judul": "Hook Pembuka",
+      "teks": "Di era kecerdasan buatan, video berdurasi panjang memerlukan konsistensi alur dan visual.",
+      "ikon": "🚀",
+      "svg_prompt": "Ilustrasi flat 3D isometric untuk konsep: Hook Pembuka. Bersih, modern, dan konsisten."
+    },
+    {
+      "nomor": 2,
+      "mulai": 4.8,
+      "selesai": 8.8,
+      "durasi_detik": 4,
+      "durasi": 4,
+      "judul": "Masalah Utama",
+      "teks": "Tantangan terbesar adalah mempertahankan retensi penonton tanpa pacing yang membosankan.",
+      "ikon": "⚠️",
+      "svg_prompt": "Ilustrasi flat 3D isometric untuk konsep: Masalah Utama. Bersih, modern, dan konsisten."
+    },
+    {
+      "nomor": 3,
+      "mulai": 8.8,
+      "selesai": 12.8,
+      "durasi_detik": 4,
+      "durasi": 4,
+      "judul": "Solusi Arsitektur",
+      "teks": "Kuncinya adalah mengintegrasikan fisika pegas closed-form dan pergantian visual dinamis.",
+      "ikon": "💡",
+      "svg_prompt": "Ilustrasi flat 3D isometric untuk konsep: Solusi Arsitektur. Bersih, modern, dan konsisten."
+    },
+    {
+      "nomor": 4,
+      "mulai": 12.8,
+      "selesai": 17.2,
+      "durasi_detik": 4.4,
+      "durasi": 4.4,
+      "judul": "Penerapan Remotion",
+      "teks": "Setiap komponen React disusun dengan presisi matematis frame demi frame 30fps.",
+      "ikon": "🧩",
+      "svg_prompt": "Ilustrasi flat 3D isometric untuk konsep: Penerapan Remotion. Bersih, modern, dan konsisten."
+    },
+    {
+      "nomor": 5,
+      "mulai": 17.2,
+      "selesai": 21.2,
+      "durasi_detik": 4,
+      "durasi": 4,
+      "judul": "Sinkronisasi Audio",
+      "teks": "Narasi voice-over dipetakan per kata menghasilkan timestamp yang akurat.",
+      "ikon": "✨",
+      "svg_prompt": "Ilustrasi flat 3D isometric untuk konsep: Sinkronisasi Audio. Bersih, modern, dan konsisten."
+    },
+    {
+      "nomor": 6,
+      "mulai": 21.2,
+      "selesai": 25.2,
+      "durasi_detik": 4,
+      "durasi": 4,
+      "judul": "Call To Action",
+      "teks": "Bangun karya video motion berdurasi panjang berkualitas studio hari ini.",
+      "ikon": "🏆",
+      "svg_prompt": "Ilustrasi flat 3D isometric untuk konsep: Call To Action. Bersih, modern, dan konsisten."
+    }
+  ]
+}
