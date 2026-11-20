@@ -15,10 +15,12 @@ for (const [key, tema] of Object.entries(TEMA)) {
 // Custom presets will be registered here by scripts/generate_style_artifacts.py
 // CUSTOM_PRESETS_START
 import { preset_toon_3d_celshaded } from './toon-3d-celshaded';
+import { preset_preset_3d_custom } from './3d-custom';
 // CUSTOM_PRESETS_END
 
 export const STYLE_PRESETS: Record<string, StylePreset> = {
   ...builtInPresets,
+  '3d-custom': preset_preset_3d_custom,
   'toon-3d-celshaded': preset_toon_3d_celshaded,
 };
 

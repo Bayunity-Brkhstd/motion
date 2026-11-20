@@ -3836,6 +3836,86 @@
       color: var(--teks);
     }
 
+    /* SLASH COMMAND AUTOCOMPLETE POPOVER */
+    .slash-skill-popover {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 0;
+      right: 0;
+      max-height: 290px;
+      overflow-y: auto;
+      background: var(--panel2);
+      border: 1.5px solid #a855f7;
+      border-radius: 14px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 24px rgba(168, 85, 247, 0.25);
+      z-index: 100;
+      padding: 8px;
+      backdrop-filter: blur(14px);
+    }
+    .slash-header {
+      font-size: 11px;
+      font-family: var(--mono);
+      font-weight: 700;
+      color: #c084fc;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: 4px 10px 8px;
+      border-bottom: 1px solid var(--garis);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .slash-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+      margin-top: 4px;
+    }
+    .slash-item:hover, .slash-item.pilihan {
+      background: rgba(168, 85, 247, 0.22);
+    }
+    .slash-item-kiri {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .slash-cmd {
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 13px;
+      color: #38bdf8;
+    }
+    .slash-nama {
+      font-size: 12px;
+      color: var(--teks);
+      font-weight: 600;
+    }
+    .slash-desc {
+      font-size: 11.5px;
+      color: var(--redup);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 480px;
+    }
+    .slash-palette {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .slash-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
     @media (max-width:900px) {
 
       .grid2,
@@ -4962,7 +5042,23 @@
             </div>
 
             <!-- CHAT INPUT DECK -->
-            <div class="pro-input-deck">
+            <div class="pro-input-deck" style="position:relative">
+              <!-- Popover Slash Command / Skill -->
+              <div id="popoverSlashSkillPro" class="slash-skill-popover" style="display:none">
+                <div class="slash-header">
+                  <span>Pilih Skill Aturan AI Director (/skill)</span>
+                  <small style="color:var(--redup)">Gunakan ↑↓ navigasi, Enter/klik untuk pilih</small>
+                </div>
+                <div id="listSlashSkills" style="display:flex;flex-direction:column;gap:2px;margin-top:4px"></div>
+              </div>
+
+              <!-- Badge Skill Aktif yang Terpilih -->
+              <div id="badgeSkillAktifChat" style="display:none;align-items:center;gap:8px;padding:4px 12px;border-radius:8px;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.35);font-size:12px;margin-bottom:8px">
+                <span style="color:#c084fc;font-weight:700">★ Aturan Skill Terkunci:</span>
+                <span id="labelSkillAktifChat" style="font-family:var(--mono);color:#38bdf8;font-weight:600"></span>
+                <button onclick="lepasSkillAktifPro()" style="background:none;border:none;color:#f87171;font-weight:bold;cursor:pointer;margin-left:auto;font-size:12px" title="Hapus aturan skill">✕ Lepas</button>
+              </div>
+
               <div class="pro-chips-bar">
                 <button class="pro-chip" onclick="eksekusiPromptPro('analisis')">⚡ Analisis File &amp; Susun Storyboard</button>
                 <button class="pro-chip" onclick="eksekusiPromptPro('style')">🎨 Samakan Style Referensi &amp; Palet</button>
@@ -7357,8 +7453,11 @@ Aturan:
         };
       }
 
+      let AUDIO_JALUR_PRO = '';
+
       function resetAudioPro() {
         AUDIO_FILE_PRO = null;
+        AUDIO_JALUR_PRO = '';
         DURASI_AUDIO_PRO = 0;
         if (fileAud) fileAud.value = '';
         if (playerAud) { playerAud.pause(); playerAud.src = ''; }
@@ -7374,7 +7473,7 @@ Aturan:
         };
       }
 
-      function prosesFileAudioPro(file) {
+      async function prosesFileAudioPro(file) {
         if (!file) return;
         AUDIO_FILE_PRO = file;
         const url = URL.createObjectURL(file);
@@ -7393,6 +7492,21 @@ Aturan:
             infoAud.innerHTML = `<span style="color:#facc15">⚠️ Durasi: ${menit}m ${detik}s (${total} dtk) • Di bawah 4 menit. Disarankan pakai tab Motion standar.</span>`;
           }
         };
+
+        // Unggah otomatis ke server lokal agar file fisik tersedia saat Remotion render
+        try {
+          toast(`Menyimpan audio "${file.name}" ke workspace studio...`);
+          const r = await fetch('/api/unggah', {
+            method: 'POST',
+            headers: { 'X-Nama-File': file.name, 'X-Jenis': 'aset' },
+            body: file
+          });
+          const j = await r.json();
+          AUDIO_JALUR_PRO = j.jalur || '';
+          toast(`Audio voice-over siap di server: ${file.name}`);
+        } catch (err) {
+          toast(`Peringatan: Gagal unggah audio (${err.message})`, true);
+        }
       }
 
       // Brand Logo / Watermark
@@ -7698,15 +7812,69 @@ Aturan:
       const fileUnggahSkill = $('#fileUploadSkillPro');
       const listSkills = $('#listSkillsPro');
 
+      let SKILL_AKTIF_PRO = null;
+      let DAFTAR_SKILLS_PRO_CACHE = [];
+      let slashSkillIndex = -1;
+
+      window.pasangSkillAktifPro = (slug, nama) => {
+        SKILL_AKTIF_PRO = slug;
+        const badge = $('#badgeSkillAktifChat');
+        const lbl = $('#labelSkillAktifChat');
+        if (badge && lbl) {
+          lbl.textContent = `/${slug}${nama ? ' — ' + nama : ''}`;
+          badge.style.display = 'flex';
+        }
+        $$('#listSkillsPro .pro-skill-badge').forEach((el) => {
+          if (el.dataset.id === slug) {
+            el.classList.add('aktif');
+            el.style.borderColor = '#c084fc';
+            el.style.background = 'rgba(192,132,252,0.2)';
+          } else {
+            el.style.borderColor = '';
+            el.style.background = '';
+          }
+        });
+      };
+
+      window.lepasSkillAktifPro = () => {
+        SKILL_AKTIF_PRO = null;
+        const badge = $('#badgeSkillAktifChat');
+        if (badge) badge.style.display = 'none';
+        $$('#listSkillsPro .pro-skill-badge').forEach((el) => {
+          el.style.borderColor = '';
+          el.style.background = '';
+        });
+        toast('Aturan skill dilepas. AI Director berjalan normal.');
+      };
+
+      window.pilihSkillSlash = (slug, nama) => {
+        window.pasangSkillAktifPro(slug, nama);
+        tutupPopoverSlash();
+        const inC = $('#inputChatPro');
+        if (inC) {
+          let val = inC.value;
+          const slashMatch = val.match(/(?:\s|^)\/(?:skill\s*)?([a-zA-Z0-9_-]*)$/);
+          if (slashMatch) {
+            val = val.substring(0, slashMatch.index + (slashMatch[0].startsWith(' ') ? 1 : 0)) + `/skill ${slug} `;
+          } else if (!val.includes(`/skill ${slug}`)) {
+            val = `/skill ${slug} ` + val;
+          }
+          inC.value = val;
+          inC.focus();
+        }
+        toast(`Aturan skill "/${slug}" diaktifkan sebagai pedoman AI Director!`);
+      };
+
       async function muatDaftarSkillsPro() {
         if (!listSkills) return;
         try {
           const res = await api('/api/motion-pro/daftar-skills');
           if (res.ok && res.skills) {
+            DAFTAR_SKILLS_PRO_CACHE = res.skills;
             listSkills.innerHTML = res.skills.map((s) => `
-              <span class="pro-skill-badge ${s.aktif ? 'aktif' : ''}" title="${esc(s.deskripsi || '')}">
+              <span class="pro-skill-badge ${s.aktif || s.id === SKILL_AKTIF_PRO ? 'aktif' : ''}" data-id="${esc(s.id)}" onclick="pilihSkillSlash('${esc(s.id)}', '${esc(s.nama || s.id)}')" style="cursor:pointer" title="Klik untuk mengunci skill ini sebagai aturan AI: ${esc(s.deskripsi || '')}">
                 ● ${esc(s.id)}
-                ${!s.inti ? `<button onclick="hapusSkillEksternalPro('${esc(s.id)}')" style="background:none;border:none;color:#f87171;font-weight:bold;cursor:pointer;padding:0 2px;margin-left:4px" title="Hapus skill eksternal">✕</button>` : ''}
+                ${!s.inti ? `<button onclick="event.stopPropagation();hapusSkillEksternalPro('${esc(s.id)}')" style="background:none;border:none;color:#f87171;font-weight:bold;cursor:pointer;padding:0 2px;margin-left:4px" title="Hapus skill eksternal">✕</button>` : ''}
               </span>
             `).join('');
           }
@@ -7834,15 +8002,118 @@ Aturan:
       const inChat = $('#inputChatPro');
       const btnKirim = $('#tblKirimChatPro');
       const btnReset = $('#tblResetChatPro');
+      const popoverSlash = $('#popoverSlashSkillPro');
+      const listSlash = $('#listSlashSkills');
+
+      function renderListSlash(items) {
+        if (!listSlash) return;
+        if (!items.length) {
+          listSlash.innerHTML = '<div style="padding:8px 12px;font-size:11.5px;color:var(--redup)">Tidak ada skill yang cocok</div>';
+          return;
+        }
+        listSlash.innerHTML = items.map((s, idx) => `
+          <div class="slash-item ${idx === slashSkillIndex ? 'selected' : ''}" data-idx="${idx}" data-slug="${esc(s.id)}" data-nama="${esc(s.nama || s.id)}" onclick="pilihSkillSlash('${esc(s.id)}', '${esc(s.nama || s.id)}')">
+            <div class="slash-cmd">/${esc(s.id)}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:12px;color:var(--teks);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.nama || s.id)}</div>
+              <div style="font-size:10.5px;color:var(--redup);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.deskripsi || 'Aturan animasi & palet')}</div>
+            </div>
+            ${s.palette_hex && s.palette_hex.length ? `
+              <div class="slash-palette">
+                ${s.palette_hex.slice(0, 5).map(c => `<span class="slash-dot" style="background:${c}"></span>`).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+      }
+
+      function bukaPopoverSlash(kueri = '') {
+        if (!popoverSlash) return;
+        const q = (kueri || '').toLowerCase().trim();
+        const pool = DAFTAR_SKILLS_PRO_CACHE && DAFTAR_SKILLS_PRO_CACHE.length ? DAFTAR_SKILLS_PRO_CACHE : [
+          { id: 'isometric-video', nama: 'Isometric Video 3D', deskripsi: 'Animasi 3D isometrik dengan spring physics' },
+          { id: 'motion-graphics', nama: 'Motion Graphics', deskripsi: 'Pacing kinetik & 17 gaya visual teruji' },
+          { id: 'sound-effects', nama: 'Sound Effects & VO', deskripsi: 'Auto-ducking -16 LUFS & SFX placement' },
+          { id: 'video-making', nama: 'Video Making Pipeline', deskripsi: 'Komposisi Remotion SVG & canvas rendering' }
+        ];
+        const hasil = pool.filter(s =>
+          !q || s.id.toLowerCase().includes(q) || (s.nama && s.nama.toLowerCase().includes(q))
+        );
+        if (!hasil.length && !q) {
+          tutupPopoverSlash();
+          return;
+        }
+        slashSkillIndex = 0;
+        renderListSlash(hasil);
+        popoverSlash.style.display = 'block';
+      }
+
+      function tutupPopoverSlash() {
+        if (popoverSlash) popoverSlash.style.display = 'none';
+        slashSkillIndex = -1;
+      }
+
+      document.addEventListener('click', (e) => {
+        if (popoverSlash && !popoverSlash.contains(e.target) && e.target !== inChat) {
+          tutupPopoverSlash();
+        }
+      });
 
       if (btnKirim && inChat) {
         const kirim = () => {
+          tutupPopoverSlash();
           const pesan = inChat.value.trim();
           if (!pesan) return;
           eksekusiPromptPro('chat', pesan);
         };
         btnKirim.onclick = kirim;
+
+        inChat.addEventListener('input', () => {
+          const pos = inChat.selectionStart || inChat.value.length;
+          const textBeforeCursor = inChat.value.slice(0, pos);
+          const slashMatch = textBeforeCursor.match(/(?:^|\s)\/(?:skill\s*)?([a-zA-Z0-9_-]*)$/i);
+          if (slashMatch !== null) {
+            bukaPopoverSlash(slashMatch[1]);
+          } else {
+            tutupPopoverSlash();
+          }
+        });
+
         inChat.onkeydown = (e) => {
+          if (popoverSlash && popoverSlash.style.display !== 'none') {
+            const items = listSlash ? Array.from(listSlash.querySelectorAll('.slash-item')) : [];
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              if (items.length) {
+                slashSkillIndex = (slashSkillIndex + 1) % items.length;
+                items.forEach((it, i) => it.classList.toggle('selected', i === slashSkillIndex));
+                items[slashSkillIndex]?.scrollIntoView({ block: 'nearest' });
+              }
+              return;
+            }
+            if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              if (items.length) {
+                slashSkillIndex = (slashSkillIndex - 1 + items.length) % items.length;
+                items.forEach((it, i) => it.classList.toggle('selected', i === slashSkillIndex));
+                items[slashSkillIndex]?.scrollIntoView({ block: 'nearest' });
+              }
+              return;
+            }
+            if (e.key === 'Enter' || e.key === 'Tab') {
+              e.preventDefault();
+              const sel = items[slashSkillIndex] || items[0];
+              if (sel) {
+                pilihSkillSlash(sel.dataset.slug, sel.dataset.nama);
+              }
+              return;
+            }
+            if (e.key === 'Escape') {
+              e.preventDefault();
+              tutupPopoverSlash();
+              return;
+            }
+          }
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             kirim();
@@ -7879,6 +8150,16 @@ Aturan:
         if (!instruksi) return;
         if (inChat) inChat.value = '';
 
+        // Deteksi slash command dari teks jika user mengetik manual /skill <slug> atau /<slug>
+        const mSlash = instruksi.match(/(?:^|\s)\/(?:skill\s+)?([a-zA-Z0-9_-]+)/i);
+        if (mSlash) {
+          const slugKandidat = mSlash[1].toLowerCase();
+          const matchSkill = DAFTAR_SKILLS_PRO_CACHE.find(s => s.id.toLowerCase() === slugKandidat);
+          if (matchSkill) {
+            window.pasangSkillAktifPro(matchSkill.id, matchSkill.nama);
+          }
+        }
+
         const model = $('#pilModelPro')?.value || '';
         const labelModelAktif = $('#pilModelPro')?.options[$('#pilModelPro')?.selectedIndex]?.text || model || 'Mesin AI Aktif';
         const naskah = editMd?.value.trim() || '';
@@ -7914,6 +8195,7 @@ Aturan:
           const res = await api('/api/motion-pro/orkestrasi', {
             instruksi,
             model,
+            skill: SKILL_AKTIF_PRO || '',
             naskah,
             durasi_audio: durasiAudio,
             nama_audio: namaAudio,
@@ -8050,18 +8332,18 @@ Aturan:
         try {
           const res = await api('/api/motion-pro/render', {
             naskah_json: LAST_PRO_NASKAH_JSON,
-            audio_narasi: AUDIO_FILE_PRO?.name
+            audio_narasi: AUDIO_JALUR_PRO || AUDIO_FILE_PRO?.name
           });
 
-          if (res && res.nama) {
-            const namaProyek = res.nama;
+          const namaProyek = res?.nama || res?.proyek;
+          if (namaProyek) {
             const t = setInterval(async () => {
               try {
                 const st = await api('/api/status');
                 if (st.status === 'jalan') {
-                  const logAkhir = (st.log || []).slice(-1)[0] || 'Merender video...';
+                  const logAkhir = (st.log || []).slice(-1)[0] || 'Merender video Remotion React...';
                   if (labelStatus) labelStatus.textContent = logAkhir;
-                } else {
+                } else if (st.status === 'selesai') {
                   clearInterval(t);
                   if (barisStatus) barisStatus.style.display = 'none';
                   const videoUrl = `/berkas/motion/${namaProyek}/video.mp4`;
@@ -8077,11 +8359,25 @@ Aturan:
                     linkUnduh.style.display = 'inline-flex';
                   }
                   toast('Video selesai dirender! Pratinjau otomatis diputar.');
+                } else if (st.status === 'gagal' || st.status === 'batal') {
+                  clearInterval(t);
+                  if (barisStatus) barisStatus.style.display = 'none';
+                  const pesanGalat = (st.log || []).slice(-4).join('<br>') || 'Eksekusi render Remotion terhenti atau gagal.';
+                  if (placeholder) {
+                    placeholder.style.display = 'block';
+                    placeholder.innerHTML = `<div style="color:#f87171;padding:14px;background:rgba(239,68,68,0.1);border-radius:8px;border:1px solid rgba(239,68,68,0.3);text-align:left">
+                      <div style="font-weight:700;margin-bottom:6px">⚠️ Render Terminal Gagal / Terhenti:</div>
+                      <div style="font-family:var(--mono);font-size:11px;line-height:1.5;max-height:120px;overflow-y:auto">${pesanGalat}</div>
+                    </div>`;
+                  }
+                  toast('Render video terhenti dengan error. Cek rincian log.', true);
                 }
               } catch {
                 clearInterval(t);
               }
             }, 1500);
+          } else {
+            throw new Error(res?.galat || 'Gagal memulai render');
           }
         } catch (err) {
           if (barisStatus) barisStatus.style.display = 'none';

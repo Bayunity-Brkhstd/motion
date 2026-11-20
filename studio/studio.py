@@ -834,10 +834,67 @@ def orkestrasi_motion_pro(d: dict) -> dict:
     nama_model_murni = KAMUS_MODEL.get(model, model or "Bawaan Akun")
     model_label = f"{nama_model_murni} ({nama_mesin})"
 
+    # ── DETEKSI SLASH COMMAND / SKILL AKTIF DARI INSTRUKSI ATAU PAYLOAD ──
+    skill_terpilih = (d.get("skill") or d.get("skill_aktif") or "").strip()
+    m_cmd = re.search(r"/(?:skill|gaya|use|aturan)[:\s]+([\w-]+)", instruksi, re.I)
+    if m_cmd:
+        skill_terpilih = m_cmd.group(1).strip()
+    elif not skill_terpilih:
+        # Cek jika pengguna mengetik /<slug> secara langsung
+        for s in skills_aktif:
+            if f"/{s}" in instruksi:
+                skill_terpilih = s
+                break
+
+    isi_skill_md = ""
+    skill_nama_tampil = skill_terpilih
+    skill_palet_bawaan = []
+    if skill_terpilih:
+        jalur_skill = MOTION / "skills" / skill_terpilih / "SKILL.md"
+        if not jalur_skill.exists():
+            jalur_skill = MOTION / "skills" / f"{skill_terpilih}.md"
+        if not jalur_skill.exists():
+            for sub in (MOTION / "skills").iterdir():
+                if sub.is_dir() and sub.name.lower() == skill_terpilih.lower():
+                    cand = sub / "SKILL.md"
+                    if cand.exists():
+                        jalur_skill = cand
+                        skill_terpilih = sub.name
+                        break
+        if jalur_skill.exists():
+            try:
+                isi_skill_md = jalur_skill.read_text(encoding="utf-8").strip()
+                m_nama = re.search(r"^name:\s*(.+)$", isi_skill_md, re.M)
+                if m_nama:
+                    skill_nama_tampil = m_nama.group(1).strip()
+                # Ekstrak palet warna HEX dari teks skill jika ada
+                hexes = re.findall(r"#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b", isi_skill_md)
+                if len(hexes) >= 5:
+                    skill_palet_bawaan = list(dict.fromkeys(hexes))[:5]
+            except Exception:
+                pass
+
+    blok_aturan_skill = ""
+    if isi_skill_md:
+        blok_aturan_skill = f"""
+================================================================================
+ATURAN SKILL AKTIF WAJIB DIPATUHI: [{skill_terpilih.upper()}] ({skill_nama_tampil})
+Sumber Pedoman: motion/skills/{skill_terpilih}/SKILL.md
+
+{isi_skill_md}
+================================================================================
+PERINTAH SUTRADARA:
+Anda WAJIB menerapkan seluruh aturan visual, rasio pacing durasi adegan, fisika pegas (spring stiffness & damping), karakteristik outline/stroke garis, dan 5 palet warna HEX yang ditetapkan dalam ATURAN SKILL AKTIF di atas ke dalam storyboard JSON Anda. Gunakan gaya '{skill_terpilih}'.
+"""
+        gaya_tema = skill_terpilih
+        if skill_palet_bawaan:
+            palet = skill_palet_bawaan
+
     # ── EKSEKUSI REAL KE AI AGENT VIA CLI (ON-DEMAND) ──
     prompt_sutradara = f"""Anda adalah Motion Director Agent profesional untuk Cheat Motion Pro.
 Tugas Anda adalah merespons instruksi pengguna dan menyusun atau memperbarui struktur adegan video motion graphic 1080x1920 30fps durasi panjang (Target: {durasi_label}, Total kata naskah: {total_kata} kata).
 Modul Skills aktif: {', '.join(skills_aktif)}
+{blok_aturan_skill}
 
 Konteks Aset Proyek:
 - Durasi Audio Narasi: {durasi_label} ({nama_audio or 'Audio Voice Over'})
@@ -916,13 +973,20 @@ Petunjuk Respon:
     reasoning_steps = [
         f"✓ Mesin Eksekusi: {model_label} (On-Demand CLI Subprocess)",
         f"✓ Latensi Komputasi: {latency}s · RAM segera dibebaskan pasca respons",
+    ]
+    if skill_terpilih and isi_skill_md:
+        reasoning_steps.append(f"✓ Aturan Skill Terpasang: /{skill_terpilih} ({skill_nama_tampil} — motion/skills/{skill_terpilih}/SKILL.md diaktifkan sebagai pedoman utama)")
+    else:
+        reasoning_steps.append("ℹ Tips: Gunakan command /skill <nama> untuk mengaktifkan aturan visual spesifik")
+
+    reasoning_steps.extend([
         "✓ Membaca konfigurasi pipeline: motion/skills/SKILL-LONGFORM.md",
         f"✓ Memeriksa modul skill terpasang: {', '.join(skills_aktif)} (SEMUA SIAP)",
         f"✓ Menganalisis naskah markdown ({total_kata} kata)",
         f"✓ Melakukan audio-script alignment terhadap durasi {durasi_label}",
         f"✓ Segmentasi naskah menjadi {len(adegan_list)} adegan (durasi 4 - 8 detik per adegan)",
-        f"✓ Ekstraksi palet warna & arahan gaya visual: {arahan_visual or 'Adaptif Modern'}"
-    ]
+        f"✓ Ekstraksi palet warna & arahan gaya visual: {gaya_tema.upper()} · {arahan_visual or 'Adaptif Modern'}"
+    ])
 
     berkas_disimpan = None
     if aksi in ("render", "simpan") or d.get("simpan"):
@@ -979,7 +1043,8 @@ def render_motion_pro(d: dict) -> dict:
         payload["audioNarasi"] = str(audio_narasi)
 
     res = mulai_motion(payload)
-    return res
+    proyek = res.get("proyek") or res.get("nama")
+    return {"ok": True, "proyek": proyek, "nama": proyek}
 
 
 def bersihkan_cache_pro() -> dict:

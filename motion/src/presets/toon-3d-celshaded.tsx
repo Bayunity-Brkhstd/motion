@@ -1,52 +1,50 @@
-// Preset Komposisi Remotion Otomatis: Toon 3D Celshaded (toon-3d-celshaded)
+// Preset Komposisi Remotion: Toon 3D Celshaded (toon-3d-celshaded)
 import React from 'react';
-import {AbsoluteFill, interpolate} from 'remotion';
+import {AbsoluteFill} from 'remotion';
 import {StylePreset} from './types';
 
-const LatarToon3dCelshaded: React.FC<{f: number; i: number; n: number; aksen: string; judul: string}> = ({f, aksen}) => {
-  const rotasi = (f * 0.4) % 360;
-  const pulse = Math.sin(f / 18) * 14;
+const LatarToon3d: React.FC<{f: number; i: number; n: number; aksen: string; judul: string}> = ({f}) => {
+  const rotasi = (f * 0.3) % 360;
+  const pulse = Math.sin(f / 20) * 12;
   return (
-    <AbsoluteFill style={{background: '#14427A', overflow: 'hidden'}}>
-      {/* Elemen Latar Dinamis Berbasis Palet Ekstraksi */}
-      <svg width="1080" height="1920" style={{position: 'absolute', inset: 0, opacity: 0.28}}>
+    <AbsoluteFill style={{background: '#0B1B2B', overflow: 'hidden'}}>
+      <svg width="1080" height="1920" style={{position: 'absolute', inset: 0, opacity: 0.32}}>
         <defs>
-          <radialGradient id="grad-toon-3d-celshaded" cx="50%" cy="40%" r="60%">
-            <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#14427A" stopOpacity="0" />
+          <radialGradient id="grad-toon" cx="50%" cy="35%" r="65%">
+            <stop offset="0%" stopColor="#4FC3F7" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#0B1B2B" stopOpacity="0" />
           </radialGradient>
         </defs>
-        <rect width="1080" height="1920" fill="url(#grad-toon-3d-celshaded)" />
+        <rect width="1080" height="1920" fill="url(#grad-toon)" />
         <circle
           cx={540}
           cy={640}
-          r={280 + pulse}
+          r={260 + pulse}
           fill="none"
           stroke="#FACC15"
-          strokeWidth="4"
-          strokeDasharray="12 16"
+          strokeWidth="6"
+          strokeDasharray="14 18"
           transform={`rotate(${rotasi} 540 640)`}
         />
         <circle
           cx={540}
           cy={640}
-          r={340}
+          r={320}
           fill="none"
-          stroke="#F97316"
-          strokeWidth="2"
-          opacity="0.3"
+          stroke="#4FC3F7"
+          strokeWidth="3"
+          opacity="0.4"
         />
       </svg>
-      {/* Garis Grid Kinetik */}
       <div
         style={{
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
-          height: 380,
-          background: 'linear-gradient(to top, #38BDF818, transparent)',
-          borderTop: '1px solid #38BDF833',
+          height: 360,
+          background: 'linear-gradient(to top, #4FC3F722, transparent)',
+          borderTop: '2px solid #4FC3F744',
         }}
       />
     </AbsoluteFill>
@@ -57,11 +55,11 @@ export const preset_toon_3d_celshaded: StylePreset = {
   nama: 'Toon 3D Celshaded',
   slug: 'toon-3d-celshaded',
   asal: 'video-reference',
-  teks: '#0B0B0B',
-  redup: '#0B0B0Baa',
-  aksen: '#38BDF8',
-  fontJudul: 'Plus Jakarta Sans, Montserrat, sans-serif',
-  fontTeks: 'Plus Jakarta Sans, Montserrat, sans-serif',
+  teks: '#FFFFFF',
+  redup: '#94A3B8',
+  aksen: '#4FC3F7',
+  fontJudul: 'Space Grotesk, sans-serif',
+  fontTeks: 'Space Grotesk, sans-serif',
   fontLabel: 'monospace',
   bobot: 800,
   kapital: false,
@@ -69,14 +67,14 @@ export const preset_toon_3d_celshaded: StylePreset = {
   ikon: 'kartu',
   sub: 'kotak',
   label: 'progres',
-  Latar: LatarToon3dCelshaded,
-  avg_pacing_sec: 8.0,
-  palette_hex: ["#14427A", "#0B0B0B", "#FACC15", "#38BDF8", "#F97316"],
+  Latar: LatarToon3d,
+  avg_pacing_sec: 4.5,
+  palette_hex: ['#0B1B2B', '#4FC3F7', '#FACC15', '#FFFFFF', '#1E293B'],
   physics: {
-    spring_stiffness: 180,
-    spring_damping: 18,
+    spring_stiffness: 110,
+    spring_damping: 14,
     dominant_transition: 'zoom-punch',
-    camera_shake_on_impact: true,
+    camera_shake_on_impact: false,
   },
 };
 
