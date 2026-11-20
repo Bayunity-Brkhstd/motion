@@ -70,7 +70,7 @@ export const preset_toon_3d_celshaded: StylePreset = {
   sub: 'kotak',
   label: 'progres',
   Latar: LatarToon3dCelshaded,
-  avg_pacing_sec: 3.2,
+  avg_pacing_sec: 8.0,
   palette_hex: ["#14427A", "#0B0B0B", "#FACC15", "#38BDF8", "#F97316"],
   physics: {
     spring_stiffness: 180,

@@ -4236,7 +4236,7 @@
             </div>
           </div>
           <div class="kartu">
-            <h2 class="judul-kartu"><i style="background:var(--hijau)"></i>Gaya · 24 template</h2>
+            <h2 class="judul-kartu"><i style="background:var(--hijau)"></i>Gaya · <span id="jmlTemplateGaya">24</span> template</h2>
             <div class="gaya-pilih" id="pilGaya">
               <button class="gaya" data-v="piksel" title="Pixel Art"><img src="/aset/gaya/piksel.jpg" alt=""
                   loading="lazy">
@@ -5216,6 +5216,9 @@
       if (h === 'pengaturan') muatStatusAI();
       if (h === 'riwayat') { muatRiwayat(); $('#cariRiwayat').oninput = muatRiwayat; }
       if (h === 'pengaturan') muatPengaturan();
+      if (h === 'motion') {
+        if (typeof sinkronGayaMotion === 'function') sinkronGayaMotion();
+      }
       if (h === 'motion-pro') {
         if (typeof periksaStatusPro === 'function') periksaStatusPro();
         if (typeof muatModelAktifPro === 'function') muatModelAktifPro();
@@ -7111,6 +7114,8 @@ Aturan:
           if (res.ok) {
             toast(`Skill "${idSkill}" berhasil dihapus.`);
             muatDaftarSkillsPro();
+            if (typeof muatPustakaSkillsGlobal === 'function') muatPustakaSkillsGlobal();
+            if (typeof sinkronGayaMotion === 'function') sinkronGayaMotion();
           }
         } catch (e) {
           toast('Gagal menghapus skill: ' + e.message, true);
@@ -7649,9 +7654,54 @@ Aturan:
             toast(`Skill & preset "${idSkill}" berhasil dihapus.`);
             muatPustakaSkillsGlobal();
             if (typeof muatDaftarSkillsPro === 'function') muatDaftarSkillsPro();
+            if (typeof sinkronGayaMotion === 'function') sinkronGayaMotion();
           }
         } catch (e) {
           toast('Gagal menghapus: ' + e.message, true);
+        }
+      };
+
+      // Sinkronisasi gaya kustom global ke menu template tab Motion
+      window.sinkronGayaMotion = async () => {
+        const pilGaya = $('#pilGaya');
+        const jmlEl = $('#jmlTemplateGaya');
+        if (!pilGaya) return;
+        try {
+          const res = await api('/api/daftar-skills-global');
+          if (!res.ok || !res.skills) return;
+
+          const customSkills = res.skills.filter((s) => !s.inti);
+          const customSlugs = new Set(customSkills.map((s) => s.id));
+
+          $$('#pilGaya .gaya-kustom').forEach((el) => {
+            if (!customSlugs.has(el.dataset.v)) el.remove();
+          });
+
+          customSkills.forEach((s) => {
+            if (pilGaya.querySelector(`.gaya[data-v="${s.id}"]`)) return;
+            const palet = s.palette_hex && s.palette_hex.length ? s.palette_hex : ['#14427A', '#0B0B0B', '#FACC15', '#38BDF8', '#F97316'];
+            const bg = palet[0] || '#111827';
+            const card = document.createElement('button');
+            card.className = 'gaya gaya-kustom';
+            card.dataset.v = s.id;
+            card.title = s.nama || s.id;
+            card.innerHTML = `
+              <div style="aspect-ratio:9/16;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%, ${bg}, #050505 85%);position:relative;padding:8px;box-sizing:border-box;overflow:hidden">
+                <div style="display:flex;gap:3px;margin-bottom:8px">
+                  ${palet.slice(0, 5).map(c => `<span style="width:10px;height:10px;border-radius:2px;background:${c};border:1px solid #ffffff44" title="${c}"></span>`).join('')}
+                </div>
+                <span style="font-size:9px;font-family:var(--mono);font-weight:700;padding:2px 6px;border-radius:99px;background:rgba(245,158,11,0.25);color:#f59e0b;border:1px solid rgba(245,158,11,0.4);margin-bottom:4px">Kustom</span>
+                <span style="font-size:10px;font-family:var(--mono);color:#ffffffaa">~${s.avg_pacing_sec || 3.5}s</span>
+              </div>
+              <div class="nama"><b>${esc(s.nama || s.id)}</b><span>video ref</span></div>
+            `;
+            pilGaya.insertBefore(card, pilGaya.firstChild);
+          });
+
+          const total = $$('#pilGaya .gaya').length;
+          if (jmlEl) jmlEl.textContent = total;
+        } catch (err) {
+          console.warn('Gagal sinkron gaya motion:', err);
         }
       };
 
@@ -7729,9 +7779,10 @@ Aturan:
                   </div>`;
               }
 
-              // Segarkan pustaka global dan Card 4
+              // Segarkan pustaka global, Card 4, dan Menu Template Motion
               muatPustakaSkillsGlobal();
               if (typeof muatDaftarSkillsPro === 'function') muatDaftarSkillsPro();
+              if (typeof sinkronGayaMotion === 'function') sinkronGayaMotion();
 
               if (autoPurge) {
                 bersihkanVideoGlobal();
@@ -7747,6 +7798,10 @@ Aturan:
           }
         };
       }
+
+      // Panggil segera saat startup
+      muatPustakaSkillsGlobal();
+      sinkronGayaMotion();
     }
 
     // awal: lanjutkan proses yang masih jalan

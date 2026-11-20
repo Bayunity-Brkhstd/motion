@@ -1,6 +1,6 @@
 ---
 name: toon-3d-celshaded
-description: Preset gaya visual dinamis diekstrak dari video referensi dengan pacing 3.2s dan palet warna #14427A, #0B0B0B, #FACC15, #38BDF8, #F97316. Wajib gunakan modul skill dan preset ini jika pengguna meminta animasi visual bertema 'Toon 3D Celshaded' atau palet #14427A/#FACC15.
+description: Preset gaya visual dinamis diekstrak dari video referensi dengan pacing 8.0s dan palet warna #14427A, #0B0B0B, #FACC15, #38BDF8, #F97316. Wajib gunakan modul skill dan preset ini jika pengguna meminta animasi visual bertema 'Toon 3D Celshaded' atau palet #14427A/#FACC15.
 ---
 
 # AI Video Skill: Toon 3D Celshaded (`toon-3d-celshaded`)
@@ -8,9 +8,9 @@ description: Preset gaya visual dinamis diekstrak dari video referensi dengan pa
 Preset gaya visual ini digenerasi secara terprogram dari video referensi untuk memproduksi animasi gerak dinamis Remotion berbasis kode React, ilustrasi vektor SVG aman, dan pacing kinetik.
 
 ## 1. Aturan Pacing & Durasi Adegan
-- **Rata-rata Pacing Adegan:** `3.2` detik per adegan.
-- Properti `durasi_detik` pada setiap objek `Adegan` di `naskah.json` WAJIB berkisar antara `2.2` hingga `4.5` detik.
-- Jangan biarkan ada adegan statis tanpa pergantian visual atau punch in melebihi `4.5` detik.
+- **Rata-rata Pacing Adegan:** `8.0` detik per adegan.
+- Properti `durasi_detik` pada setiap objek `Adegan` di `naskah.json` WAJIB berkisar antara `5.6` hingga `11.2` detik.
+- Jangan biarkan ada adegan statis tanpa pergantian visual atau punch in melebihi `11.2` detik.
 
 ## 2. Palet Warna Wajib (5 Kode HEX)
 Setiap naskah/komposisi yang menggunakan gaya ini WAJIB memasukkan 5 kode warna berikut ke properti `palet` di `naskah.json`:

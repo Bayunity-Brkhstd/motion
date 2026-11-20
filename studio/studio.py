@@ -1467,6 +1467,8 @@ class H(BaseHTTPRequestHandler):
                 return self._json(sistem_detail())
             if jalur == "/api/status-ai":
                 return self._json(status_ai())
+            if jalur in ("/api/motion-pro/daftar-skills", "/api/daftar-skills-global"):
+                return self._json(daftar_skills_pro())
             if jalur == "/api/proyek":
                 return self._json(daftar_proyek())
             if m := re.match(r"^/api/jejak/([\w-]+)/(\d+)$", jalur):
