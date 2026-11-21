@@ -76,19 +76,19 @@
     "inti": false
   },
   {
-    "slug": "toon-3d-celshaded",
-    "name": "Toon 3D Celshaded",
-    "description": "Preset gaya visual Toon 3D Celshaded dengan garis outline tebal kartun, palet warna cerah, dan animasi pegas dinamis.",
+    "slug": "dijadikan-kontak-darurat-pinjol-wajib-bayar-shorts-hukum-semenit-1080p-h264",
+    "name": "Dijadikan Kontak Darurat Pinjol Wajib Bayar Shorts Hukum Semenit 1080P H264",
+    "description": "Preset gaya visual dinamis diekstrak dari video referensi dengan pacing 6.0s dan palet warna #14427A, #0B0B0B, #FACC15, #38BDF8, #F97316.",
     "palette_hex": [
-      "#0B1B2B",
-      "#4FC3F7",
+      "#14427A",
+      "#0B0B0B",
       "#FACC15",
-      "#FFFFFF",
-      "#1E293B"
+      "#38BDF8",
+      "#F97316"
     ],
-    "avg_pacing_sec": 4.5,
-    "thumbnail": "/aset/gaya/toon-3d-celshaded.jpg",
-    "created_at": "2026-11-20T17:15:00.000000+00:00",
+    "avg_pacing_sec": 6.0,
+    "thumbnail": "/aset/gaya/dijadikan-kontak-darurat-pinjol-wajib-bayar-shorts-hukum-semenit-1080p-h264.jpg",
+    "created_at": "2026-11-21T13:36:14.941008+00:00",
     "inti": false
   }
 ]

@@ -524,6 +524,7 @@ def mulai_motion(d: dict) -> dict:
     if not naskah_teks and ai == "lokal":
         raise ValueError("Membuat naskah dari topik butuh AI (Gemini/Ollama/Claude) — atur di Pengaturan, "
                          "atau tempel naskah JSON dari Claude/Gemini gratis.")
+    sinkronkan_presets_index()
     node = cari_node()
     folder = proyek_baru("motion")
     nama = folder.name
@@ -1078,8 +1079,74 @@ def bersihkan_cache_pro() -> dict:
     return {"ok": True, "dibersihkan_mb": mb, "pesan": f"Berhasil membersihkan cache & file sementara ({mb} MB dibebaskan)."}
 
 
+def sinkronkan_presets_index() -> None:
+    """Sinkronisasi otomatis motion/src/presets/index.ts berdasarkan file .tsx yang benar-benar ada di disk."""
+    try:
+        presets_dir = MOTION / "src" / "presets"
+        index_ts = presets_dir / "index.ts"
+        if not presets_dir.is_dir():
+            return
+
+        tsx_files = sorted(
+            [f for f in presets_dir.glob("*.tsx") if f.name not in ("types.tsx", "index.tsx")],
+            key=lambda p: p.name.lower()
+        )
+        imports = []
+        entries = []
+        for f in tsx_files:
+            slug = f.stem
+            code = f.read_text(encoding="utf-8")
+            m = re.search(r"export\s+const\s+(preset_\w+)\s*:\s*StylePreset", code)
+            if m:
+                ident = m.group(1)
+            else:
+                clean = re.sub(r"[^a-zA-Z0-9_]", "_", slug)
+                ident = f"preset_{clean}" if clean and clean[0].isdigit() else f"preset_{clean}"
+            imports.append(f"import {{ {ident} }} from './{slug}';")
+            entries.append(f"  '{slug}': {ident},")
+
+        custom_imports_str = "\n".join(imports)
+        custom_entries_str = "\n".join(entries)
+        konten = f"""import {{ TEMA }} from '../tema';
+import {{ StylePreset }} from './types';
+
+// Built-in presets from existing themes
+const builtInPresets: Record<string, StylePreset> = {{}};
+for (const [key, tema] of Object.entries(TEMA)) {{
+  builtInPresets[key] = {{
+    ...tema,
+    slug: key,
+    display_name: tema.nama,
+    avg_pacing_sec: 3.5,
+  }};
+}}
+
+// CUSTOM_PRESETS_START
+{custom_imports_str}
+// CUSTOM_PRESETS_END
+
+export const STYLE_PRESETS: Record<string, StylePreset> = {{
+  ...builtInPresets,
+{custom_entries_str}
+}};
+
+export const getPreset = (name?: string): StylePreset => {{
+  if (name && STYLE_PRESETS[name]) {{
+    return STYLE_PRESETS[name];
+  }}
+  return STYLE_PRESETS['garis'] || Object.values(STYLE_PRESETS)[0];
+}};
+
+export * from './types';
+"""
+        index_ts.write_text(konten, encoding="utf-8")
+    except Exception as e:
+        print(f"[Peringatan] Gagal sinkronkan presets index: {e}")
+
+
 def daftar_skills_pro() -> dict:
     """Daftar modul skills yang aktif di folder motion/skills/."""
+    sinkronkan_presets_index()
     skill_dir = MOTION / "skills"
     skill_dir.mkdir(parents=True, exist_ok=True)
     reg_file = skill_dir / "registry.json"
@@ -1189,6 +1256,9 @@ def hapus_skill_pro(d: dict) -> dict:
             thumb_file.unlink()
         except Exception:
             pass
+
+    # Selalu sinkronkan ulang index.ts agar import modul yang dihapus bersih
+    sinkronkan_presets_index()
 
     return {"ok": True, "daftar": daftar_skills_pro()["skills"]}
 

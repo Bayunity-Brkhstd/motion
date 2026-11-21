@@ -2,9 +2,66 @@
 // Cheat Clip and Motion — naskah JSON → suara → subtitle → animasi → MP4 9:16.
 // Pakai: node buat.mjs naskah/contoh.json [--gaya=neon] [--suara=say|rekaman|tanpa] [--suara-mac=Damayanti]
 import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, rmSync, readdirSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { svgAman } from './svg-aman.mjs';
+
+// Auto-sinkronisasi index preset agar tidak ada import mati yang membuat build Remotion gagal
+function sinkronkanPresetsRemotion() {
+  try {
+    const presetsDir = resolve('src', 'presets');
+    const indexTs = join(presetsDir, 'index.ts');
+    if (!existsSync(presetsDir)) return;
+    const files = readdirSync(presetsDir);
+    const tsx = files.filter((f) => f.endsWith('.tsx') && f !== 'types.tsx' && f !== 'index.tsx');
+    const imports = [];
+    const entries = [];
+    for (const f of tsx) {
+      const slug = f.replace(/\.tsx$/, '');
+      const code = readFileSync(join(presetsDir, f), 'utf8');
+      const m = code.match(/export\s+const\s+(preset_\w+)\s*:\s*StylePreset/);
+      let ident = m ? m[1] : ('preset_' + slug.replace(/[^a-zA-Z0-9_]/g, '_'));
+      imports.push(`import { ${ident} } from './${slug}';`);
+      entries.push(`  '${slug}': ${ident},`);
+    }
+    const konten = `import { TEMA } from '../tema';
+import { StylePreset } from './types';
+
+// Built-in presets from existing themes
+const builtInPresets: Record<string, StylePreset> = {};
+for (const [key, tema] of Object.entries(TEMA)) {
+  builtInPresets[key] = {
+    ...tema,
+    slug: key,
+    display_name: tema.nama,
+    avg_pacing_sec: 3.5,
+  };
+}
+
+// CUSTOM_PRESETS_START
+${imports.join('\n')}
+// CUSTOM_PRESETS_END
+
+export const STYLE_PRESETS: Record<string, StylePreset> = {
+  ...builtInPresets,
+${entries.join('\n')}
+};
+
+export const getPreset = (name?: string): StylePreset => {
+  if (name && STYLE_PRESETS[name]) {
+    return STYLE_PRESETS[name];
+  }
+  return STYLE_PRESETS['garis'] || Object.values(STYLE_PRESETS)[0];
+};
+
+export * from './types';
+`;
+    writeFileSync(indexTs, konten, 'utf8');
+  } catch (err) {
+    console.error('Peringatan sinkronisasi preset:', err.message);
+  }
+}
+sinkronkanPresetsRemotion();
 
 const argv = process.argv.slice(2);
 const opsi = Object.fromEntries(argv.filter((a) => a.startsWith('--')).map((a) => a.slice(2).split('=')));

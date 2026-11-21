@@ -196,37 +196,62 @@ export default preset_{slug_to_ident(slug)};
 
 
 def update_presets_index(slug: str, index_path: Path):
-    if not index_path.exists():
+    presets_dir = index_path.parent
+    if not presets_dir.exists():
         return
 
-    content = index_path.read_text(encoding="utf-8")
-    ident = slug_to_ident(slug)
-    import_stmt = f"import {{ preset_{ident} }} from './{slug}';"
-    dict_entry = f"  '{slug}': preset_{ident},"
-
-    # Cek apakah sudah di-import
-    if import_stmt in content:
-        return
-
-    # Sisipkan import di penanda CUSTOM_PRESETS_START atau sebelum STYLE_PRESETS
-    if "// CUSTOM_PRESETS_START" in content and "// CUSTOM_PRESETS_END" in content:
-        pattern = r"// CUSTOM_PRESETS_START\r?\n([\s\S]*?)// CUSTOM_PRESETS_END"
-        m = re.search(pattern, content)
+    tsx_files = sorted(
+        [f for f in presets_dir.glob("*.tsx") if f.name not in ("types.tsx", "index.tsx")],
+        key=lambda p: p.name.lower()
+    )
+    imports = []
+    entries = []
+    for f in tsx_files:
+        s = f.stem
+        code = f.read_text(encoding="utf-8")
+        m = re.search(r"export\s+const\s+(preset_\w+)\s*:\s*StylePreset", code)
         if m:
-            existing_imports = m.group(1)
-            new_imports = existing_imports + f"{import_stmt}\n"
-            content = content.replace(m.group(0), f"// CUSTOM_PRESETS_START\n{new_imports}// CUSTOM_PRESETS_END")
-    else:
-        # Fallback sisipkan sebelum export const STYLE_PRESETS
-        content = f"{import_stmt}\n" + content
+            ident = m.group(1)
+        else:
+            ident = f"preset_{slug_to_ident(s)}"
+        imports.append(f"import {{ {ident} }} from './{s}';")
+        entries.append(f"  '{s}': {ident},")
 
-    # Sisipkan entry ke STYLE_PRESETS
-    if f"'{slug}':" not in content and f'"{slug}":' not in content:
-        dict_pattern = r"(export const STYLE_PRESETS: Record<string, StylePreset> = \{\s*\.\.\.builtInPresets,)"
-        replacement = f"\\1\n{dict_entry}"
-        content = re.sub(dict_pattern, replacement, content)
+    custom_imports_str = "\n".join(imports)
+    custom_entries_str = "\n".join(entries)
+    new_content = f"""import {{ TEMA }} from '../tema';
+import {{ StylePreset }} from './types';
 
-    index_path.write_text(content, encoding="utf-8")
+// Built-in presets from existing themes
+const builtInPresets: Record<string, StylePreset> = {{}};
+for (const [key, tema] of Object.entries(TEMA)) {{
+  builtInPresets[key] = {{
+    ...tema,
+    slug: key,
+    display_name: tema.nama,
+    avg_pacing_sec: 3.5,
+  }};
+}}
+
+// CUSTOM_PRESETS_START
+{custom_imports_str}
+// CUSTOM_PRESETS_END
+
+export const STYLE_PRESETS: Record<string, StylePreset> = {{
+  ...builtInPresets,
+{custom_entries_str}
+}};
+
+export const getPreset = (name?: string): StylePreset => {{
+  if (name && STYLE_PRESETS[name]) {{
+    return STYLE_PRESETS[name];
+  }}
+  return STYLE_PRESETS['garis'] || Object.values(STYLE_PRESETS)[0];
+}};
+
+export * from './types';
+"""
+    index_path.write_text(new_content, encoding="utf-8")
 
 
 def update_skills_registry(metrics: dict, registry_path: Path):
