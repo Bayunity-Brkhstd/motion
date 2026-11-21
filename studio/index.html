@@ -4411,17 +4411,95 @@
           <div class="kartu">
             <h2 class="judul-kartu"><i style="background:var(--ungu)"></i>Isi video</h2>
             <div class="pil" id="pilIsi" style="margin-bottom:12px"><button data-v="topik" class="aktif">Dari topik
-                (AI)</button><button data-v="naskah">Tempel naskah JSON</button><button data-v="manual">Manual</button>
+                (AI)</button><button data-v="animasi">🎬 Animasi Karakter</button><button data-v="manual">Manual</button>
             </div>
             <div id="isiTopik"><textarea class="input" id="topik"
                 placeholder="mis. 3 kebiasaan pagi yang bikin produktif"></textarea>
-              <div class="catatan">Butuh AI di Pengaturan (Gemini gratis cukup). Tanpa kunci? Pakai tab <b>Tempel naskah
-                  JSON</b> — minta naskahnya di Claude/Gemini gratis dengan <button type="button" class="tautan"
+              <div class="catatan">Butuh AI di Pengaturan (Gemini gratis cukup). Tanpa kunci? Pakai tab <b>Animasi Karakter</b> — minta naskahnya di Claude/Gemini gratis dengan <button type="button" class="tautan"
                   id="salinPrompt" style="padding:4px 2px">prompt ini</button>.</div>
             </div>
-            <div id="isiNaskah" hidden><textarea class="input" id="naskahJSON"
-                style="min-height:180px;font-family:var(--mono);font-size:12px"
-                placeholder='{"judul":"...","adegan":[{"judul":"...","teks":"...","kunci":["..."],"ikon":"🔥"}]}'></textarea>
+            <div id="isiAnimasi" hidden>
+              <!-- Subscription Check Alert -->
+              <div id="boxAnimasiSubscriptionAlert" style="display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.35);border-radius:10px;padding:12px;margin-bottom:12px">
+                <div style="display:flex;align-items:flex-start;gap:10px">
+                  <span style="font-size:20px;line-height:1">🔒</span>
+                  <div>
+                    <b style="color:#F87171;font-size:13px;display:block;margin-bottom:4px">Fitur Animasi Karakter Membutuhkan AI Berlangganan</b>
+                    <span style="font-size:12px;color:var(--redup);line-height:1.4;display:block">
+                      Untuk menyusun matematika sendi karakter, bukaan mulut deterministik, dan alur adegan presisi, fitur ini membutuhkan akun langganan resmi (<b>Antigravity CLI</b> atau <b>Claude Code CLI</b>).
+                    </span>
+                    <button type="button" class="tombol kedua kecil" style="margin-top:8px" onclick="ke('pengaturan')">Hubungkan di Pengaturan AI →</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Main Input Form for Character Animation -->
+              <div class="bidang" style="margin-bottom:10px">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                  <label style="font-size:12px;font-weight:600">Naskah Cerita / Penjelasan Adegan:</label>
+                  <span style="font-size:11px;color:var(--redup)">Tulis teks narasi per paragraf</span>
+                </div>
+                <textarea class="input" id="animasiTeksNaskah" style="min-height:110px;font-size:13px" placeholder="Tulis naskah video Anda di sini... misal:&#10;Selamat datang di era animasi karakter bergerak.&#10;Kini karakter melangkah, mengayunkan tangan, dan berbicara dengan ekspresi dinamis.&#10;Semua dirender hemat RAM di bawah 600 MB."></textarea>
+              </div>
+
+              <!-- Rig Karakter Picker Cards -->
+              <div class="bidang" style="margin-bottom:10px">
+                <label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px">Pilih Rig Karakter Animasi:</label>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(110px, 1fr));gap:8px" id="wadahPilihanRig">
+                  <div class="kartu-rig aktif" data-rig="toon-3d" style="border:2px solid var(--aksen);border-radius:8px;padding:8px;background:rgba(56,189,248,0.08);cursor:pointer;text-align:center">
+                    <div style="font-size:22px;margin-bottom:2px">🎭</div>
+                    <b style="font-size:12px;display:block">Toon 3D</b>
+                    <small style="font-size:10px;color:var(--redup)">Perspektif & Cel-Shaded</small>
+                  </div>
+                  <div class="kartu-rig" data-rig="stickman" style="border:1px solid var(--border);border-radius:8px;padding:8px;background:rgba(255,255,255,0.02);cursor:pointer;text-align:center">
+                    <div style="font-size:22px;margin-bottom:2px">🏃</div>
+                    <b style="font-size:12px;display:block">Stickman</b>
+                    <small style="font-size:10px;color:var(--redup)">Kinetik Jalan & Lari</small>
+                  </div>
+                  <div class="kartu-rig" data-rig="isometric" style="border:1px solid var(--border);border-radius:8px;padding:8px;background:rgba(255,255,255,0.02);cursor:pointer;text-align:center">
+                    <div style="font-size:22px;margin-bottom:2px">📐</div>
+                    <b style="font-size:12px;display:block">Isometric</b>
+                    <small style="font-size:10px;color:var(--redup)">3D Balok & Tech Grid</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Rasio Aspek Video -->
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;padding:8px 12px">
+                <span style="font-size:12px;font-weight:600">Rasio Aspek Video:</span>
+                <div class="pil" id="pilRasioAnimasi" style="margin:0">
+                  <button data-v="vertikal" class="aktif" style="padding:4px 10px;font-size:11px">📱 9:16 Vertikal</button>
+                  <button data-v="landscape" style="padding:4px 10px;font-size:11px">🖥️ 16:9 Landscape</button>
+                </div>
+              </div>
+
+              <!-- Visual QA Filmstrip (Keyframe Inspector) -->
+              <div class="bidang" style="margin-bottom:12px">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                  <label style="font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px">
+                    <span>🔍 Visual QA Keyframes</span>
+                    <span style="font-size:10px;background:rgba(56,189,248,0.2);color:var(--aksen);padding:2px 6px;border-radius:4px">Pratinjau Instan 2 Detik</span>
+                  </label>
+                  <button type="button" class="tombol kedua kecil" id="tblPratinjauKeyframe" style="font-size:11px;padding:4px 8px">
+                    ⚡ Periksa Keyframe
+                  </button>
+                </div>
+                <div id="stripKeyframes" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;min-height:90px;background:rgba(0,0,0,0.2);border-radius:8px;padding:8px;border:1px dashed var(--border)">
+                  <div id="stripKeyframesKosong" style="display:flex;align-items:center;justify-content:center;width:100%;color:var(--redup);font-size:12px">
+                    Klik "⚡ Periksa Keyframe" untuk melihat pratinjau snapshot pose karakter sebelum render.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Accordion Mode Lanjutan (Raw JSON Edit - Baris 116 PRD) -->
+              <details style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:10px">
+                <summary style="font-size:12px;cursor:pointer;color:var(--redup);font-weight:600">⚙️ Mode Lanjutan (Edit / Tempel JSON Mentah)</summary>
+                <div style="margin-top:8px">
+                  <textarea class="input" id="naskahJSON"
+                    style="min-height:140px;font-family:var(--mono);font-size:11px"
+                    placeholder='{"judul":"...","rigDefault":"toon-3d","adegan":[{"judul":"...","teks":"...","rig":"toon-3d"}]}'></textarea>
+                </div>
+              </details>
             </div>
             <div id="isiManual" hidden>
               <!-- Segmen Pembuka (Judul / Hook) -->
@@ -4553,9 +4631,11 @@
               </div>
             </div>
           </div>
-          <div class="kartu">
-            <h2 class="judul-kartu"><i style="background:var(--hijau)"></i>Gaya · <span id="jmlTemplateGaya">24</span> template</h2>
-            <div class="gaya-pilih" id="pilGaya">
+          <div class="kartu" id="kartuGayaKanan">
+            <!-- SEKSI TEMPLATE STATIS (Untuk Tab Topik & Tab Manual) -->
+            <div id="seksiTemplateStatis">
+              <h2 class="judul-kartu"><i style="background:var(--hijau)"></i>Gaya Grafis Statis · <span id="jmlTemplateGaya">26</span> template</h2>
+              <div class="gaya-pilih" id="pilGaya">
               <button class="gaya" data-v="piksel" title="Pixel Art"><img src="/aset/gaya/piksel.jpg" alt=""
                   loading="lazy">
                 <div class="nama"><b>Pixel Art</b><span>ilustrasi</span></div>
@@ -4650,9 +4730,38 @@
                 <div class="nama"><b>Daftar Sumber</b><span>T11</span></div>
               </button>
             </div>
-            <label class="saklar" style="margin-top:14px">AI menggambar objek tiap adegan <em
+            <label class="saklar" style="margin-top:14px" id="lblGambarAI">AI menggambar objek tiap adegan <em
                 style="font-style:normal;color:var(--redup);font-size:12px">&nbsp;SVG, menggantikan emoji · butuh AI di
                 Pengaturan</em><input type="checkbox" id="gGambarAI" checked></label>
+            </div>
+
+            <!-- SEKSI TEMPLATE ANIMASI BERGERAK (Khusus Tab Animasi Karakter) -->
+            <div id="seksiTemplateAnimasi" hidden>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                <h2 class="judul-kartu" style="margin:0"><i style="background:#38bdf8"></i>Template Animasi Bergerak</h2>
+                <span style="font-size:10px;padding:2px 8px;border-radius:99px;background:rgba(56,189,248,0.2);color:#38bdf8;font-weight:700">Kinetik Deterministik</span>
+              </div>
+              <p style="font-size:11.5px;color:var(--redup);margin:0 0 12px;line-height:1.4">
+                Pustaka template khusus animasi bergerak (karakter melangkah, mengayunkan tangan, dan ekspresi wajah hidup). Terpisah total dari template SVG statis lama.
+              </p>
+              <div class="gaya-pilih" id="pilGayaAnimasi" style="grid-template-columns:repeat(auto-fill, minmax(130px, 1fr))">
+                <button type="button" class="gaya aktif" data-v="toon-3d" title="Toon 3D Cel-Shaded Explainer">
+                  <img src="/aset/gaya/sinematik.jpg" alt="" loading="lazy">
+                  <div class="nama"><b>Toon 3D Explainer</b><span>3D Cel-Shaded</span></div>
+                </button>
+                <button type="button" class="gaya" data-v="stickman" title="2D Kinetic Stickman Action">
+                  <img src="/aset/gaya/stickman.jpg" alt="" loading="lazy">
+                  <div class="nama"><b>Stickman Kinetic</b><span>2D Action</span></div>
+                </button>
+                <button type="button" class="gaya" data-v="isometric" title="3D Isometric Tech Engine">
+                  <img src="/aset/gaya/ps2.jpg" alt="" loading="lazy">
+                  <div class="nama"><b>Isometric Tech</b><span>3D Grid</span></div>
+                </button>
+              </div>
+              <div style="margin-top:14px;padding:10px;background:rgba(56,189,248,0.06);border:1px dashed rgba(56,189,248,0.3);border-radius:8px;font-size:11.5px;color:var(--redup);line-height:1.4">
+                ✨ <b>Animasi Mandiri:</b> Karakter digerakkan langsung di memori Remotion (Plan B), tidak memerlukan generator gambar SVG statis.
+              </div>
+            </div>
             <div class="bidang" style="margin-top:12px">
               <label style="display:block;margin-bottom:6px;font-weight:500;font-size:13px">Audio Narasi</label>
               <div class="pil" id="pilSuaraNarasi"><button type="button" data-v="otomatis" class="aktif">Suara Bawaan /
@@ -5115,14 +5224,32 @@
                 </div>
               </div>
 
+              <!-- Kategori Ekstraksi: Animasi Bergerak vs Video Statis -->
+              <div style="margin-top:14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:10px">
+                <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;color:var(--teks)">
+                  🎯 Kategori Ekstraksi Gaya Video:
+                </label>
+                <div class="pil" id="pilKategoriEkstrak" style="margin:0;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                  <button type="button" data-v="animasi" class="aktif" style="padding:8px 4px;font-size:11.5px;text-align:center">
+                    🎬 Animasi Bergerak<br><small style="font-size:10px;color:var(--redup)">Karakter &amp; 3D Cel</small>
+                  </button>
+                  <button type="button" data-v="statis" style="padding:8px 4px;font-size:11.5px;text-align:center">
+                    🖼️ Grafis Statis<br><small style="font-size:10px;color:var(--redup)">SVG &amp; Motion Grafis</small>
+                  </button>
+                </div>
+                <div id="ketKategoriEkstrak" style="font-size:11px;color:var(--redup);margin-top:8px;line-height:1.4">
+                  <b>🎬 Mode Animasi Bergerak:</b> Mengekstrak karakter rig, shading cel-shaded (seperti di <i>contohgayavisual.md</i>), pacing 2–4 detik, serta kamera dinamis untuk <b>Studio Animasi Bergerak</b>.
+                </div>
+              </div>
+
               <!-- Konfigurasi Nama Gaya -->
               <div style="margin-top:14px">
                 <label style="font-size:12px;font-weight:600;display:block;margin-bottom:5px;color:var(--teks)">
                   Nama / Slug Gaya Unik
                 </label>
-                <input type="text" class="input" id="slugGayaGlobal" placeholder="misal: toon-3d-celshaded atau cyberpunk-neon" style="font-size:12px;width:100%;padding:8px 10px">
+                <input type="text" class="input" id="slugGayaGlobal" placeholder="misal: toon-3d-celshaded atau stickman-action" style="font-size:12px;width:100%;padding:8px 10px">
                 <small style="font-size:10.5px;color:var(--redup);margin-top:4px;display:block">
-                  Akan menjadi nama folder skill <code>motion/skills/&lt;slug&gt;</code> dan preset <code>motion/src/presets/&lt;slug&gt;.tsx</code>.
+                  Akan menjadi nama folder skill <code>motion/skills/&lt;slug&gt;</code> dan template kustom terdaftar.
                 </small>
               </div>
 
@@ -5154,9 +5281,16 @@
                   🔄 Segarkan
                 </button>
               </div>
-              <p style="font-size:11.5px;color:var(--redup);margin:0 0 12px">
+              <p style="font-size:11.5px;color:var(--redup);margin:0 0 10px">
                 Daftar template dan skill AI yang aktif secara global di seluruh sistem Studio dan dapat langsung dipanggil oleh AI Agent.
               </p>
+
+              <!-- Filter Kategori Pustaka Global -->
+              <div class="pil" id="pilFilterSkillsGlobal" style="margin-bottom:12px;display:flex">
+                <button type="button" data-v="semua" class="aktif" style="flex:1;font-size:11px;padding:5px">Semua</button>
+                <button type="button" data-v="animasi" style="flex:1.2;font-size:11px;padding:5px">🎬 Animasi Bergerak</button>
+                <button type="button" data-v="statis" style="flex:1.2;font-size:11px;padding:5px">🖼️ Grafis Statis</button>
+              </div>
 
               <!-- Daftar Kartu Skill Global -->
               <div id="gridSkillsGlobal" style="display:flex;flex-direction:column;gap:10px;max-height:560px;overflow-y:auto;padding-right:4px">
@@ -5949,10 +6083,129 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
     pil('#pilModel'); pil('#pilDurasi'); pil('#pilAI', (v) => tampilAI(v));
     pil('#pilIsi', (v) => {
       $('#isiTopik').hidden = v !== 'topik';
-      $('#isiNaskah').hidden = v !== 'naskah';
+      $('#isiAnimasi').hidden = v !== 'animasi';
       $('#isiManual').hidden = v !== 'manual';
+      const seksiStatis = $('#seksiTemplateStatis');
+      const seksiAnimasi = $('#seksiTemplateAnimasi');
+      if (seksiStatis) seksiStatis.hidden = v === 'animasi';
+      if (seksiAnimasi) seksiAnimasi.hidden = v !== 'animasi';
+      if (v === 'animasi') {
+        const isLangganan = (PENG.AI === 'langganan') || (PENG.LANGGANAN && (PENG.LANGGANAN.includes('antigravity') || PENG.LANGGANAN.includes('claude')));
+        const boxAlert = $('#boxAnimasiSubscriptionAlert');
+        if (boxAlert) boxAlert.style.display = isLangganan ? 'none' : 'block';
+      }
       updateTampilanAnalisaAudio();
     });
+
+    // Rig picker & Gaya Animasi sync
+    const elWadahRig = $('#wadahPilihanRig');
+    const elPilGayaAnim = $('#pilGayaAnimasi');
+    if (elWadahRig) {
+      elWadahRig.onclick = (e) => {
+        const card = e.target.closest('.kartu-rig');
+        if (!card) return;
+        $$('.kartu-rig', elWadahRig).forEach((c) => {
+          const match = c === card;
+          c.classList.toggle('aktif', match);
+          c.style.border = match ? '2px solid var(--aksen)' : '1px solid var(--border)';
+          c.style.background = match ? 'rgba(56,189,248,0.08)' : 'rgba(255,255,255,0.02)';
+        });
+        if (elPilGayaAnim) {
+          $$('.gaya', elPilGayaAnim).forEach((g) => {
+            g.classList.toggle('aktif', g.dataset.v === card.dataset.rig);
+          });
+        }
+      };
+    }
+    if (elPilGayaAnim) {
+      elPilGayaAnim.onclick = (e) => {
+        const b = e.target.closest('.gaya');
+        if (!b) return;
+        $$('.gaya', elPilGayaAnim).forEach((x) => x.classList.toggle('aktif', x === b));
+        const rigVal = b.dataset.v;
+        if (elWadahRig) {
+          $$('.kartu-rig', elWadahRig).forEach((c) => {
+            const match = c.dataset.rig === rigVal;
+            c.classList.toggle('aktif', match);
+            c.style.border = match ? '2px solid var(--aksen)' : '1px solid var(--border)';
+            c.style.background = match ? 'rgba(56,189,248,0.08)' : 'rgba(255,255,255,0.02)';
+          });
+        }
+      };
+    }
+
+    // Rasio picker
+    pil('#pilRasioAnimasi');
+
+    // Visual QA Keyframe Inspector (Still Render)
+    const elTblPratinjau = $('#tblPratinjauKeyframe');
+    if (elTblPratinjau) {
+      elTblPratinjau.onclick = async () => {
+        const strip = $('#stripKeyframes');
+        strip.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;width:100%;color:var(--aksen);font-size:12px;gap:8px"><span class="pk-putar" style="display:inline-block;width:14px;height:14px;border:2px solid var(--aksen);border-top-color:transparent;border-radius:50%;animation:putar 0.8s linear infinite"></span> Merender keyframes Visual QA (scale 0.35)...</div>';
+        try {
+          const rawJson = $('#naskahJSON')?.value.trim();
+          let payloadNaskah = null;
+          if (rawJson) {
+            try { payloadNaskah = JSON.parse(rawJson); } catch (e) {}
+          }
+          if (!payloadNaskah) {
+            const rig = $('#wadahPilihanRig .kartu-rig.aktif')?.dataset.rig || 'toon-3d';
+            const rasio = nilaiPil('#pilRasioAnimasi') || 'vertikal';
+            const teksInput = $('#animasiTeksNaskah')?.value.trim() || 'Karakter kinetik bergerak hidup di Remotion Native.';
+            const baris = teksInput.split(/\n+/).filter(Boolean);
+            payloadNaskah = {
+              judul: baris[0]?.slice(0, 30) || 'Animasi Karakter Bergerak',
+              rigDefault: rig,
+              rasio: rasio,
+              komposisi: 'AnimasiBergerak',
+              adegan: baris.map((b, idx) => ({
+                judul: b.slice(0, 24),
+                teks: b,
+                durasi_detik: 3.5,
+                rig: rig,
+                latar: idx % 2 === 0 ? 'blueprint' : 'senja',
+                callout: `POSE ${idx + 1}`,
+                karakter: {
+                  aksi: idx % 2 === 0 ? 'jalan' : 'tunjuk',
+                  ekspresi: idx % 2 === 0 ? 'senyum' : 'serius',
+                  benda: idx === 1 ? 'folder' : 'tidak_ada'
+                }
+              }))
+            };
+          }
+
+          const frames = [30, 90, 150, 210];
+          const hasilImgs = [];
+          for (const f of frames) {
+            const r = await fetch('/api/animasi/still', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ frame: f, scale: 0.35, naskah: payloadNaskah })
+            });
+            const res = await r.json();
+            if (res.ok && res.file) {
+              hasilImgs.push({ frame: f, file: res.file });
+            }
+          }
+
+          if (hasilImgs.length > 0) {
+            strip.innerHTML = '';
+            hasilImgs.forEach((img, i) => {
+              const div = document.createElement('div');
+              div.style.cssText = 'flex:0 0 110px;display:flex;flex-direction:column;align-items:center;background:rgba(0,0,0,0.4);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);padding:4px';
+              div.innerHTML = `<img src="${img.file}?t=${Date.now()}" style="width:100%;height:140px;object-fit:cover;border-radius:4px" /><small style="font-size:10px;margin-top:4px;color:var(--redup)">Frame ${img.frame} (Pose ${i+1})</small>`;
+              strip.appendChild(div);
+            });
+            toast('Visual QA Keyframes siap!');
+          } else {
+            strip.innerHTML = '<div style="color:var(--merah);font-size:12px;padding:8px">Gagal memuat keyframe. Pastikan naskah valid.</div>';
+          }
+        } catch (err) {
+          strip.innerHTML = `<div style="color:var(--merah);font-size:12px;padding:8px">Galat Visual QA: ${err.message}</div>`;
+        }
+      };
+    }
     $('#pilGaya').onclick = (e) => { const b = e.target.closest('.gaya'); if (!b) return; $$('.gaya').forEach((x) => x.classList.toggle('aktif', x === b)); };
     $('#jumlah').oninput = (e) => $('#nJumlah').textContent = e.target.value + ' klip';
     pil('#pilRentang', (v) => { $('#isiRentang').hidden = v !== 'khusus'; });
@@ -6884,9 +7137,45 @@ Aturan:
         let naskahFinal = '';
         if (isi === 'topik') {
           if (!$('#topik').value.trim()) return toast('Isi topik video terlebih dahulu.', true);
-        } else if (isi === 'naskah') {
-          naskahFinal = $('#naskahJSON').value.trim();
-          if (!naskahFinal) return toast('Tempel naskah JSON terlebih dahulu.', true);
+        } else if (isi === 'animasi') {
+          const raw = $('#naskahJSON')?.value.trim();
+          if (raw) {
+            try {
+              const parsed = JSON.parse(raw);
+              parsed.komposisi = 'AnimasiBergerak';
+              if (audioNarasi) parsed.audioNarasi = audioNarasi;
+              naskahFinal = JSON.stringify(parsed);
+            } catch (e) {
+              return toast('Format JSON di Mode Lanjutan tidak valid: ' + e.message, true);
+            }
+          } else {
+            const teksCerita = $('#animasiTeksNaskah')?.value.trim();
+            if (!teksCerita) return toast('Tulis naskah cerita atau poin adegan terlebih dahulu.', true);
+            const rigPilihan = $('#wadahPilihanRig .kartu-rig.aktif')?.dataset.rig || 'toon-3d';
+            const rasioPilihan = nilaiPil('#pilRasioAnimasi') || 'vertikal';
+            const baris = teksCerita.split(/\n+/).filter(Boolean);
+            const objekAnimasi = {
+              judul: baris[0]?.slice(0, 36) || 'Animasi Karakter Bergerak',
+              rigDefault: rigPilihan,
+              rasio: rasioPilihan,
+              komposisi: 'AnimasiBergerak',
+              audioNarasi: audioNarasi || undefined,
+              adegan: baris.map((b, idx) => ({
+                judul: b.slice(0, 30),
+                teks: b,
+                durasi_detik: Math.max(3.0, Math.round((b.split(/\s+/).length / 2.5) * 10) / 10),
+                rig: rigPilihan,
+                latar: idx % 3 === 0 ? 'blueprint' : (idx % 3 === 1 ? 'senja' : 'kota'),
+                callout: `ADEGAN ${idx + 1}`,
+                karakter: {
+                  aksi: idx === 0 ? 'jalan' : (idx === 1 ? 'tunjuk' : 'bicara'),
+                  ekspresi: idx === 0 ? 'senyum' : 'serius',
+                  benda: idx === 1 ? 'folder' : 'tidak_ada'
+                }
+              }))
+            };
+            naskahFinal = JSON.stringify(objekAnimasi);
+          }
         } else if (isi === 'manual') {
           const dataMan = kumpulkanNaskahManual();
           if (!dataMan.judul) return toast('Isi Teks Judul / Hook Layar terlebih dahulu.', true);
@@ -6919,12 +7208,16 @@ Aturan:
           naskahFinal = JSON.stringify(dataMan);
         }
 
+        const gayaTerpilih = isi === 'animasi'
+          ? ($('#pilGayaAnimasi .gaya.aktif')?.dataset.v || $('#wadahPilihanRig .kartu-rig.aktif')?.dataset.rig || 'toon-3d')
+          : ($('#pilGaya .aktif')?.dataset.v || 'garis');
+
         await api('/api/motion', {
           topik: isi === 'topik' ? $('#topik').value : '',
           naskah: naskahFinal,
-          gaya: $('#pilGaya .aktif').dataset.v,
+          gaya: gayaTerpilih,
           ai: PENG.AI || 'lokal',
-          gambar: $('#gGambarAI').checked,
+          gambar: isi === 'animasi' ? false : $('#gGambarAI').checked,
           audioNarasi: audioNarasi
         });
         mulaiPantau('motion');
@@ -8506,51 +8799,86 @@ Aturan:
       };
       if (btnHapusVid) btnHapusVid.onclick = bersihkanVideoGlobal;
 
+      // Kategori switch listener
+      pil('#pilKategoriEkstrak', (v) => {
+        const ket = $('#ketKategoriEkstrak');
+        if (!ket) return;
+        if (v === 'animasi') {
+          ket.innerHTML = '<b>🎬 Mode Animasi Bergerak:</b> Mengekstrak karakter rig, shading cel-shaded (seperti di <i>contohgayavisual.md</i>), pacing 2–4 detik, serta kamera dinamis untuk <b>Studio Animasi Bergerak</b>.';
+        } else {
+          ket.innerHTML = '<b>🖼️ Mode Grafis Statis:</b> Mengekstrak 5 palet warna HEX, SVG outline, tipografi, dan pacing adegan untuk <b>Template Grafis Statis</b>.';
+        }
+      });
+
+      // Filter kategori di pustaka global
+      let ALL_SKILLS_GLOBAL = [];
+      function renderSkillsFiltered(kategoriFilter = 'semua') {
+        if (!gridSkills) return;
+        let filtered = ALL_SKILLS_GLOBAL;
+        if (kategoriFilter === 'animasi') {
+          filtered = ALL_SKILLS_GLOBAL.filter((s) => s.kategori === 'animasi');
+        } else if (kategoriFilter === 'statis') {
+          filtered = ALL_SKILLS_GLOBAL.filter((s) => s.kategori !== 'animasi');
+        }
+        if (!filtered.length) {
+          gridSkills.innerHTML = `<div style="text-align:center;padding:24px;color:var(--redup);font-size:12px">Tidak ada template di kategori "${kategoriFilter}".</div>`;
+          return;
+        }
+        gridSkills.innerHTML = filtered.map((s) => {
+          const isAnim = s.kategori === 'animasi';
+          const paletHtml = (s.palette_hex && s.palette_hex.length)
+            ? s.palette_hex.map((c) => `<span style="display:inline-block;width:16px;height:16px;border-radius:3px;background:${c};border:1px solid #ffffff33;cursor:pointer" title="Klik untuk salin ${c}" onclick="navigator.clipboard.writeText('${c}');toast('Warna ${c} disalin!')"></span>`).join('')
+            : '<span style="color:var(--redup);font-size:11px">Default</span>';
+          return `
+            <div class="kartu" style="padding:12px;background:var(--kartu);border:1px solid var(--garis);border-radius:8px">
+              <div style="display:flex;gap:12px;align-items:flex-start">
+                <div style="width:54px;aspect-ratio:9/16;border-radius:6px;overflow:hidden;background:#000;flex-shrink:0;border:1px solid var(--garis);display:flex;align-items:center;justify-content:center">
+                  <img src="/aset/gaya/${s.id}.jpg" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.style.display='none'">
+                </div>
+                <div style="flex:1;min-width:0">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                    <div style="display:flex;align-items:center;gap:6px">
+                      <b style="font-size:12.5px;color:var(--teks)">${esc(s.nama || s.id)}</b>
+                      <span style="font-size:9.5px;padding:1px 6px;border-radius:99px;font-family:var(--mono);font-weight:700;background:${isAnim ? 'rgba(56,189,248,0.18)' : 'rgba(245,158,11,0.18)'};color:${isAnim ? '#38bdf8' : '#f59e0b'};border:1px solid ${isAnim ? 'rgba(56,189,248,0.3)' : 'rgba(245,158,11,0.3)'}">
+                        ${isAnim ? '🎬 Animasi' : '🖼️ Statis'}
+                      </span>
+                    </div>
+                    ${!s.inti ? `<button onclick="hapusSkillGlobal('${esc(s.id)}')" style="background:none;border:none;color:#f87171;font-weight:bold;cursor:pointer;font-size:12px;padding:2px 6px" title="Hapus skill & preset">✕ Hapus</button>` : ''}
+                  </div>
+                  <div style="font-size:11px;color:var(--redup);margin-bottom:8px;line-height:1.4">
+                    ${esc(s.deskripsi || 'Skill modul animasi terintegrasi global.')}
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--garis);padding-top:8px;margin-top:8px">
+                <div style="display:flex;align-items:center;gap:4px">
+                  <small style="font-size:10px;color:var(--redup)">Palet:</small>
+                  ${paletHtml}
+                </div>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span style="font-size:10.5px;font-family:var(--mono);color:var(--redup)">~${s.avg_pacing_sec || 3.5}s</span>
+                  <button class="tombol kedua kecil" style="font-size:10px;padding:2px 6px" onclick="navigator.clipboard.writeText('${esc(s.id)}');toast('Slug gaya \\'${esc(s.id)}\\' disalin!')">
+                    Salin Slug
+                  </button>
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+      }
+
+      pil('#pilFilterSkillsGlobal', (v) => {
+        renderSkillsFiltered(v);
+      });
+
       // Fungsi muat pustaka skills & preset global
       window.muatPustakaSkillsGlobal = async () => {
         if (!gridSkills) return;
         try {
           const res = await api('/api/daftar-skills-global');
           if (res.ok && res.skills) {
-            gridSkills.innerHTML = res.skills.map((s) => {
-              const paletHtml = (s.palette_hex && s.palette_hex.length)
-                ? s.palette_hex.map((c) => `<span style="display:inline-block;width:16px;height:16px;border-radius:3px;background:${c};border:1px solid #ffffff33;cursor:pointer" title="Klik untuk salin ${c}" onclick="navigator.clipboard.writeText('${c}');toast('Warna ${c} disalin!')"></span>`).join('')
-                : '<span style="color:var(--redup);font-size:11px">Default</span>';
-              return `
-                <div class="kartu" style="padding:12px;background:var(--kartu);border:1px solid var(--garis);border-radius:8px">
-                  <div style="display:flex;gap:12px;align-items:flex-start">
-                    <div style="width:54px;aspect-ratio:9/16;border-radius:6px;overflow:hidden;background:#000;flex-shrink:0;border:1px solid var(--garis);display:flex;align-items:center;justify-content:center">
-                      <img src="/aset/gaya/${s.id}.jpg" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.style.display='none'">
-                    </div>
-                    <div style="flex:1;min-width:0">
-                      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-                        <div style="display:flex;align-items:center;gap:6px">
-                          <b style="font-size:12.5px;color:var(--teks)">${esc(s.nama || s.id)}</b>
-                          <span style="font-size:9.5px;padding:1px 6px;border-radius:99px;font-family:var(--mono);font-weight:700;background:${s.inti ? 'rgba(59,130,246,0.15)' : 'rgba(245,158,11,0.15)'};color:${s.inti ? '#60a5fa' : '#f59e0b'};border:1px solid ${s.inti ? 'rgba(59,130,246,0.3)' : 'rgba(245,158,11,0.3)'}">
-                            ${s.inti ? 'Bawaan' : 'Kustom Video'}
-                          </span>
-                        </div>
-                        ${!s.inti ? `<button onclick="hapusSkillGlobal('${esc(s.id)}')" style="background:none;border:none;color:#f87171;font-weight:bold;cursor:pointer;font-size:12px;padding:2px 6px" title="Hapus skill & preset">✕ Hapus</button>` : ''}
-                      </div>
-                      <div style="font-size:11px;color:var(--redup);margin-bottom:8px;line-height:1.4">
-                        ${esc(s.deskripsi || 'Skill modul animasi terintegrasi global.')}
-                      </div>
-                    </div>
-                  </div>
-                  <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--garis);padding-top:8px;margin-top:8px">
-                    <div style="display:flex;align-items:center;gap:4px">
-                      <small style="font-size:10px;color:var(--redup)">Palet:</small>
-                      ${paletHtml}
-                    </div>
-                    <div style="display:flex;align-items:center;gap:6px">
-                      <span style="font-size:10.5px;font-family:var(--mono);color:var(--redup)">~${s.avg_pacing_sec || 3.5}s</span>
-                      <button class="tombol kedua kecil" style="font-size:10px;padding:2px 6px" onclick="navigator.clipboard.writeText('${esc(s.id)}');toast('Slug gaya \\'${esc(s.id)}\\' disalin!')">
-                        Salin Slug
-                      </button>
-                    </div>
-                  </div>
-                </div>`;
-            }).join('');
+            ALL_SKILLS_GLOBAL = res.skills;
+            const curFilter = nilaiPil('#pilFilterSkillsGlobal') || 'semua';
+            renderSkillsFiltered(curFilter);
           }
         } catch {}
       };
@@ -8573,8 +8901,8 @@ Aturan:
       // Sinkronisasi gaya kustom global ke menu template tab Motion
       window.sinkronGayaMotion = async () => {
         const pilGaya = $('#pilGaya');
+        const pilGayaAnim = $('#pilGayaAnimasi');
         const jmlEl = $('#jmlTemplateGaya');
-        if (!pilGaya) return;
         try {
           const res = await api('/api/daftar-skills-global');
           if (!res.ok || !res.skills) return;
@@ -8582,15 +8910,27 @@ Aturan:
           const customSkills = res.skills.filter((s) => !s.inti);
           const customSlugs = new Set(customSkills.map((s) => s.id));
 
-          $$('#pilGaya .gaya-kustom').forEach((el) => {
-            if (!customSlugs.has(el.dataset.v)) el.remove();
-          });
+          if (pilGaya) {
+            $$('#pilGaya .gaya-kustom').forEach((el) => {
+              if (!customSlugs.has(el.dataset.v)) el.remove();
+            });
+          }
+          if (pilGayaAnim) {
+            $$('#pilGayaAnimasi .gaya-kustom').forEach((el) => {
+              if (!customSlugs.has(el.dataset.v)) el.remove();
+            });
+          }
 
           customSkills.forEach((s) => {
-            if (pilGaya.querySelector(`.gaya[data-v="${s.id}"]`)) return;
+            const isAnim = s.kategori === 'animasi';
+            const targetContainer = isAnim ? pilGayaAnim : pilGaya;
+            if (!targetContainer) return;
+            if (targetContainer.querySelector(`.gaya[data-v="${s.id}"]`)) return;
+
             const palet = s.palette_hex && s.palette_hex.length ? s.palette_hex : ['#14427A', '#0B0B0B', '#FACC15', '#38BDF8', '#F97316'];
             const bg = palet[0] || '#111827';
             const card = document.createElement('button');
+            card.type = 'button';
             card.className = 'gaya gaya-kustom';
             card.dataset.v = s.id;
             card.title = s.nama || s.id;
@@ -8600,16 +8940,17 @@ Aturan:
                 <div style="display:flex;gap:3px;margin-bottom:8px">
                   ${palet.slice(0, 5).map(c => `<span style="width:10px;height:10px;border-radius:2px;background:${c};border:1px solid #ffffff44" title="${c}"></span>`).join('')}
                 </div>
-                <span style="font-size:9px;font-family:var(--mono);font-weight:700;padding:2px 6px;border-radius:99px;background:rgba(245,158,11,0.25);color:#f59e0b;border:1px solid rgba(245,158,11,0.4);margin-bottom:4px">Kustom</span>
+                <span style="font-size:9px;font-family:var(--mono);font-weight:700;padding:2px 6px;border-radius:99px;background:${isAnim ? 'rgba(56,189,248,0.25)' : 'rgba(245,158,11,0.25)'};color:${isAnim ? '#38bdf8' : '#f59e0b'};border:1px solid rgba(255,255,255,0.2);margin-bottom:4px">${isAnim ? 'Animasi' : 'Statis'}</span>
                 <span style="font-size:10px;font-family:var(--mono);color:#ffffffaa">~${s.avg_pacing_sec || 3.5}s</span>
               </div>
-              <div class="nama"><b>${esc(s.nama || s.id)}</b><span>video ref</span></div>
+              <div class="nama"><b>${esc(s.nama || s.id)}</b><span>${isAnim ? 'anim ref' : 'video ref'}</span></div>
             `;
-            pilGaya.insertBefore(card, pilGaya.firstChild);
+            targetContainer.insertBefore(card, targetContainer.firstChild);
           });
 
-          const total = $$('#pilGaya .gaya').length;
-          if (jmlEl) jmlEl.textContent = total;
+          if (pilGaya && jmlEl) {
+            jmlEl.textContent = $$('#pilGaya .gaya').length;
+          }
         } catch (err) {
           console.warn('Gagal sinkron gaya motion:', err);
         }
@@ -8626,6 +8967,7 @@ Aturan:
           const rawSlug = (inputSlug?.value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
           const slug = rawSlug || 'style-' + Date.now();
           const autoPurge = checkPurge ? checkPurge.checked : true;
+          const kategoriPilihan = nilaiPil('#pilKategoriEkstrak') || 'animasi';
 
           btnProses.disabled = true;
           if (boxStatus) {
@@ -8633,12 +8975,12 @@ Aturan:
             boxStatus.innerHTML = `
               <div style="display:flex;align-items:center;gap:8px;color:#f59e0b;font-weight:700">
                 <span style="width:14px;height:14px;border:2px solid rgba(245,158,11,0.3);border-top-color:#f59e0b;border-radius:50%;display:inline-block;animation:spin .8s linear infinite"></span>
-                Sedang Mengekstrak DNA Visual &amp; Pacing...
+                Sedang Mengekstrak ${kategoriPilihan === 'animasi' ? 'Karakter &amp; Rig Animasi' : 'DNA Visual &amp; Pacing'}...
               </div>
               <div style="font-size:11px;color:var(--redup);margin-top:6px;line-height:1.4">
-                1. Menganalisis pergantian adegan (scene cut gt(scene,0.35))<br>
-                2. Mengekstrak keyframe &amp; kuantisasi 5 palet warna HEX<br>
-                3. Menyusun Remotion Preset (.tsx) &amp; Global AI Skill (.md)
+                1. Menganalisis pergantian adegan &amp; pacing durasi<br>
+                2. Mengekstrak keyframe &amp; ${kategoriPilihan === 'animasi' ? 'karakteristik rig gerak' : 'kuantisasi 5 palet warna'}<br>
+                3. Mendaftarkan template ke <b>${kategoriPilihan === 'animasi' ? 'Studio Animasi Bergerak' : 'Pustaka Gaya Statis'}</b>
               </div>`;
           }
 
@@ -8656,6 +8998,7 @@ Aturan:
             const res = await api('/api/ekstrak-gaya-video', {
               video: base64,
               slug: slug,
+              kategori: kategoriPilihan,
               auto_purge: autoPurge
             });
 

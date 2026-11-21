@@ -515,6 +515,41 @@ def analisa_audio_motion(d: dict) -> dict:
             temp_naskah.unlink(missing_ok=True)
 
 
+def generate_keyframe_still(d: dict) -> dict:
+    """Generate still frame snapshot untuk Visual QA Studio Animasi Karakter."""
+    node = cari_node()
+    frame = int(d.get("frame", 30))
+    scale = float(d.get("scale", 0.35))
+    naskah = d.get("naskah")
+    (MOTION / "hasil").mkdir(exist_ok=True)
+    temp_props = MOTION / "hasil" / "tmp_qa_props.json"
+    if naskah:
+        if isinstance(naskah, str):
+            temp_props.write_text(naskah, encoding="utf-8")
+        else:
+            temp_props.write_text(json.dumps(naskah, ensure_ascii=False, indent=2), encoding="utf-8")
+    else:
+        contoh_anim = MOTION / "naskah" / "contoh_animasi.json"
+        if contoh_anim.exists():
+            temp_props.write_text(contoh_anim.read_text(encoding="utf-8"), encoding="utf-8")
+    out_name = f"qa_frame_{frame}.png"
+    out_file = MOTION / "hasil" / out_name
+    perintah = [
+        node,
+        str(MOTION / "node_modules" / "@remotion" / "cli" / "remotion-cli.js"),
+        "still",
+        "src/index.ts",
+        "AnimasiBergerak",
+        str(out_file),
+        f"--frame={frame}",
+        f"--scale={scale}",
+        f"--props={temp_props}",
+        "--log=error"
+    ]
+    subprocess.run(perintah, cwd=MOTION, capture_output=True, text=True, check=True)
+    return {"ok": True, "file": f"/api/berkas-hasil/{out_name}", "frame": frame}
+
+
 def mulai_motion(d: dict) -> dict:
     topik = (d.get("topik") or "").strip()
     naskah_teks = (d.get("naskah") or "").strip()
@@ -1173,9 +1208,11 @@ def daftar_skills_pro() -> dict:
             continue
         if is_dir or is_md:
             info = reg_map.get(slug, {})
+            is_animasi = slug in {"toon-3d-explainer", "isometric-video", "video-making", "toon-3d"} or (MOTION / "skills" / "animasi" / f"{slug}.json").exists()
             daftar.append({
                 "id": slug,
                 "nama": info.get("name") or (item.stem if is_md else item.name),
+                "kategori": "animasi" if is_animasi else "statis",
                 "deskripsi": info.get("description", ""),
                 "palette_hex": info.get("palette_hex", []),
                 "avg_pacing_sec": info.get("avg_pacing_sec", 3.5),
@@ -1186,6 +1223,77 @@ def daftar_skills_pro() -> dict:
                 "siap": True
             })
     return {"ok": True, "skills": daftar}
+
+
+def daftar_presets_animasi() -> dict:
+    """Mengembalikan daftar preset template khusus Animasi Bergerak."""
+    presets = [
+        {
+            "id": "toon-3d",
+            "nama": "Toon 3D Cel-Shaded Explainer",
+            "kategori": "animasi-bergerak",
+            "deskripsi": "Gaya edukasi teknis 3D Cel-shaded (South Park / Fern style), inverted hull outline hitam tegas, mitten hands tanpa jari, efek cutaway X-ray holografik, dan meja blueprint interaktif.",
+            "rigDefault": "toon-3d",
+            "latarDefault": "blueprint",
+            "pacingSec": 3.0,
+            "aksen": "#38BDF8",
+            "badge": "3D Cel-Shaded",
+            "thumbnail": "/aset/gaya/sinematik.jpg",
+            "fiturVisual": [
+                "Inverted Hull Outline Hitam",
+                "Mata Oval Putih & Mitten Hands",
+                "Meja Blueprint Interaktif",
+                "Efek Cutaway / X-Ray Hologram",
+                "Pacing Cepat 2–4 Detik"
+            ]
+        },
+        {
+            "id": "stickman",
+            "nama": "2D Kinetic Stickman Action",
+            "kategori": "animasi-bergerak",
+            "deskripsi": "Karakter stickman kinetik dinamis di perkotaan/kantor dengan siklus jalan dan lari (walk/run cycle), ayunan pundak dan siku, serta properti interaktif.",
+            "rigDefault": "stickman",
+            "latarDefault": "kota",
+            "pacingSec": 3.5,
+            "aksen": "#2563EB",
+            "badge": "2D Kinetic",
+            "thumbnail": "/aset/gaya/stickman.jpg",
+            "fiturVisual": [
+                "Siklus Kaki Melangkah sin(t)",
+                "Ayunan Tangan & Sendi Siku",
+                "Latar Perkotaan & Gedung",
+                "Lip-sync Mulut Berbicara"
+            ]
+        },
+        {
+            "id": "isometric",
+            "nama": "3D Isometric Tech Engine",
+            "kategori": "animasi-bergerak",
+            "deskripsi": "Pemandangan isometrik balok 3D mengambang, conveyor grid teknologi, dan maskot drone dengan lampu indikator.",
+            "rigDefault": "isometric",
+            "latarDefault": "isometric-grid",
+            "pacingSec": 4.0,
+            "aksen": "#4ECCA3",
+            "badge": "3D Isometric",
+            "thumbnail": "/aset/gaya/ps2.jpg",
+            "fiturVisual": [
+                "Grid Balok Isometrik Mengambang",
+                "Efek Kedip Lampu LED Server",
+                "Transisi Kamera Isometrik 30°",
+                "Maskot Drone Karakter"
+            ]
+        }
+    ]
+    # Baca folder template animasi khusus hasil ekstraksi
+    anim_dir = MOTION / "skills" / "animasi"
+    if anim_dir.is_dir():
+        for p in anim_dir.glob("*.json"):
+            try:
+                data = json.loads(p.read_text(encoding="utf-8"))
+                presets.append(data)
+            except Exception:
+                pass
+    return {"ok": True, "presets": presets}
 
 
 def unggah_skill_pro(d: dict) -> dict:
@@ -1342,21 +1450,30 @@ def ekstrak_gaya_video_pro(d: dict) -> dict:
         except Exception:
             pass
 
-    return {
-        "ok": True,
-        "slug": slug,
-        "display_name": metrics.get("display_name", slug.title()),
-        "palette_hex": metrics.get("palette_hex", []),
-        "avg_pacing_sec": metrics.get("avg_pacing_sec", 3.5),
-        "skill_md": f"motion/skills/{slug}/SKILL.md",
-        "preset_tsx": f"motion/src/presets/{slug}.tsx",
-        "metrics": metrics,
-        "daftar": daftar_skills_pro()["skills"]
-    }
+    kategori = (d.get("kategori") or "animasi").lower()
+    if kategori == "animasi":
+        anim_dir = MOTION / "skills" / "animasi"
+        anim_dir.mkdir(parents=True, exist_ok=True)
+        anim_entry = {
+            "id": slug,
+            "nama": metrics.get("display_name", slug.replace("-", " ").title()),
+            "kategori": "animasi-bergerak",
+            "deskripsi": f"Hasil ekstraksi gaya video animasi bergerak ({slug}) dengan pacing ~{metrics.get('avg_pacing_sec', 3.0)}s.",
+            "rigDefault": "toon-3d",
+            "latarDefault": "blueprint",
+            "pacingSec": metrics.get("avg_pacing_sec", 3.0),
+            "aksen": metrics.get("palette_hex", ["#38BDF8"])[0] if metrics.get("palette_hex") else "#38BDF8",
+            "badge": "Extracted Animation",
+            "thumbnail": f"/aset/gaya/{slug}.jpg",
+            "palette_hex": metrics.get("palette_hex", []),
+            "fiturVisual": ["Kinetic Character Rig", "Shading Cel-Shaded", "Deterministik Memory Render"]
+        }
+        (anim_dir / f"{slug}.json").write_text(json.dumps(anim_entry, indent=2), encoding="utf-8")
 
     return {
         "ok": True,
         "slug": slug,
+        "kategori": kategori,
         "display_name": metrics.get("display_name", slug.title()),
         "palette_hex": metrics.get("palette_hex", []),
         "avg_pacing_sec": metrics.get("avg_pacing_sec", 3.5),
@@ -1624,6 +1741,12 @@ class H(BaseHTTPRequestHandler):
                 return self._file(DATA / m.group(1) / m.group(2) / m.group(3))
             if m := re.match(r"^/font/([\w.-]+\.ttf)$", jalur):  # font preset klip (OFL) untuk pratinjau
                 return self._file(KLIP / "font" / m.group(1))
+            if m := re.match(r"^/api/berkas-hasil/([\w.-]+)$", jalur):
+                p = MOTION / "hasil" / m.group(1)
+                if p.exists():
+                    return self._file(p)
+            if jalur == "/api/animasi/presets":
+                return self._json(daftar_presets_animasi())
             if jalur.startswith("/aset/"):
                 p = (AKAR / jalur.lstrip("/")).resolve()
                 if AKAR in p.parents:
@@ -1705,6 +1828,10 @@ class H(BaseHTTPRequestHandler):
                 return self._json(analisa_audio_motion(d))
             if jalur == "/api/motion":
                 return self._json(mulai_motion(d))
+            if jalur == "/api/animasi/still":
+                return self._json(generate_keyframe_still(d))
+            if jalur == "/api/animasi/presets":
+                return self._json(daftar_presets_animasi())
             if jalur == "/api/motion-pro/orkestrasi":
                 return self._json(orkestrasi_motion_pro(d))
             if jalur == "/api/motion-pro/render":

@@ -267,9 +267,12 @@ if (audioNarasiOpt) {
 mkdirSync('hasil', { recursive: true });
 const fileProps = resolve('hasil', `${nama}.props.json`);
 writeFileSync(fileProps, JSON.stringify(naskah, null, 2));
-const keluar = resolve('hasil', `${nama}-${naskah.gaya}.mp4`);
-log(`Render gaya "${naskah.gaya}" → ${keluar}`);
-execFileSync(process.execPath, [...REMOTION, 'render', 'src/index.ts', 'Motion', keluar, `--props=${fileProps}`, '--log=error'], {
+const komposisi = naskah.komposisi || (naskah.rigDefault || (naskah.adegan && naskah.adegan[0]?.rig) ? 'AnimasiBergerak' : 'Motion');
+const concurrency = process.env.REMOTION_CONCURRENCY || '2';
+const namaGaya = naskah.gaya || naskah.rigDefault || 'animasi';
+const keluar = resolve('hasil', `${nama}-${namaGaya}.mp4`);
+log(`Render komposisi "${komposisi}" (${namaGaya}) [concurrency=${concurrency}] → ${keluar}`);
+execFileSync(process.execPath, [...REMOTION, 'render', 'src/index.ts', komposisi, keluar, `--props=${fileProps}`, `--concurrency=${concurrency}`, '--log=error'], {
   stdio: 'inherit',
 });
 log('Selesai: ' + keluar);

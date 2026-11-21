@@ -1,0 +1,71 @@
+{
+  "judul": "Evolusi Animasi Studio Maliki & Bayunity",
+  "rigDefault": "toon-3d",
+  "rasio": "vertikal",
+  "adegan": [
+    {
+      "judul": "Selamat Datang di Studio Animasi",
+      "teks": "Kini video Anda bukan lagi sekadar gambar statis yang digerakkan, melainkan animasi karakter yang benar-benar hidup.",
+      "durasi_detik": 4.5,
+      "rig": "toon-3d",
+      "latar": "blueprint",
+      "karakter": {
+        "aksi": "jalan",
+        "ekspresi": "senyum",
+        "posisiX": 540,
+        "posisiY": 1150,
+        "hadap": 1,
+        "benda": "folder"
+      },
+      "callout": "🚀 MESIN KINETIK BARU"
+    },
+    {
+      "judul": "Perspektif 3D & Cel-Shaded",
+      "teks": "Dengan sudut kamera perspektif dinamis dan shading cel-shaded tebal, pesan teknis dan edukasi tersampaikan tajam.",
+      "durasi_detik": 4.0,
+      "rig": "toon-3d",
+      "latar": "senja",
+      "karakter": {
+        "aksi": "tunjuk",
+        "ekspresi": "serius",
+        "posisiX": 540,
+        "posisiY": 1180,
+        "hadap": 1,
+        "benda": "tidak_ada"
+      },
+      "callout": "📐 TOON 3D EXPLAINER"
+    },
+    {
+      "judul": "Stickman Kinetik Aksi Cepat",
+      "teks": "Gerakan melangkah, mengayunkan tangan, dan rotasi sendi dihitung secara presisi di setiap frame.",
+      "durasi_detik": 4.0,
+      "rig": "stickman",
+      "latar": "kota",
+      "karakter": {
+        "aksi": "lari",
+        "ekspresi": "bicara",
+        "posisiX": 540,
+        "posisiY": 1250,
+        "hadap": 1,
+        "benda": "amplop"
+      },
+      "callout": "🏃 DETERMINISTIC MATH"
+    },
+    {
+      "judul": "Hemat RAM & Siap Pakai",
+      "teks": "Semua dirender langsung di memori dengan Remotion tanpa membuat komputer Anda lambat atau kehabisan disk.",
+      "durasi_detik": 4.5,
+      "rig": "isometric",
+      "latar": "isometric-grid",
+      "karakter": {
+        "aksi": "bicara",
+        "ekspresi": "senyum",
+        "posisiX": 540,
+        "posisiY": 1150,
+        "hadap": 1,
+        "benda": "palu"
+      },
+      "callout": "⚡ RAM < 600 MB"
+    }
+  ]
+}
