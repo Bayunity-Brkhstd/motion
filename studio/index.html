@@ -420,19 +420,19 @@
       gap: 10px;
       min-height: 44px;
       box-sizing: border-box;
-      padding: 0 22px;
-      border-radius: 999px;
+      padding: 0 18px;
+      border-radius: 8px;
       font-weight: 600;
       white-space: nowrap;
-      transition: transform .25s var(--ease), box-shadow .3s, border-color .2s, color .2s
+      transition: transform .2s var(--ease), box-shadow .2s, border-color .2s, color .2s
     }
 
     .tombol:hover {
-      transform: translateY(-2px)
+      transform: translateY(-1px)
     }
 
     .tombol:active {
-      transform: scale(.97)
+      transform: scale(.98)
     }
 
     .utama {
@@ -441,7 +441,7 @@
     }
 
     .utama:hover {
-      box-shadow: 0 10px 30px -8px rgba(34, 211, 238, .65)
+      box-shadow: 0 4px 16px -4px rgba(34, 211, 238, .5)
     }
 
     .utama[disabled] {
@@ -450,7 +450,7 @@
     }
 
     .kedua {
-      background: transparent;
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--garis2);
       color: var(--teks)
     }
@@ -461,9 +461,10 @@
     }
 
     .kecil {
-      min-height: 36px;
-      padding: 0 15px;
-      font-size: 13px
+      min-height: 30px;
+      padding: 0 12px;
+      font-size: 12px;
+      border-radius: 6px
     }
 
     .bidang {
@@ -485,8 +486,13 @@
 
     .pil {
       display: flex;
-      gap: 6px;
-      flex-wrap: wrap
+      gap: 3px;
+      flex-wrap: wrap;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--garis);
+      border-radius: 8px;
+      padding: 3px;
+      box-sizing: border-box
     }
 
     .pil button {
@@ -494,27 +500,33 @@
       cursor: pointer;
       flex: 1;
       text-align: center;
-      font: 13px var(--mono);
+      font: 500 12px/1.3 var(--sans);
       color: var(--redup);
-      border: 1px solid var(--garis2);
-      border-radius: 999px;
-      padding: 0 14px;
-      min-height: 38px;
-      line-height: 38px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 5px 12px;
+      min-height: 28px;
+      line-height: 28px;
       white-space: nowrap;
-      transition: .2s
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all .15s ease;
+      box-sizing: border-box
     }
 
     .pil button:hover {
       color: var(--teks);
-      border-color: var(--redup2)
+      background: rgba(255, 255, 255, 0.05)
     }
 
     .pil button.aktif {
-      background: var(--aksen);
-      border-color: var(--aksen);
-      color: var(--pada-aksen);
-      font-weight: 600
+      background: rgba(56, 189, 248, 0.16);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      font-weight: 600;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2)
     }
 
     input[type=range] {
@@ -3057,7 +3069,7 @@
     }
 
     .pil button.aktif {
-      animation: pilih .35s var(--expo)
+      animation: none
     }
 
     @keyframes pilih {
@@ -4433,13 +4445,121 @@
                 </div>
               </div>
 
-              <!-- Main Input Form for Character Animation -->
-              <div class="bidang" style="margin-bottom:10px">
+              <!-- Mode Input Animasi Karakter: Storyboard vs Teks Bebas -->
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div class="pil" id="pilSubAnimasi" style="margin:0">
+                  <button type="button" class="aktif" data-v="storyboard">🎬 Storyboard Adegan &amp; Dialog</button>
+                  <button type="button" data-v="teks">📝 Naskah Teks Bebas</button>
+                </div>
+                <span style="font-size:11px;color:var(--aksen);font-weight:600">Multi-Scene &amp; Multi-Tokoh</span>
+              </div>
+
+              <!-- SEKSI 1: STORYBOARD ADEGAN & DIALOG (Interaktif) -->
+              <div id="boxAnimasiStoryboard">
+                <!-- Box Input Konsep Cerita & Parameter Sutradara -->
+                <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:12px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                    <label style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:6px">
+                      <span>🎬 Konsep Cerita Animasi:</span>
+                    </label>
+                    <span style="font-size:10px;color:var(--aksen);font-weight:600">AI Director &amp; Storyboard Engine</span>
+                  </div>
+                  <textarea class="input" id="animasiTemaCerita" rows="2"
+                    style="font-size:12px;padding:7px 10px;min-height:56px;line-height:1.4"
+                    placeholder="misal: Budi lagi ngopi di warung makan pinggir desa Siforejo. Tiba-tiba Ridwan teman akrabnya datang ke kursi bambu depan warung dan menagih hutang rokok sebungkus malam takbiran. Budi kaget lalu pura-pura lupa..."></textarea>
+                  
+                  <!-- Pengaturan Nama Tokoh & Preferensi Latar -->
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:6px;margin-top:8px">
+                    <div>
+                      <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Tokoh Utama (Karakter 1):</label>
+                      <input type="text" class="input" id="animasiTokoh1" value="Budi" placeholder="misal: Budi" style="font-size:11px;padding:5px 8px" />
+                    </div>
+                    <div>
+                      <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Tokoh 2 (Lawan Bicara):</label>
+                      <input type="text" class="input" id="animasiTokoh2" value="Ridwan" placeholder="misal: Ridwan (opsional)" style="font-size:11px;padding:5px 8px" />
+                    </div>
+                    <div>
+                      <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Preferensi Nuansa Latar:</label>
+                      <select class="input" id="animasiLatarPreferensi" style="font-size:11px;padding:5px 8px">
+                        <option value="auto" selected>🤖 Otomatis Dianalisa AI Agent</option>
+                        <option value="warung-desa">🛖 Warung Makan Desa (Siforejo)</option>
+                        <option value="kursi-bambu">🎋 Kursi Bambu Depan Warung</option>
+                        <option value="pos-ronda">🥁 Pos Ronda / Gardu Kamling</option>
+                        <option value="jalan-desa">🌾 Jalanan Sawah Desa</option>
+                        <option value="senja">🌇 Langit Senja Cel-Shaded</option>
+                        <option value="kota">🏙️ Kota &amp; Perkantoran Modern</option>
+                        <option value="blueprint">📐 Blueprint Edukasi Teknis</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Tombol Utama Analisa AI & Chip Contoh Cepat -->
+                  <button type="button" id="tblSusunAdeganAI" class="tombol utama"
+                    style="width:100%;font-size:12px;padding:7px 14px;margin-top:10px;gap:6px">
+                    ✨ Analisa Konsep &amp; Susun Adegan (AI Agent)
+                  </button>
+
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px">
+                    <span style="font-size:10px;color:var(--redup)">Inspirasi Cepat:</span>
+                    <button type="button" class="chip-cerita" onclick="isiContohCerita('rokok')"
+                      style="font-size:10.5px;padding:2px 7px;border-radius:5px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#f59e0b;cursor:pointer">
+                      🚬 Hutang Rokok Siforejo
+                    </button>
+                    <button type="button" class="chip-cerita" onclick="isiContohCerita('ngopi')"
+                      style="font-size:10.5px;padding:2px 7px;border-radius:5px;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);color:#38bdf8;cursor:pointer">
+                      ☕ Ngopi &amp; Reuni Desa
+                    </button>
+                    <button type="button" class="chip-cerita" onclick="isiContohCerita('ronda')"
+                      style="font-size:10.5px;padding:2px 7px;border-radius:5px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.25);color:#c084fc;cursor:pointer">
+                      🥁 Sketsa Pos Ronda
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Wadah Kartu-Kartu Adegan Storyboard -->
+                <div style="margin-bottom:10px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                    <label style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:6px">
+                      <span>Daftar Adegan Storyboard:</span>
+                      <span id="labelJmlAdegan" style="font-size:10px;background:rgba(56,189,248,0.15);color:var(--aksen);padding:1px 6px;border-radius:99px">0 Adegan</span>
+                    </label>
+                    <div style="display:flex;align-items:center;gap:6px">
+                      <button type="button" class="tombol kedua kecil" onclick="kosongkanAdeganAnimasi()" style="font-size:11px;padding:3px 9px;color:var(--redup)">
+                        Bersihkan
+                      </button>
+                      <button type="button" class="tombol kedua kecil" id="tblTambahAdeganAnimasi" style="font-size:11px;padding:3px 9px">
+                        + Tambah Adegan
+                      </button>
+                    </div>
+                  </div>
+                  <div id="wadahDaftarAdegan" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto;padding-right:4px">
+                    <!-- Kartu adegan diinjeksi secara dinamis -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- SEKSI 2: INPUT TEKS BEBAS (Opsional) -->
+              <div id="boxAnimasiTeksBebas" hidden style="margin-bottom:10px">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-                  <label style="font-size:12px;font-weight:600">Naskah Cerita / Penjelasan Adegan:</label>
+                  <label style="font-size:12px;font-weight:600">Naskah Teks Bebas:</label>
                   <span style="font-size:11px;color:var(--redup)">Tulis teks narasi per paragraf</span>
                 </div>
-                <textarea class="input" id="animasiTeksNaskah" style="min-height:110px;font-size:13px" placeholder="Tulis naskah video Anda di sini... misal:&#10;Selamat datang di era animasi karakter bergerak.&#10;Kini karakter melangkah, mengayunkan tangan, dan berbicara dengan ekspresi dinamis.&#10;Semua dirender hemat RAM di bawah 600 MB."></textarea>
+                <textarea class="input" id="animasiTeksNaskah" style="min-height:100px;font-size:12.5px" placeholder="Tulis naskah video Anda di sini... misal:&#10;Selamat datang di era animasi karakter bergerak.&#10;Kini karakter melangkah, mengayunkan tangan, dan berbicara dengan ekspresi dinamis.&#10;Semua dirender hemat RAM di bawah 600 MB."></textarea>
+                
+                <!-- Pilihan Latar Tempat untuk Mode Teks Bebas -->
+                <div style="margin-top:8px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:6px;padding:8px">
+                  <label style="display:block;font-size:11px;font-weight:600;color:var(--aksen);margin-bottom:4px">🏞️ Latar Tempat Utama (Environment):</label>
+                  <select class="input" id="animasiLatarBebas" style="font-size:11.5px;padding:5px 8px">
+                    <option value="warung-desa" selected>🛖 Warung Makan Desa (Siforejo / Spanduk &amp; Kopi)</option>
+                    <option value="kursi-bambu">🎋 Kursi Bambu Depan Warung (Tempat Nongkrong Santai)</option>
+                    <option value="jalan-desa">🌾 Jalanan Sawah Desa (Pedusunan Asri)</option>
+                    <option value="pos-ronda">🥁 Pos Ronda / Gardu Siskamling</option>
+                    <option value="senja">🌇 Langit Senja Cel-Shaded</option>
+                    <option value="kota">🏙️ Kota &amp; Perkantoran Modern</option>
+                    <option value="blueprint">📐 Blueprint Edukasi Teknis</option>
+                    <option value="isometric-grid">🧊 3D Isometric Tech Grid</option>
+                  </select>
+                </div>
               </div>
 
               <!-- Rig Karakter Picker Cards -->
@@ -4735,31 +4855,83 @@
                 Pengaturan</em><input type="checkbox" id="gGambarAI" checked></label>
             </div>
 
-            <!-- SEKSI TEMPLATE ANIMASI BERGERAK (Khusus Tab Animasi Karakter) -->
+            <!-- SEKSI GAYA VISUAL ANIMASI (Khusus Tab Animasi Karakter) -->
             <div id="seksiTemplateAnimasi" hidden>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-                <h2 class="judul-kartu" style="margin:0"><i style="background:#38bdf8"></i>Template Animasi Bergerak</h2>
-                <span style="font-size:10px;padding:2px 8px;border-radius:99px;background:rgba(56,189,248,0.2);color:#38bdf8;font-weight:700">Kinetik Deterministik</span>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                <h2 class="judul-kartu" style="margin:0"><i style="background:#38bdf8"></i>Gaya Visual Animasi</h2>
+                <span style="font-size:10px;padding:2px 8px;border-radius:99px;background:rgba(56,189,248,0.2);color:#38bdf8;font-weight:700">Art Style Universe</span>
               </div>
-              <p style="font-size:11.5px;color:var(--redup);margin:0 0 12px;line-height:1.4">
-                Pustaka template khusus animasi bergerak (karakter melangkah, mengayunkan tangan, dan ekspresi wajah hidup). Terpisah total dari template SVG statis lama.
+              <p style="font-size:11.5px;color:var(--redup);margin:0 0 10px;line-height:1.4">
+                Pilih estetika dunia animasi (shading cel, warna, dan proporsi rig).
               </p>
-              <div class="gaya-pilih" id="pilGayaAnimasi" style="grid-template-columns:repeat(auto-fill, minmax(130px, 1fr))">
-                <button type="button" class="gaya aktif" data-v="toon-3d" title="Toon 3D Cel-Shaded Explainer">
+              <div class="gaya-pilih" id="pilGayaAnimasi" style="grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));margin-bottom:14px">
+                <button type="button" class="gaya aktif" data-v="toon-desa" title="Toon 3D Pedesaan &amp; Warung Lokal">
                   <img src="/aset/gaya/sinematik.jpg" alt="" loading="lazy">
-                  <div class="nama"><b>Toon 3D Explainer</b><span>3D Cel-Shaded</span></div>
+                  <div class="nama"><b>Toon 3D Pedesaan</b><span>Warung &amp; Nongkrong</span></div>
+                </button>
+                <button type="button" class="gaya" data-v="toon-3d" title="Toon 3D Cel-Shaded Explainer">
+                  <img src="/aset/gaya/tekno.jpg" alt="" loading="lazy">
+                  <div class="nama"><b>Toon 3D Explainer</b><span>Modern Cel-Shaded</span></div>
                 </button>
                 <button type="button" class="gaya" data-v="stickman" title="2D Kinetic Stickman Action">
                   <img src="/aset/gaya/stickman.jpg" alt="" loading="lazy">
-                  <div class="nama"><b>Stickman Kinetic</b><span>2D Action</span></div>
+                  <div class="nama"><b>Stickman Kinetik</b><span>Komedi &amp; Aksi</span></div>
+                </button>
+                <button type="button" class="gaya" data-v="anime-cel" title="Anime Cel-Shaded 2.5D">
+                  <img src="/aset/gaya/komik.jpg" alt="" loading="lazy">
+                  <div class="nama"><b>Anime Cel-Shaded</b><span>2.5D Ekspresif</span></div>
                 </button>
                 <button type="button" class="gaya" data-v="isometric" title="3D Isometric Tech Engine">
                   <img src="/aset/gaya/ps2.jpg" alt="" loading="lazy">
-                  <div class="nama"><b>Isometric Tech</b><span>3D Grid</span></div>
+                  <div class="nama"><b>Isometric Tech</b><span>3D Balok &amp; Grid</span></div>
                 </button>
               </div>
-              <div style="margin-top:14px;padding:10px;background:rgba(56,189,248,0.06);border:1px dashed rgba(56,189,248,0.3);border-radius:8px;font-size:11.5px;color:var(--redup);line-height:1.4">
-                ✨ <b>Animasi Mandiri:</b> Karakter digerakkan langsung di memori Remotion (Plan B), tidak memerlukan generator gambar SVG statis.
+
+              <!-- PUSTAKA & PILIHAN LATAR TEMPAT (ENVIRONMENT) -->
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                <label style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:6px">
+                  <span>🏞️ Pilihan Latar Tempat:</span>
+                  <span id="labelLatarAktif" style="font-size:10px;background:rgba(56,189,248,0.15);color:var(--aksen);padding:1px 6px;border-radius:4px">Warung Siforejo</span>
+                </label>
+                <span style="font-size:10px;color:var(--redup)">Canvas 2D Prosedural</span>
+              </div>
+              <div class="pustaka-latar-grid" id="wadahPilihanLatarGlobal" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));gap:6px;margin-bottom:12px">
+                <div class="kartu-latar aktif" data-latar="warung-desa" style="padding:6px 8px;border-radius:6px;background:rgba(56,189,248,0.12);border:1px solid var(--aksen);cursor:pointer;font-size:11px">
+                  <div style="font-weight:600;margin-bottom:2px">🛖 Warung Siforejo</div>
+                  <small style="color:var(--redup);display:block;font-size:9.5px">Spanduk &amp; Kopi Tubruk</small>
+                </div>
+                <div class="kartu-latar" data-latar="kursi-bambu" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
+                  <div style="font-weight:600;margin-bottom:2px">🎋 Kursi Bambu</div>
+                  <small style="color:var(--redup);display:block;font-size:9.5px">Teras Depan &amp; Rokok</small>
+                </div>
+                <div class="kartu-latar" data-latar="jalan-desa" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
+                  <div style="font-weight:600;margin-bottom:2px">🌾 Sawah Pedesaan</div>
+                  <small style="color:var(--redup);display:block;font-size:9.5px">Jalan &amp; Tiang Listrik</small>
+                </div>
+                <div class="kartu-latar" data-latar="pos-ronda" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
+                  <div style="font-weight:600;margin-bottom:2px">🥁 Pos Ronda</div>
+                  <small style="color:var(--redup);display:block;font-size:9.5px">Gardu &amp; Kentongan</small>
+                </div>
+                <div class="kartu-latar" data-latar="senja" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
+                  <div style="font-weight:600;margin-bottom:2px">🌇 Langit Senja</div>
+                  <small style="color:var(--redup);display:block;font-size:9.5px">Siluet Sunset Cel</small>
+                </div>
+                <div class="kartu-latar" data-latar="kota" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
+                  <div style="font-weight:600;margin-bottom:2px">🏙️ Kota Modern</div>
+                  <small style="color:var(--redup);display:block;font-size:9.5px">Gedung &amp; Kantor</small>
+                </div>
+                <div class="kartu-latar" data-latar="blueprint" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
+                  <div style="font-weight:600;margin-bottom:2px">📐 Blueprint</div>
+                  <small style="color:var(--redup);display:block;font-size:9.5px">Grid Teknis Edukasi</small>
+                </div>
+                <div class="kartu-latar" data-latar="isometric-grid" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
+                  <div style="font-weight:600;margin-bottom:2px">🧊 Isometric Grid</div>
+                  <small style="color:var(--redup);display:block;font-size:9.5px">3D Balok &amp; Grid</small>
+                </div>
+              </div>
+
+              <div style="padding:8px 10px;background:rgba(56,189,248,0.06);border:1px dashed rgba(56,189,248,0.3);border-radius:6px;font-size:11px;color:var(--redup);line-height:1.4">
+                🎨 <b>Latar Dinamis:</b> Klik kartu latar di atas untuk memilih latar utama atau atur latar per adegan di Storyboard.
               </div>
             </div>
             <div class="bidang" style="margin-top:12px">
@@ -5510,6 +5682,12 @@
               (sambungkan penyedia/langganan di OpenCode) · <b>Antigravity CLI</b> (login akun Google Antigravity).
               Pemakaian memotong kuota langgananmu. Studio menghapus kunci API dari lingkungan supaya yang terpakai
               benar-benar langganan.
+            </div>
+            <div style="margin:14px 0 6px;padding:10px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12.5px;color:var(--teks)">
+                <input type="checkbox" id="chkModeAnimatorDebug">
+                <span><b>Mode Animator / Debug:</b> Pertahankan frame sementara &amp; file props di folder <code>motion/temp/</code> (jangan auto-purge pasca-render).</span>
+              </label>
             </div>
           </div>
           <div class="aksi"><button class="tombol utama" id="tblSimpan">Simpan pengaturan</button><button
@@ -6270,6 +6448,10 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
         const isLangganan = (PENG.AI === 'langganan') || (PENG.LANGGANAN && (PENG.LANGGANAN.includes('antigravity') || PENG.LANGGANAN.includes('claude')));
         const boxAlert = $('#boxAnimasiSubscriptionAlert');
         if (boxAlert) boxAlert.style.display = isLangganan ? 'none' : 'block';
+        const subMode = nilaiPil('#pilSubAnimasi') || 'storyboard';
+        $('#boxAnimasiStoryboard').hidden = subMode !== 'storyboard';
+        $('#boxAnimasiTeksBebas').hidden = subMode !== 'teks';
+        if (subMode === 'storyboard') renderDaftarAdeganAnimasi();
       }
       updateTampilanAnalisaAudio();
     });
@@ -6300,9 +6482,10 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
         if (!b) return;
         $$('.gaya', elPilGayaAnim).forEach((x) => x.classList.toggle('aktif', x === b));
         const rigVal = b.dataset.v;
+        const targetRig = (rigVal === 'toon-desa' || rigVal === 'anime-cel') ? 'toon-3d' : rigVal;
         if (elWadahRig) {
           $$('.kartu-rig', elWadahRig).forEach((c) => {
-            const match = c.dataset.rig === rigVal;
+            const match = c.dataset.rig === targetRig;
             c.classList.toggle('aktif', match);
             c.style.border = match ? '2px solid var(--aksen)' : '1px solid var(--border)';
             c.style.background = match ? 'rgba(56,189,248,0.08)' : 'rgba(255,255,255,0.02)';
@@ -6311,8 +6494,389 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
       };
     }
 
+    // Pilihan Latar Tempat Global (di Panel Kanan)
+    const elWadahLatarGlobal = $('#wadahPilihanLatarGlobal');
+    if (elWadahLatarGlobal) {
+      elWadahLatarGlobal.onclick = (e) => {
+        const card = e.target.closest('.kartu-latar');
+        if (!card) return;
+        const latarVal = card.dataset.latar;
+        $$('.kartu-latar', elWadahLatarGlobal).forEach(c => {
+          const match = c === card;
+          c.classList.toggle('aktif', match);
+          c.style.border = match ? '1px solid var(--aksen)' : '1px solid var(--border)';
+          c.style.background = match ? 'rgba(56,189,248,0.12)' : 'rgba(255,255,255,0.02)';
+        });
+        const judulLatar = card.querySelector('div')?.textContent.trim() || latarVal;
+        const lbl = $('#labelLatarAktif');
+        if (lbl) lbl.textContent = judulLatar.replace(/^[^\s]+\s+/, '');
+
+        const selBebas = $('#animasiLatarBebas');
+        if (selBebas) selBebas.value = latarVal;
+
+        if (DATA_ADEGAN_ANIMASI && DATA_ADEGAN_ANIMASI.length > 0) {
+          DATA_ADEGAN_ANIMASI[0].latar = latarVal;
+          renderDaftarAdeganAnimasi();
+        }
+        toast(`Latar tempat aktif: ${judulLatar}`);
+      };
+    }
+
     // Rasio picker
     pil('#pilRasioAnimasi');
+
+    // Sub-mode Animasi Karakter: Storyboard vs Teks Bebas
+    pil('#pilSubAnimasi', (v) => {
+      const mode = v || 'storyboard';
+      $('#boxAnimasiStoryboard').hidden = mode !== 'storyboard';
+      $('#boxAnimasiTeksBebas').hidden = mode !== 'teks';
+      if (mode === 'storyboard') renderDaftarAdeganAnimasi();
+    });
+
+    // ── Storyboard Adegan Animasi Karakter & Dialog ────────────────────────
+    let DATA_ADEGAN_ANIMASI = [];
+
+    function renderDaftarAdeganAnimasi() {
+      const wadah = $('#wadahDaftarAdegan');
+      const labelJml = $('#labelJmlAdegan');
+      if (!wadah) return;
+      if (labelJml) labelJml.textContent = `${DATA_ADEGAN_ANIMASI.length} Adegan`;
+      wadah.innerHTML = '';
+
+      if (!DATA_ADEGAN_ANIMASI || DATA_ADEGAN_ANIMASI.length === 0) {
+        wadah.innerHTML = `
+          <div style="text-align:center;padding:26px 16px;background:rgba(255,255,255,0.02);border:1px dashed var(--border);border-radius:8px;color:var(--redup)">
+            <div style="font-size:26px;margin-bottom:6px">🎬</div>
+            <b style="font-size:12.5px;color:var(--teks);display:block;margin-bottom:4px">Storyboard Adegan Masih Kosong</b>
+            <span style="font-size:11px;line-height:1.4;display:block;max-width:380px;margin:0 auto">
+              Masukkan konsep cerita &amp; nama tokoh di atas, lalu klik <b>✨ Analisa Konsep &amp; Susun Adegan</b>. AI Agent akan membedah alur cerita, menentukan latar tempat konsisten, pose gerak tokoh, dan balon dialog secara otomatis.
+            </span>
+          </div>
+        `;
+        return;
+      }
+
+      const t1NamaGlobal = $('#animasiTokoh1')?.value.trim() || 'Budi';
+      const t2NamaGlobal = $('#animasiTokoh2')?.value.trim() || 'Ridwan';
+
+      DATA_ADEGAN_ANIMASI.forEach((a, idx) => {
+        const kartu = document.createElement('div');
+        kartu.className = 'kartu-adegan-anim';
+        kartu.style.cssText = 'background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:8px;position:relative';
+
+        kartu.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:11px;font-weight:700;color:var(--aksen);background:rgba(56,189,248,0.15);padding:2px 8px;border-radius:4px">
+              🎬 Scene ${idx + 1}
+            </span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:10px;color:var(--redup)">Durasi:</span>
+              <input type="number" step="0.5" min="2" max="15" value="${a.durasi_detik || 3.5}"
+                style="width:48px;padding:2px 4px;font-size:11px;background:rgba(0,0,0,0.3);border:1px solid var(--border);color:#fff;border-radius:4px"
+                onchange="DATA_ADEGAN_ANIMASI[${idx}].durasi_detik = parseFloat(this.value) || 3.5" />
+              <small style="font-size:10px;color:var(--redup)">dtk</small>
+              ${DATA_ADEGAN_ANIMASI.length > 1 ? `
+                <button type="button" onclick="hapusAdeganAnimasi(${idx})" title="Hapus adegan"
+                  style="background:none;border:none;color:var(--merah);cursor:pointer;font-size:13px;padding:2px 6px">✕</button>
+              ` : ''}
+            </div>
+          </div>
+
+          <!-- Judul & Callout -->
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:6px">
+            <div>
+              <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Judul Adegan:</label>
+              <input type="text" value="${escapeHtml(a.judul || '')}" class="input" style="font-size:11px;padding:4px 8px"
+                onchange="DATA_ADEGAN_ANIMASI[${idx}].judul = this.value" placeholder="misal: Budi Mampir Warung" />
+            </div>
+            <div>
+              <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Badge Callout Layar:</label>
+              <input type="text" value="${escapeHtml(a.callout || '')}" class="input" style="font-size:11px;padding:4px 8px"
+                onchange="DATA_ADEGAN_ANIMASI[${idx}].callout = this.value" placeholder="misal: 📍 WARUNG SIFOREJO" />
+            </div>
+          </div>
+
+          <!-- Pilihan Latar Tempat Lingkungan -->
+          <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:6px;padding:6px 8px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+              <label style="font-size:10px;font-weight:600;color:var(--aksen);display:flex;align-items:center;gap:4px">
+                <span>🏞️ Latar Tempat (Environment):</span>
+              </label>
+              <span style="font-size:9.5px;color:var(--redup)">Canvas 2D</span>
+            </div>
+            <select class="input" style="font-size:11px;padding:4px 8px;border-color:rgba(56,189,248,0.25)" onchange="DATA_ADEGAN_ANIMASI[${idx}].latar = this.value">
+              <option value="warung-desa" ${a.latar === 'warung-desa' ? 'selected' : ''}>🛖 Warung Makan Desa (Siforejo / Spanduk &amp; Kopi)</option>
+              <option value="kursi-bambu" ${a.latar === 'kursi-bambu' ? 'selected' : ''}>🎋 Kursi Bambu Depan Warung (Tempat Nongkrong Santai)</option>
+              <option value="jalan-desa" ${a.latar === 'jalan-desa' ? 'selected' : ''}>🌾 Jalanan Sawah Desa (Pedusunan Asri)</option>
+              <option value="pos-ronda" ${a.latar === 'pos-ronda' ? 'selected' : ''}>🥁 Pos Ronda / Gardu Siskamling</option>
+              <option value="senja" ${a.latar === 'senja' ? 'selected' : ''}>🌇 Langit Senja Cel-Shaded</option>
+              <option value="kota" ${a.latar === 'kota' ? 'selected' : ''}>🏙️ Kota &amp; Perkantoran Modern</option>
+              <option value="blueprint" ${a.latar === 'blueprint' ? 'selected' : ''}>📐 Blueprint Edukasi Teknis</option>
+              <option value="isometric-grid" ${a.latar === 'isometric-grid' ? 'selected' : ''}>🧊 3D Isometric Tech Grid</option>
+            </select>
+          </div>
+
+          <!-- Pengaturan Tokoh 1 & Tokoh 2 -->
+          <div style="background:rgba(0,0,0,0.25);border-radius:6px;padding:6px 8px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+              <div>
+                <span style="font-size:10px;font-weight:700;color:var(--aksen);display:block;margin-bottom:2px">Tokoh 1 (${escapeHtml(a.karakter?.nama || t1NamaGlobal)}):</span>
+                <div style="display:flex;gap:4px">
+                  <select class="input" style="font-size:10px;padding:2px 4px" onchange="DATA_ADEGAN_ANIMASI[${idx}].tokoh1_aksi = this.value">
+                    <option value="duduk" ${a.tokoh1_aksi === 'duduk' ? 'selected' : ''}>Duduk Santai</option>
+                    <option value="jalan" ${a.tokoh1_aksi === 'jalan' ? 'selected' : ''}>Jalan Masuk</option>
+                    <option value="bicara" ${a.tokoh1_aksi === 'bicara' ? 'selected' : ''}>Bicara / Senyum</option>
+                    <option value="kaget" ${a.tokoh1_aksi === 'kaget' ? 'selected' : ''}>Kaget / Panik</option>
+                    <option value="pikir" ${a.tokoh1_aksi === 'pikir' ? 'selected' : ''}>Pikir / Pura Lupa</option>
+                    <option value="tunjuk" ${a.tokoh1_aksi === 'tunjuk' ? 'selected' : ''}>Tunjuk</option>
+                  </select>
+                  <select class="input" style="font-size:10px;padding:2px 4px" onchange="DATA_ADEGAN_ANIMASI[${idx}].tokoh1_benda = this.value">
+                    <option value="tidak_ada" ${a.tokoh1_benda === 'tidak_ada' ? 'selected' : ''}>Tanpa Benda</option>
+                    <option value="kopi" ${a.tokoh1_benda === 'kopi' ? 'selected' : ''}>☕ Kopi Tubruk</option>
+                    <option value="rokok" ${a.tokoh1_benda === 'rokok' ? 'selected' : ''}>🚬 Rokok</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#f59e0b;cursor:pointer;margin-bottom:2px">
+                  <input type="checkbox" ${a.tokoh2_aktif ? 'checked' : ''} onchange="DATA_ADEGAN_ANIMASI[${idx}].tokoh2_aktif = this.checked; renderDaftarAdeganAnimasi();" />
+                  <span>+ Tokoh 2 (${escapeHtml(a.karakter2?.nama || t2NamaGlobal)})</span>
+                </label>
+                ${a.tokoh2_aktif ? `
+                  <div style="display:flex;gap:4px">
+                    <select class="input" style="font-size:10px;padding:2px 4px" onchange="DATA_ADEGAN_ANIMASI[${idx}].tokoh2_aksi = this.value">
+                      <option value="tunjuk" ${a.tokoh2_aksi === 'tunjuk' ? 'selected' : ''}>Tunjuk / Tagih</option>
+                      <option value="duduk" ${a.tokoh2_aksi === 'duduk' ? 'selected' : ''}>Duduk Nongkrong</option>
+                      <option value="bicara" ${a.tokoh2_aksi === 'bicara' ? 'selected' : ''}>Bicara Serius</option>
+                      <option value="kaget" ${a.tokoh2_aksi === 'kaget' ? 'selected' : ''}>Kaget</option>
+                    </select>
+                    <select class="input" style="font-size:10px;padding:2px 4px" onchange="DATA_ADEGAN_ANIMASI[${idx}].tokoh2_benda = this.value">
+                      <option value="rokok" ${a.tokoh2_benda === 'rokok' ? 'selected' : ''}>🚬 Rokok</option>
+                      <option value="kopi" ${a.tokoh2_benda === 'kopi' ? 'selected' : ''}>☕ Kopi</option>
+                      <option value="tidak_ada" ${a.tokoh2_benda === 'tidak_ada' ? 'selected' : ''}>Tanpa Benda</option>
+                    </select>
+                  </div>
+                ` : `
+                  <span style="font-size:10px;color:var(--redup);line-height:22px">Hanya 1 tokoh di scene ini</span>
+                `}
+              </div>
+            </div>
+
+            <!-- Balon Dialog -->
+            <div style="margin-bottom:6px">
+              <label style="display:block;font-size:10px;color:#facc15;font-weight:600;margin-bottom:2px">💬 Balon Dialog Karakter (Pop-up di Layar):</label>
+              <input type="text" value="${escapeHtml(a.dialog || '')}" class="input" style="font-size:11px;padding:4px 8px;border-color:rgba(250,204,21,0.3)"
+                onchange="DATA_ADEGAN_ANIMASI[${idx}].dialog = this.value" placeholder="misal: Ridwan: Bud, utang rokok pas takbiran bayar!" />
+            </div>
+
+            <!-- Teks Narasi Voice-Over -->
+            <div>
+              <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Teks Narasi / Suara Voice-Over:</label>
+              <textarea class="input" style="min-height:48px;font-size:11px;padding:4px 8px"
+                onchange="DATA_ADEGAN_ANIMASI[${idx}].teks = this.value" placeholder="Teks yang akan dibacakan oleh suara narator...">${escapeHtml(a.teks || '')}</textarea>
+            </div>
+          </div>
+        `;
+        wadah.appendChild(kartu);
+      });
+    }
+
+    function tambahAdeganAnimasi() {
+      const idx = DATA_ADEGAN_ANIMASI.length + 1;
+      const t1 = $('#animasiTokoh1')?.value.trim() || 'Budi';
+      const t2 = $('#animasiTokoh2')?.value.trim() || 'Ridwan';
+      const latarDefault = $('#animasiLatarPreferensi')?.value;
+      const latar = (latarDefault && latarDefault !== 'auto') ? latarDefault : (idx % 2 === 0 ? 'kursi-bambu' : 'warung-desa');
+      DATA_ADEGAN_ANIMASI.push({
+        judul: `Adegan ${idx}`,
+        latar: latar,
+        callout: `ADEGAN ${idx}`,
+        tokoh1_aksi: 'bicara',
+        tokoh1_benda: 'tidak_ada',
+        tokoh2_aktif: Boolean($('#animasiTokoh2')?.value.trim()),
+        tokoh2_aksi: 'bicara',
+        tokoh2_benda: 'rokok',
+        dialog: `${t1}: 'Dialog adegan ${idx}...'`,
+        teks: `Penjelasan narasi untuk adegan ${idx}.`,
+        durasi_detik: 3.5
+      });
+      renderDaftarAdeganAnimasi();
+    }
+    window.tambahAdeganAnimasi = tambahAdeganAnimasi;
+
+    function hapusAdeganAnimasi(idx) {
+      DATA_ADEGAN_ANIMASI.splice(idx, 1);
+      renderDaftarAdeganAnimasi();
+    }
+    window.hapusAdeganAnimasi = hapusAdeganAnimasi;
+
+    function kosongkanAdeganAnimasi() {
+      DATA_ADEGAN_ANIMASI = [];
+      renderDaftarAdeganAnimasi();
+      toast('Daftar adegan dikosongkan.');
+    }
+    window.kosongkanAdeganAnimasi = kosongkanAdeganAnimasi;
+
+    function isiContohCerita(tipe) {
+      if (tipe === 'rokok') {
+        const inp = $('#animasiTemaCerita');
+        if (inp) inp.value = 'Hutang rokok yang terlupakan: Budi mampir ke warung desa Siforejo, Ridwan teman akrabnya datang ke kursi bambu depan warung menagih hutang rokok sebungkus malam takbiran. Budi kaget lalu pura-pura lupa.';
+        if ($('#animasiTokoh1')) $('#animasiTokoh1').value = 'Budi';
+        if ($('#animasiTokoh2')) $('#animasiTokoh2').value = 'Ridwan';
+        if ($('#animasiLatarPreferensi')) $('#animasiLatarPreferensi').value = 'warung-desa';
+      } else if (tipe === 'ngopi') {
+        const inp = $('#animasiTemaCerita');
+        if (inp) inp.value = 'Reuni ngopi santai di warung kopi pedesaan pinggiran, dua kawan lama duduk nongkrong di kursi bambu.';
+        if ($('#animasiTokoh1')) $('#animasiTokoh1').value = 'Budi';
+        if ($('#animasiTokoh2')) $('#animasiTokoh2').value = 'Ridwan';
+        if ($('#animasiLatarPreferensi')) $('#animasiLatarPreferensi').value = 'kursi-bambu';
+      } else if (tipe === 'ronda') {
+        const inp = $('#animasiTemaCerita');
+        if (inp) inp.value = 'Malam siskamling ronda malam di pos kamling desa menjaga keamanan warga.';
+        if ($('#animasiTokoh1')) $('#animasiTokoh1').value = 'Budi';
+        if ($('#animasiTokoh2')) $('#animasiTokoh2').value = 'Ridwan';
+        if ($('#animasiLatarPreferensi')) $('#animasiLatarPreferensi').value = 'pos-ronda';
+      }
+      susunAdeganAnimasiAI();
+    }
+    window.isiContohCerita = isiContohCerita;
+
+    async function susunAdeganAnimasiAI() {
+      const konsep = $('#animasiTemaCerita')?.value.trim();
+      if (!konsep) return toast('Ketik konsep atau ide cerita Anda terlebih dahulu.', true);
+      const tokoh1 = $('#animasiTokoh1')?.value.trim() || 'Budi';
+      const tokoh2 = $('#animasiTokoh2')?.value.trim() || '';
+      const latar = $('#animasiLatarPreferensi')?.value || 'auto';
+      const tbl = $('#tblSusunAdeganAI');
+      const teksAsli = tbl ? tbl.innerHTML : '';
+      if (tbl) {
+        tbl.disabled = true;
+        tbl.innerHTML = '<span class="pk-putar" style="display:inline-block;width:12px;height:12px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:putar 0.8s linear infinite;margin-right:6px"></span> AI Agent sedang menganalisa visual &amp; naskah...';
+      }
+
+      try {
+        const res = await api('/api/animasi/analisa-cerita', { konsep, tokoh1, tokoh2, latar });
+        if (res.ok && res.data && res.data.adegan && res.data.adegan.length > 0) {
+          DATA_ADEGAN_ANIMASI = res.data.adegan;
+          if (res.data.gaya_visual) {
+            const elPilGaya = $('#pilGayaAnimasi');
+            if (elPilGaya) {
+              const b = $(`button[data-v="${res.data.gaya_visual}"]`, elPilGaya);
+              if (b) {
+                $$('.gaya', elPilGaya).forEach(x => x.classList.toggle('aktif', x === b));
+                const targetRig = (res.data.gaya_visual === 'toon-desa' || res.data.gaya_visual === 'anime-cel') ? 'toon-3d' : res.data.gaya_visual;
+                const elWadahRig = $('#wadahPilihanRig');
+                if (elWadahRig) {
+                  $$('.kartu-rig', elWadahRig).forEach(c => {
+                    const match = c.dataset.rig === targetRig;
+                    c.classList.toggle('aktif', match);
+                    c.style.border = match ? '2px solid var(--aksen)' : '1px solid var(--border)';
+                    c.style.background = match ? 'rgba(56,189,248,0.08)' : 'rgba(255,255,255,0.02)';
+                  });
+                }
+              }
+            }
+          }
+          renderDaftarAdeganAnimasi();
+          toast(`✨ AI Agent menyusun ${res.data.adegan.length} adegan dengan gaya visual konsisten!`);
+        } else {
+          toast('AI Agent tidak mengembalikan format adegan yang valid.', true);
+        }
+      } catch (err) {
+        toast('Gagal menganalisa konsep: ' + err.message, true);
+      } finally {
+        if (tbl) {
+          tbl.disabled = false;
+          tbl.innerHTML = teksAsli;
+        }
+      }
+    }
+    window.susunAdeganAnimasiAI = susunAdeganAnimasiAI;
+
+    // Pasang handler tombol storyboard
+    const tblSusunAI = $('#tblSusunAdeganAI');
+    if (tblSusunAI) tblSusunAI.onclick = susunAdeganAnimasiAI;
+    const tblTambahAdg = $('#tblTambahAdeganAnimasi');
+    if (tblTambahAdg) tblTambahAdg.onclick = tambahAdeganAnimasi;
+
+    // Render inisial storyboard
+    setTimeout(renderDaftarAdeganAnimasi, 100);
+
+    function ambilDataAdeganAnimasi() {
+      const rigPilihan = $('#wadahPilihanRig .kartu-rig.aktif')?.dataset.rig || 'toon-3d';
+      const rasioPilihan = nilaiPil('#pilRasioAnimasi') || 'vertikal';
+      const subMode = nilaiPil('#pilSubAnimasi') || 'storyboard';
+      const audioNarasi = $('#namaAudioNarasi')?.dataset?.path || undefined;
+
+      if (subMode === 'storyboard' && DATA_ADEGAN_ANIMASI && DATA_ADEGAN_ANIMASI.length > 0) {
+        const namaTokoh1 = $('#animasiTokoh1')?.value.trim() || 'Budi';
+        const namaTokoh2 = $('#animasiTokoh2')?.value.trim() || 'Ridwan';
+        return {
+          judul: $('#animasiTemaCerita')?.value.trim() || 'Animasi Karakter Bergerak',
+          rigDefault: rigPilihan,
+          rasio: rasioPilihan,
+          stop_motion_fps: 12,
+          komposisi: 'AnimasiBergerak',
+          audioNarasi: audioNarasi || undefined,
+          adegan: DATA_ADEGAN_ANIMASI.map(a => {
+            const speakerName = a.dialog && a.dialog.includes(':') ? a.dialog.split(':')[0].trim() : (a.tokoh2_aktif ? (a.karakter2?.nama || namaTokoh2) : (a.karakter?.nama || namaTokoh1));
+            return {
+              judul: a.judul,
+              teks: a.teks,
+              dialog: a.dialog || undefined,
+              speaker: speakerName,
+              durasi_detik: a.durasi_detik || 3.5,
+              rig: rigPilihan,
+              latar: a.latar || 'warung-desa',
+              callout: a.callout || undefined,
+              karakter: {
+                nama: a.karakter?.nama || namaTokoh1,
+                aksi: a.tokoh1_aksi || 'duduk',
+                benda: a.tokoh1_benda || 'tidak_ada',
+                posisiX: a.tokoh2_aktif ? 320 : 540,
+                hadap: 1
+              },
+              karakter2: a.tokoh2_aktif ? {
+                nama: a.karakter2?.nama || namaTokoh2,
+                aksi: a.tokoh2_aksi || 'tunjuk',
+                benda: a.tokoh2_benda || 'tidak_ada',
+                posisiX: 740,
+                hadap: -1
+              } : undefined
+            };
+          })
+        };
+      } else {
+        const teksInput = $('#animasiTeksNaskah')?.value.trim() || 'Karakter bergerak hidup di Remotion Native.';
+        const baris = teksInput.split(/\n+/).filter(Boolean);
+        const latarBebas = $('#animasiLatarBebas')?.value || 'warung-desa';
+        return {
+          judul: baris[0]?.slice(0, 36) || 'Animasi Karakter Bergerak',
+          rigDefault: rigPilihan,
+          rasio: rasioPilihan,
+          stop_motion_fps: 12,
+          komposisi: 'AnimasiBergerak',
+          audioNarasi: audioNarasi || undefined,
+          adegan: baris.map((b, idx) => ({
+            judul: b.slice(0, 30),
+            teks: b,
+            durasi_detik: 3.5,
+            rig: rigPilihan,
+            latar: latarBebas || (idx === 0 ? 'warung-desa' : (idx === 1 ? 'kursi-bambu' : 'jalan-desa')),
+            callout: `ADEGAN ${idx + 1}`,
+            karakter: {
+              nama: 'Budi',
+              aksi: idx === 0 ? 'jalan' : (idx === 1 ? 'duduk' : 'bicara'),
+              benda: idx === 0 ? 'kopi' : 'tidak_ada',
+              posisiX: 540,
+              hadap: 1
+            }
+          }))
+        };
+      }
+    }
+    window.ambilDataAdeganAnimasi = ambilDataAdeganAnimasi;
 
     // Visual QA Keyframe Inspector (Still Render)
     const elTblPratinjau = $('#tblPratinjauKeyframe');
@@ -6327,29 +6891,12 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
             try { payloadNaskah = JSON.parse(rawJson); } catch (e) {}
           }
           if (!payloadNaskah) {
-            const rig = $('#wadahPilihanRig .kartu-rig.aktif')?.dataset.rig || 'toon-3d';
-            const rasio = nilaiPil('#pilRasioAnimasi') || 'vertikal';
-            const teksInput = $('#animasiTeksNaskah')?.value.trim() || 'Karakter kinetik bergerak hidup di Remotion Native.';
-            const baris = teksInput.split(/\n+/).filter(Boolean);
-            payloadNaskah = {
-              judul: baris[0]?.slice(0, 30) || 'Animasi Karakter Bergerak',
-              rigDefault: rig,
-              rasio: rasio,
-              komposisi: 'AnimasiBergerak',
-              adegan: baris.map((b, idx) => ({
-                judul: b.slice(0, 24),
-                teks: b,
-                durasi_detik: 3.5,
-                rig: rig,
-                latar: idx % 2 === 0 ? 'blueprint' : 'senja',
-                callout: `POSE ${idx + 1}`,
-                karakter: {
-                  aksi: idx % 2 === 0 ? 'jalan' : 'tunjuk',
-                  ekspresi: idx % 2 === 0 ? 'senyum' : 'serius',
-                  benda: idx === 1 ? 'folder' : 'tidak_ada'
-                }
-              }))
-            };
+            const subMode = nilaiPil('#pilSubAnimasi') || 'storyboard';
+            if (subMode === 'storyboard' && (!DATA_ADEGAN_ANIMASI || DATA_ADEGAN_ANIMASI.length === 0)) {
+              strip.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;width:100%;color:var(--merah);font-size:12px">Storyboard masih kosong. Klik ✨ Analisa Konsep &amp; Susun Adegan terlebih dahulu.</div>';
+              return toast('Storyboard masih kosong. Klik ✨ Analisa Konsep & Susun Adegan terlebih dahulu.', true);
+            }
+            payloadNaskah = ambilDataAdeganAnimasi();
           }
 
           const frames = [30, 90, 150, 210];
@@ -7063,6 +7610,7 @@ Aturan:
       try { if (!localStorage.getItem('tema') && PENG.TEMA && window.pasangTema) pasangTema(PENG.TEMA, false); } catch (e) { }
       tampilSuara(PENG.SUARA || 'bawaan', PENG.VOXCPM_MODE || 'bawaan');
       pilihLangganan(PENG.LANGGANAN || 'claude-code');
+      if ($('#chkModeAnimatorDebug')) $('#chkModeAnimatorDebug').checked = String(PENG.MODE_ANIMATOR_DEBUG || 'false').toLowerCase() === 'true';
       for (const k of ['GEMINI_MODEL', 'OPENAI_BASE_URL', 'OPENAI_MODEL', 'SUARA_MAC', 'OPENCODE_MODEL', 'CLAUDE_CODE_MODEL', 'CODEX_MODEL', 'ANTIGRAVITY_MODEL', 'VOXCPM_DESAIN']) if ($('#' + k)) $('#' + k).value = PENG[k] || '';
       $$('[data-list]').forEach(sinkronDropdown);
       for (const k of ['GEMINI_API_KEY', 'OPENAI_API_KEY']) { $('#' + k).value = ''; $('#' + k).placeholder = PENG[k] ? `tersimpan (${PENG[k]}) — isi untuk mengganti` : $('#' + k).placeholder; }
@@ -7288,6 +7836,7 @@ Aturan:
     $('#pilPenyedia').onclick = (e) => { const b = e.target.closest('.pny'); if (b) { pilihPenyedia(b.dataset.v); gambarPanduan(); } };
     $('#tblSimpan').onclick = async () => {
       const d = { AI: $('#pilPenyedia').dataset.v, LANGGANAN: $('#pilLangganan').dataset.v };
+      if ($('#chkModeAnimatorDebug')) d.MODE_ANIMATOR_DEBUG = $('#chkModeAnimatorDebug').checked ? 'true' : 'false';
       for (const k of ['GEMINI_MODEL', 'OPENAI_BASE_URL', 'OPENAI_MODEL', 'SUARA_MAC', 'OPENCODE_MODEL', 'CLAUDE_CODE_MODEL', 'CODEX_MODEL', 'ANTIGRAVITY_MODEL']) if ($('#' + k)) d[k] = $('#' + k).value;
       for (const k of ['GEMINI_API_KEY', 'OPENAI_API_KEY', 'GEMINI_API_KEYS']) if ($('#' + k) && $('#' + k).value) d[k] = $('#' + k).value;
       await api('/api/pengaturan', d); await muatPengaturan(); muatStatusAI(); toast('Pengaturan tersimpan ✓ — tekan Uji koneksi untuk memastikan');
@@ -7384,31 +7933,11 @@ Aturan:
               return toast('Format JSON di Mode Lanjutan tidak valid: ' + e.message, true);
             }
           } else {
-            const teksCerita = $('#animasiTeksNaskah')?.value.trim();
-            if (!teksCerita) return toast('Tulis naskah cerita atau poin adegan terlebih dahulu.', true);
-            const rigPilihan = $('#wadahPilihanRig .kartu-rig.aktif')?.dataset.rig || 'toon-3d';
-            const rasioPilihan = nilaiPil('#pilRasioAnimasi') || 'vertikal';
-            const baris = teksCerita.split(/\n+/).filter(Boolean);
-            const objekAnimasi = {
-              judul: baris[0]?.slice(0, 36) || 'Animasi Karakter Bergerak',
-              rigDefault: rigPilihan,
-              rasio: rasioPilihan,
-              komposisi: 'AnimasiBergerak',
-              audioNarasi: audioNarasi || undefined,
-              adegan: baris.map((b, idx) => ({
-                judul: b.slice(0, 30),
-                teks: b,
-                durasi_detik: Math.max(3.0, Math.round((b.split(/\s+/).length / 2.5) * 10) / 10),
-                rig: rigPilihan,
-                latar: idx % 3 === 0 ? 'blueprint' : (idx % 3 === 1 ? 'senja' : 'kota'),
-                callout: `ADEGAN ${idx + 1}`,
-                karakter: {
-                  aksi: idx === 0 ? 'jalan' : (idx === 1 ? 'tunjuk' : 'bicara'),
-                  ekspresi: idx === 0 ? 'senyum' : 'serius',
-                  benda: idx === 1 ? 'folder' : 'tidak_ada'
-                }
-              }))
-            };
+            const subMode = nilaiPil('#pilSubAnimasi') || 'storyboard';
+            if (subMode === 'storyboard' && (!DATA_ADEGAN_ANIMASI || DATA_ADEGAN_ANIMASI.length === 0)) {
+              return toast('Storyboard masih kosong. Klik ✨ Analisa Konsep & Susun Adegan terlebih dahulu.', true);
+            }
+            const objekAnimasi = ambilDataAdeganAnimasi();
             naskahFinal = JSON.stringify(objekAnimasi);
           }
         } else if (isi === 'manual') {
@@ -9178,7 +9707,7 @@ Aturan:
                 <span style="font-size:9px;font-family:var(--mono);font-weight:700;padding:2px 6px;border-radius:99px;background:${isAnim ? 'rgba(56,189,248,0.25)' : 'rgba(245,158,11,0.25)'};color:${isAnim ? '#38bdf8' : '#f59e0b'};border:1px solid rgba(255,255,255,0.2);margin-bottom:4px">${isAnim ? 'Animasi' : 'Statis'}</span>
                 <span style="font-size:10px;font-family:var(--mono);color:#ffffffaa">~${s.avg_pacing_sec || 3.5}s</span>
               </div>
-              <div class="nama"><b>${esc(s.nama || s.id)}</b><span>${isAnim ? 'anim ref' : 'video ref'}</span></div>
+              <div class="nama"><b>${esc(s.nama || s.id)}</b><span>${isAnim ? 'Gaya Ref' : 'Video Ref'}</span></div>
             `;
             targetContainer.insertBefore(card, targetContainer.firstChild);
           });

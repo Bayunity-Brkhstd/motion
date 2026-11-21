@@ -1,71 +1,83 @@
 {
-  "judul": "Evolusi Animasi Studio Maliki & Bayunity",
+  "judul": "Hutang Rokok yang Terlupakan",
   "rigDefault": "toon-3d",
   "rasio": "vertikal",
+  "komposisi": "AnimasiBergerak",
   "adegan": [
     {
-      "judul": "Selamat Datang di Studio Animasi",
-      "teks": "Kini video Anda bukan lagi sekadar gambar statis yang digerakkan, melainkan animasi karakter yang benar-benar hidup.",
-      "durasi_detik": 4.5,
+      "judul": "Budi Mampir Warung Siforejo",
+      "teks": "Sore itu, Budi mampir ke warung makan Mbok Jum di pinggir desa Siforejo untuk ngopi santai.",
+      "dialog": "Budi: 'Mbok, kopi tubruk satu ya!'",
+      "speaker": "Budi",
+      "durasi_detik": 3.5,
       "rig": "toon-3d",
-      "latar": "blueprint",
+      "latar": "warung-desa",
+      "callout": "📍 WARUNG SIFOREJO",
       "karakter": {
-        "aksi": "jalan",
+        "nama": "Budi",
+        "aksi": "duduk",
         "ekspresi": "senyum",
-        "posisiX": 540,
-        "posisiY": 1150,
+        "posisiX": 340,
+        "posisiY": 1180,
         "hadap": 1,
-        "benda": "folder"
-      },
-      "callout": "🚀 MESIN KINETIK BARU"
+        "benda": "kopi"
+      }
     },
     {
-      "judul": "Perspektif 3D & Cel-Shaded",
-      "teks": "Dengan sudut kamera perspektif dinamis dan shading cel-shaded tebal, pesan teknis dan edukasi tersampaikan tajam.",
-      "durasi_detik": 4.0,
+      "judul": "Ridwan Menagih di Kursi Bambu",
+      "teks": "Baru mau seruput kopi, Ridwan teman akrabnya tiba-tiba muncul di kursi bambu depan warung dan langsung menodong tagihan.",
+      "dialog": "Ridwan: 'Woi Bud! Enak bener ngopi. Inget utang rokok sebungkus pas malam takbiran kemarin gak?!'",
+      "speaker": "Ridwan",
+      "durasi_detik": 4.5,
       "rig": "toon-3d",
-      "latar": "senja",
+      "latar": "kursi-bambu",
+      "callout": "💬 TAGIHAN TAKBIRAN",
       "karakter": {
-        "aksi": "tunjuk",
-        "ekspresi": "serius",
-        "posisiX": 540,
+        "nama": "Budi",
+        "aksi": "kaget",
+        "ekspresi": "kaget",
+        "posisiX": 300,
         "posisiY": 1180,
         "hadap": 1,
         "benda": "tidak_ada"
       },
-      "callout": "📐 TOON 3D EXPLAINER"
+      "karakter2": {
+        "nama": "Ridwan",
+        "aksi": "tunjuk",
+        "ekspresi": "serius",
+        "posisiX": 750,
+        "posisiY": 1180,
+        "hadap": -1,
+        "benda": "rokok"
+      }
     },
     {
-      "judul": "Stickman Kinetik Aksi Cepat",
-      "teks": "Gerakan melangkah, mengayunkan tangan, dan rotasi sendi dihitung secara presisi di setiap frame.",
+      "judul": "Pura-Pura Lupa",
+      "teks": "Budi langsung pasang muka polos pura-pura lupa, sambil cengar-cengir di depan temannya.",
+      "dialog": "Budi: 'Hah? Utang apaan ya? Kirain kemarin lu sedekahin buat gue bro, hehe...'",
+      "speaker": "Budi",
       "durasi_detik": 4.0,
-      "rig": "stickman",
-      "latar": "kota",
+      "rig": "toon-3d",
+      "latar": "kursi-bambu",
+      "callout": "😅 PURA-PURA LUPA",
       "karakter": {
-        "aksi": "lari",
+        "nama": "Budi",
+        "aksi": "pikir",
         "ekspresi": "bicara",
-        "posisiX": 540,
-        "posisiY": 1250,
+        "posisiX": 300,
+        "posisiY": 1180,
         "hadap": 1,
-        "benda": "amplop"
+        "benda": "tidak_ada"
       },
-      "callout": "🏃 DETERMINISTIC MATH"
-    },
-    {
-      "judul": "Hemat RAM & Siap Pakai",
-      "teks": "Semua dirender langsung di memori dengan Remotion tanpa membuat komputer Anda lambat atau kehabisan disk.",
-      "durasi_detik": 4.5,
-      "rig": "isometric",
-      "latar": "isometric-grid",
-      "karakter": {
+      "karakter2": {
+        "nama": "Ridwan",
         "aksi": "bicara",
         "ekspresi": "senyum",
-        "posisiX": 540,
-        "posisiY": 1150,
-        "hadap": 1,
-        "benda": "palu"
-      },
-      "callout": "⚡ RAM < 600 MB"
+        "posisiX": 750,
+        "posisiY": 1180,
+        "hadap": -1,
+        "benda": "rokok"
+      }
     }
   ]
 }

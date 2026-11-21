@@ -1,0 +1,488 @@
+{
+  "versi": "2.0.0",
+  "id_sesi": "sesi_1795299232_ojk_pinjol",
+  "metadata": {
+    "judul": "Aturan Baru OJK Penagihan Pinjol",
+    "rasio": "9:16",
+    "gaya_visual_slug": "toon-desa",
+    "stop_motion_fps": 12,
+    "palet_warna": [
+      "#EC4899",
+      "#0284C7",
+      "#1E293B",
+      "#FACC15",
+      "#10B981"
+    ]
+  },
+  "audio": {
+    "file_master": "c:\\Users\\BRKH STUDIO\\Downloads\\Generated Audio November 21, 2026 - 8_47PM.wav",
+    "durasi_total_detik": 71.12
+  },
+  "adegan": [
+    {
+      "judul": "Penagih Pinjol Teror Terus?",
+      "teks": "Gila ya, debt collector pinjol neror terus sampai malam begini!",
+      "dialog": "Maya: 'Gila ya, debt collector pinjol neror terus sampai malam begini!'",
+      "speaker": "Maya",
+      "durasi_detik": 2.63,
+      "durasi": 2.63,
+      "rig": "toon-3d",
+      "latar": "warung-desa",
+      "callout": "😱 PENAGIH PINJOL TEROR TERUS?",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "kaget",
+        "benda": "ponsel",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Aturan Baru OJK",
+      "teks": "Sabar dulu, kamu tahu tidak ada aturan OJK terbaru soal penagihan?",
+      "dialog": "Rian: 'Sabar dulu, kamu tahu tidak ada aturan OJK terbaru soal penagihan?'",
+      "speaker": "Rian",
+      "durasi_detik": 5.27,
+      "durasi": 5.27,
+      "rig": "toon-3d",
+      "latar": "kursi-bambu",
+      "callout": "📜 ATURAN BARU OJK",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "bicara",
+        "benda": "kertas",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Batas Jam Penagihan",
+      "teks": "Memangnya OJK mengatur jam operasional penagihan kepada nasabah juga ya?",
+      "dialog": "Maya: 'Memangnya OJK mengatur jam operasional penagihan kepada nasabah juga ya?'",
+      "speaker": "Maya",
+      "durasi_detik": 4.39,
+      "durasi": 4.39,
+      "rig": "toon-3d",
+      "latar": "kursi-bambu",
+      "callout": "🕒 BATAS JAM PENAGIHAN",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "bicara",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Maksimal Jam Delapan Malam",
+      "teks": "Iya, penagihan lapangan maksimal hanya boleh sampai jam delapan malam saja.",
+      "dialog": "Rian: 'Iya, penagihan lapangan maksimal hanya boleh sampai jam delapan malam saja.'",
+      "speaker": "Rian",
+      "durasi_detik": 5.27,
+      "durasi": 5.27,
+      "rig": "toon-3d",
+      "latar": "pos-ronda",
+      "callout": "🌙 MAKSIMAL JAM DELAPAN MALAM",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "tunjuk",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Melanggar Aturan Publik",
+      "teks": "Berarti kalau mereka datang lewat jam segitu, itu sudah melanggar aturan?",
+      "dialog": "Maya: 'Berarti kalau mereka datang lewat jam segitu, itu sudah melanggar aturan?'",
+      "speaker": "Maya",
+      "durasi_detik": 5.27,
+      "durasi": 5.27,
+      "rig": "toon-3d",
+      "latar": "pos-ronda",
+      "callout": "🚫 MELANGGAR ATURAN PUBLIK",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "pikir",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Hak Perlindungan Konsumen",
+      "teks": "Tepat, itu bentuk perlindungan hak warga negara dalam kebijakan publik finansial.",
+      "dialog": "Rian: 'Tepat, itu bentuk perlindungan hak warga negara dalam kebijakan publik finansial.'",
+      "speaker": "Rian",
+      "durasi_detik": 5.27,
+      "durasi": 5.27,
+      "rig": "toon-3d",
+      "latar": "pos-ronda",
+      "callout": "🛡️ HAK PERLINDUNGAN KONSUMEN",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "bicara",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Ancaman Dan Kekerasan",
+      "teks": "Terus, gimana kalau mereka mulai pakai ancaman atau kekerasan fisik?",
+      "dialog": "Maya: 'Terus, gimana kalau mereka mulai pakai ancaman atau kekerasan fisik?'",
+      "speaker": "Maya",
+      "durasi_detik": 4.39,
+      "durasi": 4.39,
+      "rig": "toon-3d",
+      "latar": "jalan-desa",
+      "callout": "😰 ANCAMAN DAN KEKERASAN",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "kaget",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Dilarang Pakai Intimidasi",
+      "teks": "Sangat dilarang! Penagih dilarang menggunakan ancaman, intimidasi, apalagi kekerasan fisik.",
+      "dialog": "Rian: 'Sangat dilarang! Penagih dilarang menggunakan ancaman, intimidasi, apalagi kekerasan fisik.'",
+      "speaker": "Rian",
+      "durasi_detik": 4.39,
+      "durasi": 4.39,
+      "rig": "toon-3d",
+      "latar": "jalan-desa",
+      "callout": "❌ DILARANG PAKAI INTIMIDASI",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "tunjuk",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Menyebar Data Pribadi",
+      "teks": "Mereka juga tidak boleh mempermalukan kita di depan umum, kan?",
+      "dialog": "Maya: 'Mereka juga tidak boleh mempermalukan kita di depan umum, kan?'",
+      "speaker": "Maya",
+      "durasi_detik": 4.39,
+      "durasi": 4.39,
+      "rig": "toon-3d",
+      "latar": "warung-desa",
+      "callout": "🤫 MENYEBAR DATA PRIBADI",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "bicara",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Pelanggaran Etika Berat",
+      "teks": "Tentu! Menyebarkan data pribadi atau mempermalukan debitur adalah pelanggaran etika berat.",
+      "dialog": "Rian: 'Tentu! Menyebarkan data pribadi atau mempermalukan debitur adalah pelanggaran etika berat.'",
+      "speaker": "Rian",
+      "durasi_detik": 5.27,
+      "durasi": 5.27,
+      "rig": "toon-3d",
+      "latar": "warung-desa",
+      "callout": "⚖️ PELANGGARAN ETIKA BERAT",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "bicara",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Hak Sebagai Warga",
+      "teks": "Wah, ternyata sebagai warga negara kita punya perlindungan hukum yang kuat.",
+      "dialog": "Maya: 'Wah, ternyata sebagai warga negara kita punya perlindungan hukum yang kuat.'",
+      "speaker": "Maya",
+      "durasi_detik": 5.27,
+      "durasi": 5.27,
+      "rig": "toon-3d",
+      "latar": "kursi-bambu",
+      "callout": "🇮🇩 HAK SEBAGAI WARGA",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "pikir",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Fungsi Kebijakan Publik",
+      "teks": "Betul, kebijakan ini dibuat agar tata kelola keuangan tetap manusiawi.",
+      "dialog": "Rian: 'Betul, kebijakan ini dibuat agar tata kelola keuangan tetap manusiawi.'",
+      "speaker": "Rian",
+      "durasi_detik": 4.39,
+      "durasi": 4.39,
+      "rig": "toon-3d",
+      "latar": "kursi-bambu",
+      "callout": "🤝 FUNGSI KEBIJAKAN PUBLIK",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "bicara",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Kewajiban Bayar Hutang",
+      "teks": "Tapi kita tetap wajib bayar hutang sesuai kesepakatan awal, ya?",
+      "dialog": "Maya: 'Tapi kita tetap wajib bayar hutang sesuai kesepakatan awal, ya?'",
+      "speaker": "Maya",
+      "durasi_detik": 4.39,
+      "durasi": 4.39,
+      "rig": "toon-3d",
+      "latar": "senja",
+      "callout": "💸 KEWAJIBAN BAYAR HUTANG",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "bicara",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Tanggung Jawab Finansial",
+      "teks": "Jelas, hak kita dilindungi tapi kewajiban harus dijalankan secara bertanggung jawab.",
+      "dialog": "Rian: 'Jelas, hak kita dilindungi tapi kewajiban harus dijalankan secara bertanggung jawab.'",
+      "speaker": "Rian",
+      "durasi_detik": 5.27,
+      "durasi": 5.27,
+      "rig": "toon-3d",
+      "latar": "senja",
+      "callout": "✅ TANGGUNG JAWAB FINANSIAL",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "tunjuk",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    },
+    {
+      "judul": "Simpan Video Ini",
+      "teks": "Simpan video ini biar kamu tidak kena teror pinjol sembarangan lagi!",
+      "dialog": "Maya: 'Simpan video ini biar kamu tidak kena teror pinjol sembarangan lagi!'",
+      "speaker": "Maya",
+      "durasi_detik": 5.26,
+      "durasi": 5.26,
+      "rig": "toon-3d",
+      "latar": "senja",
+      "callout": "💾 SIMPAN VIDEO INI",
+      "karakter": {
+        "nama": "Maya",
+        "aksi": "kaget",
+        "benda": "tidak_ada",
+        "warnaBaju": "#EC4899",
+        "warnaCelana": "#831843",
+        "warnaRambut": "#4A044E",
+        "posisiX": 320,
+        "hadap": 1
+      },
+      "karakter2": {
+        "nama": "Rian",
+        "aksi": "diam",
+        "benda": "tidak_ada",
+        "warnaBaju": "#0284C7",
+        "warnaCelana": "#1E293B",
+        "warnaRambut": "#0F172A",
+        "posisiX": 740,
+        "hadap": -1
+      }
+    }
+  ]
+}

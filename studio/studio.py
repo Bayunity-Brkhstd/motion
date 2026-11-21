@@ -47,9 +47,9 @@ ENV = DATA / "pengaturan.env"
 PORT = int(os.environ.get("STUDIO_PORT", "8787"))
 KUNCI = ["SUARA", "VOXCPM_MODE", "VOXCPM_DESAIN", "AI", "LANGGANAN", "OPENCODE_MODEL", "CLAUDE_CODE_MODEL", "CODEX_MODEL",
          "GEMINI_API_KEY", "GEMINI_API_KEYS", "GEMINI_MODEL",
-         "OPENAI_BASE_URL", "OPENAI_API_KEY", "OPENAI_MODEL", "SUARA_MAC", "TEMA"]
+         "OPENAI_BASE_URL", "OPENAI_API_KEY", "OPENAI_MODEL", "SUARA_MAC", "TEMA", "MODE_ANIMATOR_DEBUG"]
 BAWAAN = {"SUARA": "bawaan", "VOXCPM_MODE": "bawaan", "AI": "lokal", "LANGGANAN": "claude-code", "GEMINI_MODEL": "gemini-3.8-flash",
-          "OPENAI_BASE_URL": "http://localhost:11434/v1", "OPENAI_MODEL": "gemma3:4b", "SUARA_MAC": "Damayanti"}
+          "OPENAI_BASE_URL": "http://localhost:11434/v1", "OPENAI_MODEL": "gemma3:4b", "SUARA_MAC": "Damayanti", "MODE_ANIMATOR_DEBUG": "false"}
 
 
 def baca_pengaturan() -> dict:
@@ -551,6 +551,335 @@ def generate_keyframe_still(d: dict) -> dict:
     return {"ok": True, "file": f"/api/berkas-hasil/{out_name}", "frame": frame}
 
 
+def fallback_analisa_cerita(konsep: str, tokoh1: str, tokoh2: str, latar_pref: str, gaya_pref: str, jml_adegan: int) -> dict:
+    """Mesin penyusun adegan deterministik jika AI CLI sedang offline."""
+    low = (konsep or "").lower()
+    
+    # Deteksi gaya visual konsisten
+    if gaya_pref and gaya_pref != "auto":
+        gaya_visual = gaya_pref
+    elif any(k in low for k in ("desa", "warung", "rokok", "kopi", "siforejo", "bambu", "ronda", "kampung")):
+        gaya_visual = "toon-desa"
+    elif any(k in low for k in ("stickman", "garis", "lari", "aksi")):
+        gaya_visual = "stickman"
+    elif any(k in low for k in ("anime", "komik", "manga", "jepang")):
+        gaya_visual = "anime-cel"
+    elif any(k in low for k in ("isometrik", "isometric", "balok", "tech", "grid")):
+        gaya_visual = "isometric"
+    else:
+        gaya_visual = "toon-3d"
+
+    # Deteksi latar utama konsisten
+    if latar_pref and latar_pref != "auto":
+        latar_utama = latar_pref
+    elif any(k in low for k in ("warung", "siforejo", "kopi")):
+        latar_utama = "warung-desa"
+    elif any(k in low for k in ("bambu", "kursi", "nongkrong")):
+        latar_utama = "kursi-bambu"
+    elif any(k in low for k in ("ronda", "kamling", "pos", "malam")):
+        latar_utama = "pos-ronda"
+    elif any(k in low for k in ("sawah", "jalan")):
+        latar_utama = "jalan-desa"
+    elif any(k in low for k in ("senja", "sore")):
+        latar_utama = "senja"
+    elif any(k in low for k in ("kantor", "kota", "gedung")):
+        latar_utama = "kota"
+    else:
+        latar_utama = "warung-desa" if gaya_visual == "toon-desa" else "blueprint"
+
+    tokoh2_ada = bool((tokoh2 or "").strip())
+    t1 = (tokoh1 or "").strip() or "Budi"
+    t2 = (tokoh2 or "").strip() or ("Ridwan" if tokoh2_ada else "")
+
+    if "rokok" in low or "hutang" in low or "utang" in low:
+        adegan_list = [
+            {
+                "judul": f"{t1} Mampir Ngopi di Warung",
+                "latar": "warung-desa",
+                "callout": "📍 WARUNG SIFOREJO",
+                "tokoh1_aksi": "duduk",
+                "tokoh1_benda": "kopi",
+                "tokoh2_aktif": False,
+                "tokoh2_aksi": "bicara",
+                "tokoh2_benda": "tidak_ada",
+                "dialog": f"{t1}: 'Mbok, kopi tubruk satu ya, manis dikit!'",
+                "teks": f"Sore itu, {t1} mampir ke warung makan di pinggir desa untuk menikmati secangkir kopi hangat.",
+                "durasi_detik": 3.5
+            },
+            {
+                "judul": f"{t2 or 'Ridwan'} Menodong Tagihan",
+                "latar": "kursi-bambu",
+                "callout": "💬 TAGIHAN TAKBIRAN",
+                "tokoh1_aksi": "kaget",
+                "tokoh1_benda": "tidak_ada",
+                "tokoh2_aktif": True,
+                "tokoh2_aksi": "tunjuk",
+                "tokoh2_benda": "rokok",
+                "dialog": f"{t2 or 'Ridwan'}: 'Woi {t1}! Enak bener ngopi. Inget utang rokok sebungkus pas takbiran kemarin gak?!'",
+                "teks": f"Tiba-tiba {t2 or 'Ridwan'} muncul di kursi bambu depan warung dan langsung menodong tagihan rokok lama.",
+                "durasi_detik": 4.5
+            },
+            {
+                "judul": "Pura-Pura Lupa",
+                "latar": "kursi-bambu",
+                "callout": "😅 PURA-PURA LUPA",
+                "tokoh1_aksi": "pikir",
+                "tokoh1_benda": "tidak_ada",
+                "tokoh2_aktif": True,
+                "tokoh2_aksi": "bicara",
+                "tokoh2_benda": "rokok",
+                "dialog": f"{t1}: 'Hah? Utang apaan ya bro? Kirain kemarin udah lu sedekahin, hehe...'",
+                "teks": f"{t1} langsung memasang ekspresi polos sambil cengar-cengir di hadapan temannya.",
+                "durasi_detik": 4.0
+            }
+        ]
+    elif "ronda" in low or "kamling" in low:
+        adegan_list = [
+            {
+                "judul": "Kumpul di Pos Ronda",
+                "latar": "pos-ronda",
+                "callout": "🥁 POS RONDA MALAM",
+                "tokoh1_aksi": "duduk",
+                "tokoh1_benda": "kopi",
+                "tokoh2_aktif": False,
+                "tokoh2_aksi": "bicara",
+                "tokoh2_benda": "tidak_ada",
+                "dialog": f"{t1}: 'Malam ini giliran jaga pos kamling.'",
+                "teks": f"Suasana dingin malam hari di pos ronda desa, ditemani secangkir kopi panas.",
+                "durasi_detik": 3.5
+            },
+            {
+                "judul": "Koordinasi Keliling Kampung",
+                "latar": "pos-ronda",
+                "callout": "🔦 GILIRAN RONDA",
+                "tokoh1_aksi": "bicara",
+                "tokoh1_benda": "tidak_ada",
+                "tokoh2_aktif": tokoh2_ada,
+                "tokoh2_aksi": "tunjuk",
+                "tokoh2_benda": "rokok",
+                "dialog": f"{t2 if tokoh2_ada else t1}: 'Jam satu nanti kita muter blok barat ya.'",
+                "teks": "Mempersiapkan kentongan dan jadwal patroli menjaga keamanan desa.",
+                "durasi_detik": 4.0
+            },
+            {
+                "judul": "Patroli Pinggir Desa",
+                "latar": "jalan-desa",
+                "callout": "🌾 AMAN TENTERAM",
+                "tokoh1_aksi": "jalan",
+                "tokoh1_benda": "tidak_ada",
+                "tokoh2_aktif": tokoh2_ada,
+                "tokoh2_aksi": "jalan",
+                "tokoh2_benda": "tidak_ada",
+                "dialog": f"{t1}: 'Alhamdulillah kampung aman terkendali!'",
+                "teks": "Patroli berjalan lancar dan warga desa dapat beristirahat dengan tenang.",
+                "durasi_detik": 4.0
+            }
+        ]
+    else:
+        adegan_list = [
+            {
+                "judul": f"Pembuka: {konsep[:22]}",
+                "latar": latar_utama,
+                "callout": "📍 PEMBUKA",
+                "tokoh1_aksi": "duduk" if "duduk" in low or "ngopi" in low else "jalan",
+                "tokoh1_benda": "kopi" if "kopi" in low else "tidak_ada",
+                "tokoh2_aktif": False,
+                "tokoh2_aksi": "bicara",
+                "tokoh2_benda": "tidak_ada",
+                "dialog": f"{t1}: 'Hari baru, cerita baru!'",
+                "teks": f"Kisah dimulai mengenai {konsep[:60]}.",
+                "durasi_detik": 3.5
+            },
+            {
+                "judul": "Interaksi & Dialog",
+                "latar": "kursi-bambu" if latar_utama == "warung-desa" else latar_utama,
+                "callout": "💬 PERCAKAPAN",
+                "tokoh1_aksi": "kaget" if "kaget" in low else "bicara",
+                "tokoh1_benda": "tidak_ada",
+                "tokoh2_aktif": tokoh2_ada,
+                "tokoh2_aksi": "tunjuk" if tokoh2_ada else "bicara",
+                "tokoh2_benda": "rokok" if "rokok" in low else "tidak_ada",
+                "dialog": f"{t2 if tokoh2_ada else t1}: 'Ada hal penting yang harus kita bahas sekarang!'",
+                "teks": "Percakapan mendalam antara tokoh mengenai topik yang sedang berlangsung.",
+                "durasi_detik": 4.0
+            },
+            {
+                "judul": "Kesimpulan & Solusi",
+                "latar": "kursi-bambu" if latar_utama == "warung-desa" else "senja",
+                "callout": "✨ KESIMPULAN",
+                "tokoh1_aksi": "bicara",
+                "tokoh1_benda": "kopi" if "kopi" in low else "tidak_ada",
+                "tokoh2_aktif": tokoh2_ada,
+                "tokoh2_aksi": "duduk" if tokoh2_ada else "bicara",
+                "tokoh2_benda": "tidak_ada",
+                "dialog": f"{t1}: 'Yang penting semua terselesaikan dengan baik!'",
+                "teks": "Kesimpulan dari keseluruhan adegan dengan pesan yang positif.",
+                "durasi_detik": 4.0
+            }
+        ]
+
+    return {
+        "judul": konsep[:40].strip() or "Animasi Karakter Bergerak",
+        "gaya_visual": gaya_visual,
+        "adegan": adegan_list[:jml_adegan]
+    }
+
+
+def buat_sesi_produksi(slug: str = "animasi") -> dict:
+    """Membuat ruang kerja sesi terisolasi (sandbox) di motion/temp/sesi_<id>."""
+    ts = int(time.time())
+    clean_slug = re.sub(r"[^\w-]", "", slug).lower()[:24] or "animasi"
+    id_sesi = f"sesi_{ts}_{clean_slug}"
+    folder_sesi = MOTION / "temp" / id_sesi
+    (folder_sesi / "kode").mkdir(parents=True, exist_ok=True)
+    (folder_sesi / "audio").mkdir(parents=True, exist_ok=True)
+    (folder_sesi / "frames").mkdir(parents=True, exist_ok=True)
+    return {
+        "id_sesi": id_sesi,
+        "folder": folder_sesi,
+        "kode": folder_sesi / "kode",
+        "audio": folder_sesi / "audio",
+        "frames": folder_sesi / "frames",
+    }
+
+
+def bersihkan_sesi_usang(max_jam: int = 24) -> int:
+    """Membersihkan sesi temporary di motion/temp/ yang berumur > max_jam."""
+    temp_dir = MOTION / "temp"
+    if not temp_dir.exists():
+        return 0
+    now = time.time()
+    dibersihkan = 0
+    for p in temp_dir.iterdir():
+        if p.is_dir() and p.name.startswith("sesi_"):
+            try:
+                umur_jam = (now - p.stat().st_mtime) / 3600
+                if umur_jam > max_jam:
+                    shutil.rmtree(p, ignore_errors=True)
+                    dibersihkan += 1
+            except Exception:
+                pass
+    return dibersihkan
+
+
+def analisa_cerita_animasi_agent(d: dict) -> dict:
+    """Menganalisa konsep & tokoh dari user, lalu AI Agent menyusun adegan, latar, dialog, dan pose yang konsisten."""
+    konsep = (d.get("konsep") or d.get("tema") or "").strip()
+    if not konsep:
+        raise ValueError("Masukkan konsep cerita atau ide naskah terlebih dahulu.")
+
+    tokoh1 = (d.get("tokoh1") or "Budi").strip()
+    tokoh2 = (d.get("tokoh2") or "").strip()
+    latar_pref = (d.get("latar") or "auto").strip()
+    gaya_pref = (d.get("gaya") or "auto").strip()
+    jml_adegan = int(d.get("jumlah_adegan") or 3)
+
+    p = baca_pengaturan()
+    ai_aktif = penyedia_ai(None)
+    cli_aktif = (p.get("LANGGANAN") or "antigravity").lower()
+    model = p.get("MODEL_ANTIGRAVITY") or p.get("MODEL_CLAUDE") or ""
+
+    prompt_agent = f"""Anda adalah AI Director dan Storyboard Master untuk animasi karakter 2D/3D (Remotion VideoAnimasi).
+Tugas Anda: Analisa konsep cerita dari user, rancang adegan yang konsisten, tentukan latar tempat yang tepat, aksi tokoh, properti, balon dialog, dan teks narasi.
+
+INPUT USER:
+- Konsep Cerita: "{konsep}"
+- Tokoh 1 (Utama): "{tokoh1}"
+- Tokoh 2 (Lawan Bicara, jika ada): "{tokoh2}"
+- Preferensi Latar: "{latar_pref}"
+- Preferensi Gaya: "{gaya_pref}"
+- Target Jumlah Adegan: {jml_adegan}
+
+ATURAN KONSISTENSI VISUAL:
+1. Pilihan 'gaya_visual' wajib salah satu dari: "toon-desa", "toon-3d", "stickman", "anime-cel", "isometric".
+2. Pilihan 'latar' per adegan wajib salah satu dari: "warung-desa", "kursi-bambu", "jalan-desa", "pos-ronda", "senja", "kota", "blueprint", "isometric-grid".
+3. Aksi tokoh wajib salah satu dari: "duduk", "jalan", "bicara", "kaget", "pikir", "tunjuk", "santai".
+4. Benda tokoh wajib salah satu dari: "kopi", "rokok", "tidak_ada".
+5. Balon dialog harus singkat, tajam, dan komikal/alami: "NamaTokoh: 'Isi ucapan'"
+6. Teks narasi adalah penjelasan voice-over yang sinkron dengan adegan.
+7. Durasi detik tiap adegan antara 3.0 s.d. 5.0 detik.
+
+OUTPUT WAJIB:
+Hanya kirimkan blok kode JSON valid dengan format persis seperti ini:
+```json
+{{
+  "judul": "Judul Cerita",
+  "gaya_visual": "toon-desa",
+  "adegan": [
+    {{
+      "judul": "Nama Adegan 1",
+      "latar": "warung-desa",
+      "callout": "📍 BADGE LOKASI",
+      "tokoh1_aksi": "duduk",
+      "tokoh1_benda": "kopi",
+      "tokoh2_aktif": false,
+      "tokoh2_aksi": "bicara",
+      "tokoh2_benda": "tidak_ada",
+      "dialog": "{tokoh1}: 'Mbok, kopi tubruk satu ya!'",
+      "teks": "Kalimat narasi voice-over untuk adegan ini.",
+      "durasi_detik": 3.5
+    }}
+  ]
+}}
+```"""
+
+    teks_ai, logs, latency = panggil_cli_sutradara_real(ai_aktif, cli_aktif, model, prompt_agent)
+
+    hasil = None
+    if teks_ai:
+        m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", teks_ai, re.DOTALL)
+        raw_json = m.group(1) if m else teks_ai.strip()
+        try:
+            parsed = json.loads(raw_json)
+            if "adegan" in parsed and isinstance(parsed["adegan"], list) and len(parsed["adegan"]) > 0:
+                hasil = parsed
+        except Exception:
+            pass
+
+    if not hasil:
+        hasil = fallback_analisa_cerita(konsep, tokoh1, tokoh2, latar_pref, gaya_pref, jml_adegan)
+
+    # Standarisasi output jembatan terstruktur alur-produksi.json & wadah sesi (ALUR_PRODUKSI.md)
+    judul_cerita = hasil.get("judul", "Animasi Karakter Bergerak")
+    sesi = buat_sesi_produksi(judul_cerita)
+    durasi_total = round(sum(float(a.get("durasi_detik", 3.5)) for a in hasil.get("adegan", [])), 2)
+    
+    alur_paket = {
+        "versi": "2.0.0",
+        "id_sesi": sesi["id_sesi"],
+        "metadata": {
+            "judul": judul_cerita,
+            "rasio": "9:16",
+            "gaya_visual_slug": hasil.get("gaya_visual", "toon-desa"),
+            "stop_motion_fps": 12,
+            "palet_warna": ["#1e293b", "#38bdf8", "#22c55e", "#f59e0b", "#ef4444"]
+        },
+        "audio": {
+            "file_master": "",
+            "durasi_total_detik": durasi_total
+        },
+        "adegan": hasil.get("adegan", [])
+    }
+
+    try:
+        # Simpan ke folder sesi terisolasi
+        (sesi["kode"] / "alur-produksi.json").write_text(json.dumps(alur_paket, ensure_ascii=False, indent=2), encoding="utf-8")
+        # Simpan juga ke motion/naskah/alur-produksi.json sebagai single global reference point
+        (MOTION / "naskah").mkdir(parents=True, exist_ok=True)
+        (MOTION / "naskah" / "alur-produksi.json").write_text(json.dumps(alur_paket, ensure_ascii=False, indent=2), encoding="utf-8")
+    except Exception as e:
+        logs.append(f"[AlurProduksi Warning] Gagal simpan jembatan alur-produksi.json: {e}")
+
+    return {
+        "ok": True,
+        "data": hasil,
+        "id_sesi": sesi["id_sesi"],
+        "alur_produksi": alur_paket,
+        "latency": latency,
+        "logs": logs
+    }
+
+
 def mulai_motion(d: dict) -> dict:
     topik = (d.get("topik") or "").strip()
     naskah_teks = (d.get("naskah") or "").strip()
@@ -600,6 +929,32 @@ def mulai_motion(d: dict) -> dict:
         n = MOTION / "naskah" / f"{nama}.json"
         if n.exists():
             shutil.copy(n, folder / "naskah.json")
+
+        # Penyelamatan 1 Keyframe per adegan untuk Visual QA thumbnail di kartu riwayat
+        for qa_img in (MOTION / "hasil").glob("qa_frame_*.png"):
+            try:
+                shutil.copy(str(qa_img), folder / qa_img.name)
+            except Exception:
+                pass
+
+        # Auto-Purge 99% cache mentah & props sementara jika bukan mode debug (ALUR_PRODUKSI.md)
+        p_set = baca_pengaturan()
+        mode_debug = str(p_set.get("MODE_ANIMATOR_DEBUG", "false")).lower() in ("true", "1", "yes")
+        if not mode_debug:
+            for tmp_prop in (MOTION / "hasil").glob(f"{nama}.props.json"):
+                try: tmp_prop.unlink(missing_ok=True)
+                except Exception: pass
+            for tmp_qa in (MOTION / "hasil").glob("tmp_qa_props.json"):
+                try: tmp_qa.unlink(missing_ok=True)
+                except Exception: pass
+            suara_tmp = MOTION / "public" / "suara" / nama
+            if suara_tmp.exists():
+                shutil.rmtree(suara_tmp, ignore_errors=True)
+            # Bersihkan folder sesi yang berhubungan jika ada di motion/temp
+            for s in (MOTION / "temp").glob(f"sesi_*_{nama}*"):
+                if s.is_dir():
+                    shutil.rmtree(s, ignore_errors=True)
+
         k.hasil = muat_proyek("motion", nama)
 
     KERJA.jalankan("motion", langkah, folder, setelah)
@@ -1090,6 +1445,7 @@ def bersihkan_cache_pro() -> dict:
     dirs_to_clean = [
         MOTION / "node_modules" / ".cache",
         MOTION / "hasil" / "temp",
+        MOTION / "temp",
         DATA / "unggahan"
     ]
     for d in dirs_to_clean:
@@ -1875,6 +2231,8 @@ class H(BaseHTTPRequestHandler):
                 return self._json(analisa_audio_motion(d))
             if jalur == "/api/motion":
                 return self._json(mulai_motion(d))
+            if jalur == "/api/animasi/analisa-cerita":
+                return self._json(analisa_cerita_animasi_agent(d))
             if jalur == "/api/animasi/still":
                 return self._json(generate_keyframe_still(d))
             if jalur == "/api/animasi/presets":
@@ -1941,6 +2299,10 @@ def server_hidup(url: str) -> bool:
 
 def main():
     DATA.mkdir(parents=True, exist_ok=True)
+    try:
+        bersihkan_sesi_usang(24)
+    except Exception:
+        pass
     url = f"http://127.0.0.1:{PORT}"
     sudah = server_hidup(url)
     if not sudah:
