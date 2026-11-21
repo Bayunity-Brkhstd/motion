@@ -23,6 +23,7 @@ import time
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+import urllib.request
 from urllib.parse import unquote, urlparse
 
 AKAR = Path(__file__).resolve().parent
@@ -1296,6 +1297,50 @@ def daftar_presets_animasi() -> dict:
     return {"ok": True, "presets": presets}
 
 
+def ambil_kuota_antigravity() -> dict:
+    """Mengambil kuota token realtime dari daemon Antigravity CLI."""
+    daemon_dir = Path.home() / ".gemini" / "antigravity" / "daemon"
+    if not daemon_dir.exists():
+        return {"ok": False, "pesan": "Folder daemon Antigravity tidak ditemukan."}
+
+    hub_files = sorted(daemon_dir.glob("hub_*.json"), key=lambda f: f.stat().st_mtime, reverse=True)
+    if not hub_files:
+        return {"ok": False, "pesan": "Daemon Antigravity belum aktif."}
+
+    for hub_file in hub_files[:5]:
+        try:
+            hub_data = json.loads(hub_file.read_text(encoding="utf-8"))
+            http_port = hub_data.get("httpPort")
+            token = hub_data.get("csrfToken")
+            if not http_port or not token:
+                continue
+
+            url = f"http://127.0.0.1:{http_port}/exa.language_server_pb.LanguageServerService/RetrieveUserQuotaSummary"
+            req = urllib.request.Request(
+                url,
+                data=json.dumps({"forceRefresh": True}).encode("utf-8"),
+                headers={
+                    "Content-Type": "application/json",
+                    "x-codeium-csrf-token": token,
+                    "Connect-Protocol-Version": "1"
+                },
+                method="POST"
+            )
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                if resp.status == 200:
+                    raw = json.loads(resp.read().decode("utf-8"))
+                    res_body = raw.get("response", {})
+                    return {
+                        "ok": True,
+                        "groups": res_body.get("groups", []),
+                        "description": res_body.get("description", "")
+                    }
+        except Exception:
+            continue
+
+    return {"ok": False, "pesan": "Gagal terhubung ke Antigravity Language Server."}
+
+
 def unggah_skill_pro(d: dict) -> dict:
     """Menerima file skill .zip / .md / .txt, mengekstrak ke motion/skills/, dan auto-purge file mentah."""
     import base64
@@ -1747,6 +1792,8 @@ class H(BaseHTTPRequestHandler):
                     return self._file(p)
             if jalur == "/api/animasi/presets":
                 return self._json(daftar_presets_animasi())
+            if jalur in ("/api/antigravity/kuota", "/api/antigravity/quota"):
+                return self._json(ambil_kuota_antigravity())
             if jalur.startswith("/aset/"):
                 p = (AKAR / jalur.lstrip("/")).resolve()
                 if AKAR in p.parents:
@@ -1832,6 +1879,8 @@ class H(BaseHTTPRequestHandler):
                 return self._json(generate_keyframe_still(d))
             if jalur == "/api/animasi/presets":
                 return self._json(daftar_presets_animasi())
+            if jalur in ("/api/antigravity/kuota", "/api/antigravity/quota"):
+                return self._json(ambil_kuota_antigravity())
             if jalur == "/api/motion-pro/orkestrasi":
                 return self._json(orkestrasi_motion_pro(d))
             if jalur == "/api/motion-pro/render":

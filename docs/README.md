@@ -33,9 +33,12 @@ Hasil kerja tersimpan di folder `~/Cheat Clip and Motion` (Windows: `C:\Users\<n
 |---|---|
 | **Klip** | **1. Analisis:** tempel link/seret video → AI, durasi, jumlah (1–30), momen yang dicari, rentang khusus, atau unggah .srt → **Cari momen**. Hasil: pemutar sumber + linimasa (heatmap/energi), ringkasan + hashtag, kartu klip (skor viral, waktu, hook, kutipan, judul yang bisa diubah, caption), cari/filter/urut, salin timestamp/MD, unduh JSON/SRT. **2. Render:** centang klip → studio render (rasio 9:16/1:1/4:3/16:9, latar hitam/blur, fokus otomatis/kiri/tengah/kanan, layout facecam atau PiP, banner hook + awalan/akhiran, subtitle sorot/kotak/garis + font/ukuran/huruf/posisi/warna, musik latar, SFX hook, penguat suara) dengan pratinjau langsung → **Render klip terpilih** |
 | **Beranda** | Mulai cepat (Klip/Motion), proyek terakhir bergambar, status AI & suara, tips |
-| **Motion** | Tulis topik (butuh AI) atau tempel naskah JSON → pilih sumber narasi (suara AI/SAPI atau upload file MP3/WAV sendiri) → pilih satu dari **14 gaya** (Garis, Neon, Kertas + 11 gaya template video sinematik/editorial/tekno/dll.) → **Buat video** |
+| **Motion** | Tulis topik (butuh AI) atau tempel naskah JSON → pilih sumber narasi (suara AI/SAPI atau upload file MP3/WAV sendiri) → pilih satu dari **26+ gaya** (Garis, Neon, Kertas + template kustom video ref) → **Buat video** |
+| **Studio Animasi** | **Animasi Karakter Bergerak (Plan B Native Remotion):** Tulis naskah cerita santai tanpa JSON rumit → pilih rig karakter (**Toon 3D**, **Stickman**, atau **Isometric**) → Visual QA pratinjau keyframe detik ke-2 → render animasi vertikal 9:16 dengan langkah kaki, ayunan tangan, dan lip-sync otomatis (sangat hemat RAM di bawah 600 MB) |
+| **Motion Pro** | Workspace sutradara video panjang ($\ge$ 4 menit) berbasis penalaran CLI AI Agent resmi (Antigravity CLI, Claude Code, OpenAI Codex, OpenCode) |
+| **Ekstrak Gaya** | **Tools Mandiri Global:** Unggah video referensi (.mp4/.mov/.webm) → AI mengekstrak 5 warna HEX dominan, pacing, dan screenshot 9:16 → otomatis menjadi template Remotion dan AI Skill global. Dilengkapi pemisahan kategori (**Animasi Bergerak** vs **Grafis Statis**) dan fitur hemat disk **Auto-Hapus video mentah** |
 | **Riwayat** | Semua proyek lama |
-| **Pengaturan AI** | Pilih penyedia AI dan tempel kuncinya |
+| **Pengaturan AI** | Pilih penyedia AI, tempel API Key, atau hubungkan langganan CLI (`agy`, `claude`, `codex`). Dilengkapi **Widget Realtime Token Limit Antigravity CLI** (memantau sisa kuota Weekly Limit & Five-Hour Limit langsung dari daemon lokal) |
 
 ### Pakai langganan yang sudah kamu punya (tanpa kunci API)
 Langganan chat **tidak** termasuk kunci API (Claude Pro, ChatGPT Plus/Pro). Tapi langganan bisa dipakai lewat **CLI resminya**,

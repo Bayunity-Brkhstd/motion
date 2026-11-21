@@ -5230,12 +5230,8 @@
                   🎯 Kategori Ekstraksi Gaya Video:
                 </label>
                 <div class="pil" id="pilKategoriEkstrak" style="margin:0;display:grid;grid-template-columns:1fr 1fr;gap:6px">
-                  <button type="button" data-v="animasi" class="aktif" style="padding:8px 4px;font-size:11.5px;text-align:center">
-                    🎬 Animasi Bergerak<br><small style="font-size:10px;color:var(--redup)">Karakter &amp; 3D Cel</small>
-                  </button>
-                  <button type="button" data-v="statis" style="padding:8px 4px;font-size:11.5px;text-align:center">
-                    🖼️ Grafis Statis<br><small style="font-size:10px;color:var(--redup)">SVG &amp; Motion Grafis</small>
-                  </button>
+                  <button type="button" data-v="animasi" class="aktif" style="min-height:34px;height:34px;line-height:34px;padding:0 10px;font-size:12px;font-weight:600">🎬 Animasi Bergerak</button>
+                  <button type="button" data-v="statis" style="min-height:34px;height:34px;line-height:34px;padding:0 10px;font-size:12px;font-weight:600">🖼️ Grafis Statis</button>
                 </div>
                 <div id="ketKategoriEkstrak" style="font-size:11px;color:var(--redup);margin-top:8px;line-height:1.4">
                   <b>🎬 Mode Animasi Bergerak:</b> Mengekstrak karakter rig, shading cel-shaded (seperti di <i>contohgayavisual.md</i>), pacing 2–4 detik, serta kamera dinamis untuk <b>Studio Animasi Bergerak</b>.
@@ -5426,6 +5422,88 @@
                 <option value="claude-opus-4-6-thinking">Claude Opus 4.6 (Thinking)</option>
                 <option value="gpt-oss-120b-medium">GPT-OSS 120B (Medium)</option>
               </datalist>
+
+              <!-- Widget Usage Models Khusus Antigravity CLI (Realtime Limit Tokens) -->
+              <div id="boxAgyQuotaWidget" style="margin-top:14px;border:1px solid rgba(255,255,255,0.08);background:#0c1322;border-radius:12px;padding:14px">
+                <div style="margin-bottom:12px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                    <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:#f1f5f9">
+                      <span>Gemini Models</span>
+                      <span title="Informasi batas pemakaian token model Gemini pada akun Antigravity" style="cursor:help;opacity:0.6;font-size:11px">ⓘ</span>
+                    </div>
+                    <button type="button" id="btnSegarkanAgyQuota" style="background:none;border:none;color:var(--aksen);font-size:11px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:2px 6px">
+                      ↻ Segarkan
+                    </button>
+                  </div>
+                  <div style="border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);border-radius:8px;overflow:hidden">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;gap:12px;border-bottom:1px solid rgba(255,255,255,0.05)">
+                      <div style="flex:1">
+                        <div style="font-size:12.5px;font-weight:600;color:#e2e8f0;margin-bottom:2px">Weekly Limit Remaining</div>
+                        <div id="agyGeminiWeeklySub" style="font-size:11px;color:#94a3b8;line-height:1.3">Memuat kuota realtime...</div>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px">
+                        <span id="agyGeminiWeeklyPct" style="font-size:13px;font-weight:700;color:#f1f5f9;font-family:var(--mono)">--%</span>
+                        <svg style="width:26px;height:26px;flex-shrink:0" viewBox="0 0 36 36">
+                          <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#1e293b" stroke-width="3.5" />
+                          <path id="agyGeminiWeeklyRing" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#4ade80" stroke-width="3.5" stroke-dasharray="100, 100" stroke-dashoffset="0" stroke-linecap="round" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;gap:12px">
+                      <div style="flex:1">
+                        <div style="font-size:12.5px;font-weight:600;color:#e2e8f0;margin-bottom:2px">Five Hour Limit Remaining</div>
+                        <div id="agyGemini5hSub" style="font-size:11px;color:#94a3b8;line-height:1.3">Memuat kuota realtime...</div>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px">
+                        <span id="agyGemini5hPct" style="font-size:13px;font-weight:700;color:#f1f5f9;font-family:var(--mono)">--%</span>
+                        <svg style="width:26px;height:26px;flex-shrink:0" viewBox="0 0 36 36">
+                          <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#1e293b" stroke-width="3.5" />
+                          <path id="agyGemini5hRing" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#4ade80" stroke-width="3.5" stroke-dasharray="100, 100" stroke-dashoffset="0" stroke-linecap="round" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:#f1f5f9;margin-bottom:8px">
+                    <span>Claude and GPT models</span>
+                    <span title="Informasi batas pemakaian token model Claude dan GPT pada akun Antigravity" style="cursor:help;opacity:0.6;font-size:11px">ⓘ</span>
+                  </div>
+                  <div style="border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);border-radius:8px;overflow:hidden">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;gap:12px;border-bottom:1px solid rgba(255,255,255,0.05)">
+                      <div style="flex:1">
+                        <div style="font-size:12.5px;font-weight:600;color:#e2e8f0">Weekly Limit Remaining</div>
+                        <div id="agy3pWeeklySub" style="font-size:11px;color:#94a3b8;line-height:1.3;display:none"></div>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px">
+                        <span id="agy3pWeeklyPct" style="font-size:13px;font-weight:700;color:#f1f5f9;font-family:var(--mono)">100%</span>
+                        <svg style="width:26px;height:26px;flex-shrink:0" viewBox="0 0 36 36">
+                          <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#1e293b" stroke-width="3.5" />
+                          <path id="agy3pWeeklyRing" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#4ade80" stroke-width="3.5" stroke-dasharray="100, 100" stroke-dashoffset="0" stroke-linecap="round" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;gap:12px">
+                      <div style="flex:1">
+                        <div style="font-size:12.5px;font-weight:600;color:#e2e8f0">Five Hour Limit Remaining</div>
+                        <div id="agy3p5hSub" style="font-size:11px;color:#94a3b8;line-height:1.3;display:none"></div>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px">
+                        <span id="agy3p5hPct" style="font-size:13px;font-weight:700;color:#f1f5f9;font-family:var(--mono)">100%</span>
+                        <svg style="width:26px;height:26px;flex-shrink:0" viewBox="0 0 36 36">
+                          <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#1e293b" stroke-width="3.5" />
+                          <path id="agy3p5hRing" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#4ade80" stroke-width="3.5" stroke-dasharray="100, 100" stroke-dashoffset="0" stroke-linecap="round" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#94a3b8">
+                  <span>⚡ Kuota Antigravity CLI disinkronkan langsung</span>
+                  <span id="agyStatusBadge" style="color:#4ade80;font-weight:600">● Memeriksa...</span>
+                </div>
+              </div>
             </div>
             <div class="catatan">Langganan chat <b>tidak</b> termasuk kunci API, tapi bisa dipakai lewat CLI resminya:
               <b>Claude Code</b> (Claude Pro/Max) · <b>Codex</b> (masuk dengan akun ChatGPT) · <b>OpenCode</b>
@@ -5519,9 +5597,10 @@
         <!-- TABS NAVIGASI CEPAT KATEGORI FAQ -->
         <div class="faq-tabs" id="pilFaqNav">
           <button class="faq-tab-btn aktif" onclick="filterFaq('semua', this)">Semua Kategori</button>
-          <button class="faq-tab-btn" onclick="filterFaq('motion', this)">🎬 1. Motion Standar</button>
+          <button class="faq-tab-btn" onclick="filterFaq('motion', this)">🎬 1. Motion &amp; Animasi Karakter</button>
           <button class="faq-tab-btn" onclick="filterFaq('motion-pro', this)">💎 2. Motion Pro (4m+)</button>
           <button class="faq-tab-btn" onclick="filterFaq('ekstrak-gaya', this)">✨ 3. Ekstrak Gaya Video</button>
+          <button class="faq-tab-btn" onclick="filterFaq('pengaturan-ai', this)">⚡ 4. Pengaturan AI &amp; Kuota</button>
           <button class="faq-tab-btn" onclick="filterFaq('lainnya', this)">❓ Pertanyaan Lainnya</button>
         </div>
 
@@ -5604,6 +5683,39 @@
               <summary>Bagaimana cara menambahkan logo dan font kustom sendiri?</summary>
               <div class="faq-jawab">
                 <p>Di halaman Motion pada panel kiri, terdapat tombol <b>+ Pilih Logo</b> dan <b>+ Font Kustom</b>. Anda dapat mengunggah file logo PNG/SVG dan file font TTF/WOFF2 yang akan otomatis diaplikasikan ke template render.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Bagaimana Studio Animasi Bergerak merender karakter dengan konsumsi RAM &lt; 600 MB?</summary>
+              <div class="faq-jawab">
+                <p>Studio Animasi Bergerak menggunakan arsitektur <b>Plan B (Native Remotion Canvas 2D &amp; Trigonometri Deterministik)</b> yang berjalan langsung di engine React Remotion tanpa memerlukan browser headless Chromium/Playwright yang memakan RAM besar.</p>
+                <p>Semua sendi, langkah kaki, ayunan tangan, dan transisi kamera dihitung menggunakan rumus fisika pegas (<i>closed-form springs</i>) dan fungsi periodik <code>sin/cos</code> secara frame-by-frame, sehingga laptop spesifikasi standar (bahkan tanpa GPU diskrit) dapat merender video animasi vertikal 1080×1920 30fps dengan lancar.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Apa saja 3 rig karakter yang tersedia dan apa perbedaannya?</summary>
+              <div class="faq-jawab">
+                <ul>
+                  <li><b>Toon 3D (Perspektif &amp; Cel-Shaded):</b> Karakter bergaya kartun modern dengan shading cel bergaris tegas, proporsi dinamis, dan kedalaman perspektif ala anime modern.</li>
+                  <li><b>Stickman (Kinetik Jalan &amp; Lari):</b> Karakter figur garis minimalis dengan artikulasi sendi lincah, ideal untuk video humor, cerita fakta kilat, atau aksi cepat.</li>
+                  <li><b>Isometric (3D Reka &amp; Tech Grid):</b> Karakter 3D berbasis kubus isometrik dengan bayangan proyeksi 30 derajat, sangat cocok untuk video edukasi, teknologi, atau infografis data.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Bagaimana sinkronisasi bibir (lip-sync) dan gerakan tubuh bekerja?</summary>
+              <div class="faq-jawab">
+                <p>Gerakan dihitung otomatis berdasarkan durasi adegan dan frekuensi bicara voice-over. Mulut karakter terbuka dan menutup secara ritmis selaras dengan suku kata narasi, sementara mata berkedip secara natural setiap 3–4 detik dengan ekspresi alis dinamis sesuai nada kalimat (senang, terkejut, serius, atau bingung).</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Apa fungsi tombol "Periksa Keyframe" sebelum render video?</summary>
+              <div class="faq-jawab">
+                <p>Fitur <b>Visual QA Keyframes</b> mengambil snapshot pose kunci karakter di detik ke-2 tiap adegan hanya dalam 1 detik. Anda dapat memverifikasi kostum, pose tangan, dan latar belakang sebelum memutuskan untuk merender seluruh video MP4 secara penuh.</p>
               </div>
             </details>
           </div>
@@ -5775,11 +5887,76 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
                 <p>Tidak perlu khawatir. Terdapat saklar opsi <b>Auto-Hapus video mentah setelah gaya diekstrak</b>. Jika dicentang (default aktif), file video sumber yang berukuran besar akan otomatis dihapus setelah analisis selesai, hanya menyisakan kode template TSX dan file thumbnail kecil (~50 KB).</p>
               </div>
             </details>
+
+            <details class="faq-item">
+              <summary>Apa perbedaan kategori "Animasi Bergerak" vs "Grafis Statis" saat ekstraksi?</summary>
+              <div class="faq-jawab">
+                <p>Ekstrak Gaya memisahkan template ke dalam dua ruang kerja terpisah agar tidak saling bercampur:</p>
+                <ul>
+                  <li><b>Animasi Bergerak (Karakter &amp; 3D Cel-Shaded):</b> Dikhususkan untuk video animasi berbasis tokoh/karakter yang bergerak, berjalan, berbicara, atau bergaya anime/kartun 3D cel-shaded. Template disimpan ke <code>motion/src/presets_animasi/</code> untuk Studio Animasi.</li>
+                  <li><b>Grafis Statis (SVG &amp; Motion Grafis):</b> Dikhususkan untuk gaya presentasi berbasis teks, infografis, tipografi kinetik, dan ilustrasi flat 2D. Template disimpan ke <code>motion/src/presets/</code> untuk Motion Standar.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Bagaimana cara menghapus template kustom yang sudah tidak dipakai?</summary>
+              <div class="faq-jawab">
+                <p>Di tab Ekstrak Gaya Video pada kolom sebelah kanan (<b>Pustaka Skill &amp; Template Global</b>), setiap kartu template kustom memiliki tombol merah bertuliskan <b>✕ Hapus</b>. Mengklik tombol tersebut akan menghapus file preset TSX, thumbnail gambar, dan mencabut registrasinya secara instan tanpa merusak preset bawaan.</p>
+              </div>
+            </details>
           </div>
         </div>
 
         <!-- ========================================== -->
-        <!-- SECTION 4: PERTANYAAN LAINNYA & BANTUAN    -->
+        <!-- SECTION 4: PENGATURAN AI & KUOTA REALTIME  -->
+        <!-- ========================================== -->
+        <div class="faq-section" data-faq-kategori="pengaturan-ai" style="margin-bottom:32px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:rgba(6,182,212,0.18);color:#22d3ee;font-weight:700">⚡</span>
+            <h2 style="margin:0;font-size:20px;color:var(--teks)">Panduan &amp; FAQ: Pengaturan AI &amp; Kuota Realtime Antigravity</h2>
+          </div>
+          <p style="margin:0 0 16px;color:var(--redup);font-size:13.5px">
+            Pelajari cara kerja integrasi model AI langganan Anda (Antigravity CLI, Claude Code, OpenAI Codex, OpenCode) serta pemantauan kuota token secara langsung.
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <details class="faq-item">
+              <summary>Bagaimana Studio membaca sisa kuota Antigravity CLI secara realtime?</summary>
+              <div class="faq-jawab">
+                <p>Studio membaca file sesi Language Server daemon Antigravity secara lokal di folder <code>.gemini/antigravity/daemon/hub_*.json</code>. Melalui komunikasi Connect-RPC internal yang aman, Studio memanggil <i>RetrieveUserQuotaSummary</i> secara berkala untuk menampilkan persentase token aktif tanpa perlu login ulang atau membuka browser.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Apa arti dari "Weekly Limit Remaining" dan "Five Hour Limit Remaining"?</summary>
+              <div class="faq-jawab">
+                <p>Arsitektur kuota akun Google Antigravity memiliki dua lapisan proteksi batas pakai:</p>
+                <ul>
+                  <li><b>Weekly Limit Remaining (Batas Mingguan):</b> Kuota kapasitas token besar untuk penggunaan intensif selama periode 7 hari. Akan terisi penuh kembali (reset) setiap siklus mingguan.</li>
+                  <li><b>Five Hour Limit Remaining (Batas 5 Jam):</b> Batas kecepatan (<i>velocity rate-limit</i>) untuk mencegah pemakaian beruntun tak terkendali dalam rentang waktu singkat. Jika habis, kuota ini pulih otomatis dalam waktu kurang dari 5 jam.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Mengapa Gemini Models dan Claude / GPT Models dipisahkan?</summary>
+              <div class="faq-jawab">
+                <p>Google Antigravity menyediakan alokasi token terpisah untuk rumpun model Google (Gemini 2.5/3.8 Flash &amp; Pro) dan rumpun model pihak ketiga (Claude 3.7 Sonnet, GPT-4o). Pemisahan ini memungkinkan Anda tetap bekerja dengan model Gemini saat kuota Claude sedang dalam masa tunggu reset, atau sebaliknya.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Apakah langganan chat pribadi (Claude Pro atau ChatGPT Plus) butuh saldo kartu kredit API?</summary>
+              <div class="faq-jawab">
+                <p><b>Sama sekali TIDAK!</b> Fitur "Pakai Langganan" (BYOS) di Studio dirancang agar Anda dapat memaksimalkan akun langganan chat web Anda lewat CLI resminya (<code>agy</code>, <code>claude</code>, atau <code>codex</code>). Studio tidak membebankan tagihan token API terpisah.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 5: PERTANYAAN LAINNYA & BANTUAN    -->
         <!-- ========================================== -->
         <div class="faq-section" data-faq-kategori="lainnya" style="margin-bottom:32px">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
@@ -6958,10 +7135,68 @@ Aturan:
       }).catch(() => { });
       if (v === 'antigravity') {
         pasangDropdown($('#ANTIGRAVITY_MODEL'));
+        muatKuotaAntigravity();
       }
       const cli = SISTEM.cli || {};
       $('#statusCLI').innerHTML = Object.entries(NAMA_CLI).map(([, [bin, label]]) => `<span class="stat">${cli[bin] ? '✅' : '⚪'} <b>${label}</b> ${cli[bin] ? 'terpasang' : 'belum terpasang'}</span>`).join('');
     }
+
+    async function muatKuotaAntigravity(paksa = false) {
+      const box = $('#boxAgyQuotaWidget');
+      if (!box || box.closest('[data-cli="antigravity"]')?.hidden) return;
+      const badge = $('#agyStatusBadge');
+      if (badge) badge.innerHTML = '<span style="color:#f59e0b">● Memeriksa realtime...</span>';
+      try {
+        const res = await api('/api/antigravity/kuota');
+        if (!res || !res.ok || !res.groups) {
+          if (badge) badge.innerHTML = '<span style="color:#ef4444">● Daemon offline</span>';
+          return;
+        }
+        if (badge) badge.innerHTML = '<span style="color:#4ade80">● Terhubung Realtime</span>';
+
+        for (const g of res.groups) {
+          const gName = (g.displayName || '').toLowerCase();
+          const isGemini = gName.includes('gemini');
+          const is3p = gName.includes('claude') || gName.includes('gpt');
+          for (const b of (g.buckets || [])) {
+            const frac = (typeof b.remainingFraction === 'number') ? b.remainingFraction : 1;
+            const pct = Math.round(frac * 100);
+            const dashoffset = Math.max(0, Math.min(100, Math.round((1 - frac) * 100)));
+            const strokeColor = pct > 50 ? '#4ade80' : pct > 20 ? '#f59e0b' : '#ef4444';
+
+            const bId = (b.bucketId || '').toLowerCase();
+            const bName = (b.displayName || '').toLowerCase();
+            const isWeekly = b.window === 'weekly' || bId.includes('weekly') || bName.includes('weekly');
+            const prefix = isGemini ? 'agyGemini' : is3p ? 'agy3p' : null;
+            if (!prefix) continue;
+
+            const slot = isWeekly ? 'Weekly' : '5h';
+            const elPct = $(`#${prefix}${slot}Pct`);
+            const elSub = $(`#${prefix}${slot}Sub`);
+            const elRing = $(`#${prefix}${slot}Ring`);
+
+            if (elPct) elPct.textContent = pct + '%';
+            if (elRing) {
+              elRing.setAttribute('stroke-dashoffset', String(dashoffset));
+              elRing.setAttribute('stroke', strokeColor);
+            }
+            if (elSub) {
+              if (b.description) {
+                elSub.textContent = b.description;
+                elSub.style.display = 'block';
+              } else {
+                elSub.style.display = 'none';
+              }
+            }
+          }
+        }
+      } catch (err) {
+        if (badge) badge.innerHTML = '<span style="color:#ef4444">● Gagal ambil kuota</span>';
+      }
+    }
+
+    const btnSegarkanAgy = $('#btnSegarkanAgyQuota');
+    if (btnSegarkanAgy) btnSegarkanAgy.onclick = () => muatKuotaAntigravity(true);
     $('#pilLangganan').onclick = (e) => { const b = e.target.closest('button'); if (b) { pilihLangganan(b.dataset.v); gambarPanduan(); } };
     // ── Panduan bertahap: tiap penyedia punya langkah + tombol bantu + status nyata ──
     let STATUS_AI = null;

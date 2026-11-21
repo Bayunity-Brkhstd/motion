@@ -9,13 +9,15 @@
 Seluruh dokumentasi proyek, panduan teknis, PRD, dan diagram alur pipeline telah dikelompokkan di folder [`docs/`](docs/):
 
 1. **[Alur Kerja Pipeline & Arsitektur Lengkap (`docs/workflow.md`)](docs/workflow.md)**  
-   *Panduan mendalam cara kerja Motion Standar, Motion Pro (Long-form $\ge 4$ menit), dan Tools Ekstrak Gaya Video dari A sampai Z beserta diagram alur.*
-2. **[Dokumentasi Teknis Studio (`docs/DOKUMENTASI.md`)](docs/DOKUMENTASI.md)**  
-   *Spesifikasi lengkap fitur Studio, integrasi AI lokal & langganan CLI, mesin suara VoxCPM, serta sistem tema.*
-3. **[PRD Motion Pro Long-Form AI Studio (`docs/prd_alur_kerja_motion_pro_long_form_ai_studio.md`)](docs/prd_alur_kerja_motion_pro_long_form_ai_studio.md)**  
+   *Panduan mendalam arsitektur sistem hulu-ke-hilir: Motion Standar, Studio Animasi Bergerak, Motion Pro ($\ge 4$ menit), Tools Ekstrak Gaya Video 2 Kategori, serta Monitor Kuota Token Realtime.*
+2. **[Workflow: Studio Animasi Bergerak Plan B (`docs/workflow_animasi_karakter_bergerak.md`)](docs/workflow_animasi_karakter_bergerak.md)**  
+   *Panduan teknis eksekusi karakter animasi bergerak berbasis React Remotion Native Canvas, matematika sendi periodik, procedural lip-sync, dan visual QA keyframes dengan memori sangat hemat (< 600 MB RAM).*
+3. **[Dokumentasi Teknis Studio (`docs/DOKUMENTASI.md`)](docs/DOKUMENTASI.md)**  
+   *Spesifikasi lengkap fitur Studio, integrasi AI lokal & langganan CLI, widget kuota realtime Antigravity, mesin suara VoxCPM, serta sistem tema.*
+4. **[PRD Motion Pro Long-Form AI Studio (`docs/prd_alur_kerja_motion_pro_long_form_ai_studio.md`)](docs/prd_alur_kerja_motion_pro_long_form_ai_studio.md)**  
    *Product Requirement Document untuk orkestrasi video berdurasi panjang berbasis AI Director Agent.*
-4. **[Dokumentasi Proyek Asli (`docs/README.md`)](docs/README.md)**  
-   *Petunjuk instalasi awal, dependensi sistem, dan konfigurasi lingkungan.*
+5. **[Dokumentasi Penggunaan Lengkap (`docs/README.md`)](docs/README.md)**  
+   *Petunjuk instalasi awal macOS & Windows, dependensi sistem, tabel fitur antarmuka, dan konfigurasi lingkungan.*
 
 ---
 

@@ -10,11 +10,12 @@ Dokumentasi resmi alur kerja (*end-to-end workflow*) aplikasi **Cheat Clip and M
 3. [C. Persyaratan Sistem & Instalasi (Setup Awal)](#c-persyaratan-sistem--instalasi-setup-awal)
 4. [D. Konfigurasi AI & Engine Suara](#d-konfigurasi-ai--engine-suara)
 5. [E. Alur Kerja Fitur "Cheat Klip" (Video Panjang ke 9:16)](#e-alur-kerja-fitur-cheat-klip-video-panjang-ke-916)
-6. [F. Alur Kerja Fitur "Cheat Motion" (Naskah ke Motion Graphics)](#f-alur-kerja-fitur-cheat-motion-naskah-ke-motion-graphics)
+6. [F. Alur Kerja Fitur "Cheat Motion" & Studio Animasi Bergerak](#f-alur-kerja-fitur-cheat-motion--studio-animasi-bergerak)
 7. [G. Fitur Kolaborasi Hibrid (Klip + Motion)](#g-fitur-kolaborasi-hibrid-klip--motion)
-8. [H. Struktur Direktori & Penyimpanan Berkas](#h-struktur-direktori--penyimpanan-berkas)
-9. [I. Diagram Alur Kerja Lengkap (Mermaid Flowchart)](#i-diagram-alur-kerja-lengkap-mermaid-flowchart)
-10. [Z. Pemecahan Masalah (Troubleshooting & FAQ)](#z-pemecahan-masalah-troubleshooting--faq)
+8. [H. Fitur Tools Mandiri: Ekstrak Gaya Video Global](#h-fitur-tools-mandiri-ekstrak-gaya-video-global)
+9. [I. Struktur Direktori & Penyimpanan Berkas](#i-struktur-direktori--penyimpanan-berkas)
+10. [J. Diagram Alur Kerja Lengkap (Mermaid Flowchart)](#j-diagram-alur-kerja-lengkap-mermaid-flowchart)
+11. [Z. Pemecahan Masalah (Troubleshooting & FAQ)](#z-pemecahan-masalah-troubleshooting--faq)
 
 ---
 
@@ -113,9 +114,18 @@ Sebelum memulai pembuatan video, buka tab **Pengaturan AI** di sidebar aplikasi:
 | **Lokal (Heuristik)** | Siap pakai tanpa konfigurasi | 100% offline, tidak butuh kunci atau internet | Saat kuota internet terbatas |
 | **Google Gemini** | Dapatkan API Key gratis di [Google AI Studio](https://aistudio.google.com/apikey) lalu tempel | Sangat cepat, kuota gratis melimpah, analisis konteks cerdas | **Sangat Direkomendasikan** untuk sebagian besar pengguna |
 | **Ollama (Lokal)** | Pasang [Ollama](https://ollama.com), unduh model (mis. `gemma3:4b` atau `llama3`) | 100% privat dan offline, tanpa biaya | Pengguna dengan PC berspesifikasi tinggi / GPU diskrit |
-| **Langganan CLI** | Klik tombol *Pasang & Masuk Akun* untuk Claude Code (`claude auth login`) atau Codex (`codex login`) | Menggunakan kuota langganan ChatGPT Plus atau Claude Pro | Bagi pemilik langganan aktif tanpa membeli token API tambahan |
+| **Langganan CLI** | Klik tombol *Pasang & Masuk Akun* untuk Antigravity (`agy`), Claude Code (`claude auth login`), atau Codex (`codex login`) | Menggunakan kuota langganan aktif tanpa membeli token API tambahan | Bagi pemilik langganan aktif Google Antigravity, ChatGPT Plus, atau Claude Pro |
 
-### 2. Konfigurasi Suara Narator (Untuk Motion)
+### 2. Monitor Kuota Realtime Antigravity CLI ("Usage Models")
+Saat Anda memilih mode **Antigravity CLI** di Pengaturan AI, Studio secara otomatis mengaktifkan widget pemantau kuota token realtime:
+- **Koneksi Daemon Lokal:** Studio membaca port dan token otentikasi internal dari `~/.gemini/antigravity/daemon/hub_*.json` (Connect-RPC service `RetrieveUserQuotaSummary`).
+- **Dua Lapisan Kuota:**
+  - **Weekly Limit Remaining (Batas Mingguan):** Menampilkan sisa kapasitas token mingguan (periode 7 hari) dan estimasi hari/jam reset.
+  - **Five Hour Limit Remaining (Batas 5 Jam):** Menampilkan persentase batas kecepatan (velocity limit) yang pulih otomatis setiap 5 jam.
+- **Pemisahan Model:** Menampilkan metrik terpisah untuk **Gemini Models** dan **Claude & GPT Models**.
+- **Tombol Segarkan (↻):** Memungkinkan pengecekan kuota langsung kapan saja tanpa perlu me-restart aplikasi.
+
+### 3. Konfigurasi Suara Narator (Untuk Motion)
 - **Suara Bawaan Sistem:**
   - Windows: Memanfaatkan Microsoft Speech Synthesizer (SAPI / OneCore). Jika suara "Microsoft Andika" terpasang, narasi otomatis berbahasa Indonesia fasih.
   - macOS: Memanfaatkan perintah `say` bawaan dengan profil suara berkualitas tinggi (seperti *Damayanti*).
@@ -296,6 +306,23 @@ Jika opsi ilustrasi AI diaktifkan, engine `gambar.mjs` akan memerintahkan AI men
 
 ---
 
+### Fitur Khusus: Studio Animasi Bergerak (Plan B - Native Remotion)
+
+Modul **Studio Animasi Bergerak** memungkinkan pembuatan video animasi karakter bergerak 9:16 dari naskah cerita santai tanpa perlu mengetik JSON rumit:
+- **Arsitektur Hemat RAM (< 600 MB):** Menggunakan React Remotion Native Canvas (`motion/src/VideoAnimasi.tsx`) dan closed-form physics tanpa browser Playwright/Chromium yang boros memori.
+- **3 Rig Karakter Utama:**
+  - `toon-3d`: Karakter kartun modern bergaris cel-shaded tegas, proporsi dinamis, dan kedalaman perspektif.
+  - `stickman`: Karakter kinetik lincah untuk video humor, aksi cepat, dan cerita kilat.
+  - `isometric`: Karakter 3D grid berbasis kubus isometrik dengan bayangan sudut datar.
+- **Matematika Sendi & Lip-sync:**
+  - Gerak langkah kaki: formula periodik `sin(t * tempo)`.
+  - Ayunan tangan: formula harmonik `cos(t * tempo)`.
+  - Lip-sync: sinkronisasi gerak bibir otomatis selaras dengan suku kata suara narator.
+- **Visual QA Keyframes:** Tombol *Periksa Keyframe* menghasilkan snapshot pose kunci detik ke-2 tiap adegan hanya dalam 1 detik untuk validasi cepat sebelum render MP4 penuh.
+- **Komposisi Remotion:** Terdaftar sebagai ID komposisi `AnimasiBergerak` di `motion/src/Akar.tsx`.
+
+---
+
 ### Fitur Khusus: Motion Pro (Long-form AI Studio ≥ 4 Menit)
 
 Workspace khusus yang memindahkan antarmuka interaktif aplikasi **AI Desktop** (seperti Antigravity App / Claude Desktop / Gemini Desktop) langsung ke dalam web studio aplikasi, ditenagai oleh **CLI AI Agent sebagai mesin utamanya**:
@@ -336,7 +363,20 @@ Anda dapat menggabungkan keunggulan video nyata (*real-footage*) dari fitur **Kl
 
 ---
 
-## H. Struktur Direktori & Penyimpanan Berkas
+## H. Fitur Tools Mandiri: Ekstrak Gaya Video Global
+
+Fitur ini mengubah video referensi favorit dari platform apa pun (.mp4 / .mov / .webm) menjadi Template Remotion baru dan AI Agent Skill yang terdaftar secara global:
+1. **Pemisahan Kategori Visual:**
+   - **Animasi Bergerak (Karakter & 3D Cel-Shaded):** Dialokasikan ke `motion/src/presets_animasi/` untuk engine Studio Animasi Bergerak.
+   - **Grafis Statis (SVG & Motion Grafis):** Dialokasikan ke `motion/src/presets/` untuk engine Motion Standar.
+2. **Kuantisasi Warna 5 HEX & Pacing Otomatis:** Sistem mendeteksi pergantian scene dengan FFmpeg dan mengekstrak 5 warna HEX dominan via algoritma MedianCut Pillow.
+3. **Screenshot 9:16 Otomatis:** Mengambil thumbnail vertikal (270×480 px) ke `studio/aset/gaya/<slug>.jpg`.
+4. **Auto-Purge Video Mentah:** Opsi saklar untuk menghapus file video sumber berukuran besar setelah ekstraksi selesai agar menghemat ruang disk.
+5. **Pustaka Global & Penghapusan 1-Klik:** Template baru langsung muncul di menu Motion, Motion Pro, dan Studio Animasi dengan tombol hapus instan jika tidak lagi digunakan.
+
+---
+
+## I. Struktur Direktori & Penyimpanan Berkas
 
 Semua data kerja tersimpan secara teratur dan lokal di komputer Anda:
 
@@ -365,7 +405,7 @@ C:\Users\<Nama_User>\cheat clip motion\
 
 ---
 
-## I. Diagram Alur Kerja Lengkap (Mermaid Flowchart)
+## J. Diagram Alur Kerja Lengkap (Mermaid Flowchart)
 
 Berikut adalah visualisasi alur logika sistem dari awal aplikasi dibuka hingga berkas siap dipublikasikan:
 
@@ -442,5 +482,21 @@ flowchart TD
 - **Solusi:**
   - Saat menggunakan fitur **Upload Audio Sendiri**, pastikan jumlah kata pada setiap baris adegan naskah seimbang secara proporsional dengan tempo bicara Anda. Sistem membagi durasi adegan berdasarkan bobot kata di naskah.
 
-### 5. Bagaimana Cara Menghentikan Mesin Sepenuhnya?
+### 5. Mengapa Studio Animasi Bergerak Jauh Lebih Ringan dari Alat Animasi AI Lainnya?
+- **Arsitektur Deterministik (Plan B):** Studio Animasi Bergerak tidak menjalankan server browser headless Chromium atau Playwright yang rakus RAM (biasanya membutuhkan 3–6 GB RAM). Sebaliknya, seluruh kalkulasi rig, sendi kinetik, dan lip-sync dihitung melalui formula matematika closed-form di React Remotion Native Canvas, menjaga pemakaian memori tetap di bawah **600 MB RAM**.
+
+### 6. Bagaimana Cara Membaca Kuota Realtime Antigravity CLI?
+- Buka **Pengaturan AI** dan pastikan opsi **Antigravity CLI** aktif.
+- Perhatikan kartu **Usage Models**:
+  - *Weekly Limit Remaining*: Kuota mingguan (7 hari) untuk tugas besar.
+  - *Five Hour Limit Remaining*: Batas kecepatan pemakaian per 5 jam.
+  - Kuota Gemini dan Claude/GPT dihitung secara independen.
+- Jika Anda baru saja menjalankan prompt besar di terminal, klik tombol **↻ Segarkan** untuk menarik status token paling mutakhir dari daemon lokal.
+
+### 7. Ke Mana Template Hasil "Ekstrak Gaya Video" Disimpan?
+- Kategori **Animasi Bergerak**: Disimpan ke `motion/src/presets_animasi/<slug>.tsx` dan langsung dapat dipilih di tab Studio Animasi.
+- Kategori **Grafis Statis**: Disimpan ke `motion/src/presets/<slug>.tsx` dan muncul di tab Motion Standar.
+- Berkas video referensi asli otomatis dibersihkan jika opsi *Auto-Hapus video mentah* diaktifkan.
+
+### 8. Bagaimana Cara Menghentikan Mesin Sepenuhnya?
 - Klik tombol **"Matikan Studio"** di pojok kanan bawah aplikasi, atau tutup jendela aplikasi. Seluruh server latar belakang dan sub-proses FFmpeg akan ditutup secara bersih dari memori komputer.

@@ -1,6 +1,6 @@
 # Alur Kerja Pipeline & Arsitektur Sistem (Cheat Clip and Motion)
 
-> Dokumentasi teknis komprehensif yang memetakan keterhubungan ekosistem **Motion Standar**, **Motion Pro**, dan **Tools Ekstrak Gaya Video** dari hulu ke hilir (End-to-End Pipeline A sampai Z).
+> Dokumentasi teknis komprehensif yang memetakan keterhubungan ekosistem **Motion Standar**, **Studio Animasi Bergerak (Native Remotion)**, **Motion Pro**, dan **Tools Ekstrak Gaya Video** dari hulu ke hilir (End-to-End Pipeline A sampai Z).
 
 ---
 
@@ -8,33 +8,44 @@
 
 Aplikasi ini menggabungkan mesin rendering video deterministik berbasis **React Remotion** dengan kapabilitas pemrosesan AI (CLI Agent dan script otomatis Python) yang berjalan **100% lokal** di komputer pengguna.
 
-Ekosistem terbagi menjadi tiga pilar fungsional yang saling terhubung:
+Ekosistem terbagi menjadi empat pilar fungsional yang saling terhubung:
 
 ```mermaid
 graph TD
     subgraph TOOLS_GLOBAL["1. Tools Mandiri: Ekstrak Gaya Video"]
         V_IN[Video Referensi .mp4/.mov] --> V_EXTRACT[extract_video_style.py]
+        V_EXTRACT --> V_CAT{Pilihan Kategori}
+        V_CAT -- "Animasi Bergerak" --> ARTIFACT_PRESET_ANIM[motion/src/presets_animasi/slug.tsx]
+        V_CAT -- "Grafis Statis" --> ARTIFACT_PRESET_STAT[motion/src/presets/slug.tsx]
         V_EXTRACT --> V_GEN[generate_style_artifacts.py]
-        V_GEN --> ARTIFACT_PRESET[motion/src/presets/slug.tsx]
         V_GEN --> ARTIFACT_SKILL[motion/skills/slug/SKILL.md]
         V_GEN --> ARTIFACT_THUMB[studio/aset/gaya/slug.jpg]
         V_GEN --> ARTIFACT_REG[motion/skills/registry.json]
     end
 
     subgraph ENGINE_GLOBAL["2. Global Registry & Remotion Engine"]
-        ARTIFACT_PRESET --> PRESET_IDX[motion/src/presets/index.ts]
-        PRESET_IDX --> VIDEO_TSX[motion/src/Video.tsx: Dynamic Lookup]
+        ARTIFACT_PRESET_STAT --> PRESET_IDX[motion/src/presets/index.ts]
+        PRESET_IDX --> VIDEO_TSX[motion/src/Video.tsx: Motion Standar]
+        ARTIFACT_PRESET_ANIM --> VIDEO_ANIM_TSX[motion/src/VideoAnimasi.tsx: Studio Animasi]
         ARTIFACT_REG --> API_GLOBAL["API: /api/daftar-skills-global"]
     end
 
     subgraph CONSUMERS["3. Antarmuka & Modul Konsumen"]
         API_GLOBAL --> UI_MOTION["Tab Motion: sinkronGayaMotion() (Auto-Insert Card + Thumb)"]
+        API_GLOBAL --> UI_ANIM["Tab Studio Animasi: Rig Toon 3D / Stickman / Isometric"]
         API_GLOBAL --> UI_PRO["Tab Motion Pro: Card 4 Modul Skills"]
         API_GLOBAL --> UI_LIB["Tab Ekstrak Gaya: Pustaka Skill Global"]
         
         UI_MOTION --> RENDER_SHORT["Render Short-form Video (1080x1920)"]
+        UI_ANIM --> RENDER_ANIM["Render Animasi Bergerak (RAM < 600 MB)"]
         UI_PRO --> AGENT_PRO["AI Director Agent (CLI Antigravity/Claude)"]
         AGENT_PRO --> RENDER_LONG["Render Long-form Video (>= 4 Menit)"]
+    end
+
+    subgraph QUOTA_MONITOR["4. Realtime Token & AI Provider Monitor"]
+        DAEMON[Antigravity CLI Daemon hub_*.json] --> RPC[Connect-RPC RetrieveUserQuotaSummary]
+        RPC --> PY_SERVER[studio.py: /api/antigravity/kuota]
+        PY_SERVER --> UI_QUOTA[UI Pengaturan AI: Usage Models Widget]
     end
 ```
 
@@ -80,9 +91,12 @@ sequenceDiagram
 
 #### 1. Input & Preparasi
 - Pengguna memilih file video (`.mp4`, `.mov`, `.webm`) melalui drag-and-drop di tab **Ekstrak Gaya**.
+- **Pemilihan Kategori:** Pengguna memilih antara:
+  - **🎬 Animasi Bergerak (Karakter & 3D Cel-Shaded):** Template dialokasikan ke `motion/src/presets_animasi/` untuk engine Studio Animasi.
+  - **🖼️ Grafis Statis (SVG & Motion Grafis):** Template dialokasikan ke `motion/src/presets/` untuk engine Motion Standar.
 - Sistem menghasilkan saran slug otomatis dari nama file (misal: `toon-3d-celshaded`).
 - Pengguna dapat mencentang **Auto-Hapus video mentah** untuk menghemat ruang disk.
-- File dikirim ke backend `/api/ekstrak-gaya-video`.
+- File dikirim ke backend `/api/ekstrak-gaya-video` dengan parameter `kategori`.
 
 #### 2. Analisis Visual & Pacing (`scripts/extract_video_style.py`)
 - **Pendeteksian Pacing:** `ffprobe` membaca metadata durasi, lalu `ffmpeg` mengeksekusi filter `select='gt(scene,0.35)'` untuk mendeteksi setiap cut pergantian scene. Rata-rata durasi per adegan dihitung (`avg_pacing_sec = total_durasi / scene_count`).
@@ -98,27 +112,82 @@ sequenceDiagram
   - Memuat 5 palet warna HEX wajib yang harus diisi di `naskah.json`.
   - Memuat standar baku ilustrasi SVG aman (tanpa tag `<script>` atau event handler `on*` agar 100% lolos verifikasi `svg-aman.mjs`).
   - Aturan teks layar (maksimal kata judul) dan fisika pegas Remotion.
-- **Preset Komposisi Remotion (`motion/src/presets/<slug>.tsx`):**
-  - Mengonstruksi komponen latar dinamis React berbasis kode SVG dengan palet warna ekstraksi.
-  - Mengekspor objek bertipe `StylePreset` yang memuat parameter font, bobot, mode animasi judul, mode subtitle, serta konfigurasi pegas (`spring({ stiffness, damping })`).
+- **Preset Komposisi Remotion Sesuai Kategori:**
+  - Kategori **Animasi Bergerak**: Menghasilkan `motion/src/presets_animasi/<slug>.tsx` yang menyertakan konfigurasi rig karakter bergerak, proporsi cel-shading, dan dynamic lighting.
+  - Kategori **Grafis Statis**: Menghasilkan `motion/src/presets/<slug>.tsx` dengan komponen latar dinamis React berbasis kode SVG dengan palet warna ekstraksi.
 - **Pembaruan Dynamic Registry (`motion/src/presets/index.ts`):**
   - Otomatis menyisipkan baris `import { preset_<slug> } from './<slug>';` dan meregistrasikannya ke dalam objek `STYLE_PRESETS`.
 - **Pembaruan Global Skill Manifest (`motion/skills/registry.json`):**
-  - Menyimpan entri `{ slug, name, description, palette_hex, avg_pacing_sec, thumbnail, created_at, inti: false }`.
+  - Menyimpan entri `{ slug, name, description, kategori, palette_hex, avg_pacing_sec, thumbnail, created_at, inti: false }`.
 
 #### 4. Distribusi & Tampilan di Antarmuka Studio
-- **Sinkronisasi Tab Motion (`sinkronGayaMotion`):**
+- **Sinkronisasi Tab Motion & Studio Animasi (`sinkronGayaMotion`):**
   - Frontend memanggil `/api/daftar-skills-global`.
-  - Kartu template baru disisipkan secara dinamis di **urutan teratas** grid template tab Motion (`#pilGaya`).
-  - Kartu menampilkan gambar screenshot `studio/aset/gaya/<slug>.jpg`, label badge `Video Ref`, dan counter template bertambah (mis. `Gaya · 25 template`).
+  - Kartu template baru disisipkan secara dinamis di **urutan teratas** grid template tab terkait (`#pilGaya`).
+  - Kartu menampilkan gambar screenshot `studio/aset/gaya/<slug>.jpg`, label badge `Animasi` atau `Statis`, dan counter template bertambah otomatis.
 - **Sinkronisasi Tab Motion Pro:**
   - Card 4 ("Skills & Plugin Eksternal") langsung menampilkan badge skill baru tersebut sehingga siap dipanggil oleh AI Director Agent.
 - **Pustaka di Tab Ekstrak Gaya:**
-  - Kolom kanan langsung menampilkan kartu pustaka global lengkap dengan thumbnail, palet warna interaktif, dan tombol hapus jika tidak lagi digunakan.
+  - Kolom kanan menampilkan filter kategori (Semua, Animasi Bergerak, Grafis Statis), palet warna interaktif, dan tombol hapus jika tidak lagi digunakan.
 
 ---
 
-## 3. Deep-Dive Alur: Motion Standar (Short-Form Video)
+## 3. Deep-Dive Alur: Studio Animasi Bergerak (Plan B - Native Remotion)
+
+Modul **Studio Animasi Bergerak** adalah mesin animasi vertikal 9:16 yang mengeksekusi karakter bergerak, berjalan, dan berbicara secara deterministik di bawah **600 MB RAM** tanpa ketergantungan pada headless browser Playwright/Chromium yang berat.
+
+```mermaid
+graph TD
+    A["Naskah Cerita & Emosi (UI Studio)"] --> B["AI Director Agent (CLI agy / claude)"]
+    B --> C["Generate adegan_animasi.json (Rig, Pose, Mood, Pacing)"]
+    C --> D["Visual QA: Periksa Keyframe Snapshot 2s"]
+    D --> E{"Setuju?"}
+    E -- "Ya" --> F["Remotion Composition: AnimasiBergerak"]
+    F --> G["VideoAnimasi.tsx: Math-driven Rigging & Springs"]
+    G --> H["Kinetic Joints: Step sin(t), Arm Swing cos(t)"]
+    G --> I["Procedural Lip-sync & Natural Eye Blink"]
+    G --> J["FFmpeg Native Pipe: Render 1080x1920 30fps MP4"]
+    J --> K["Hasil Video Siap (RAM < 600 MB)"]
+```
+
+### 3 Rig Karakter Utama:
+1. **Toon 3D (Perspektif & Cel-Shaded):**
+   - Karakter kartun modern dengan proporsi dinamis, stroke tebal, dan kedalaman cel-shading.
+   - Sesuai dengan spesifikasi visual di [`contohgayavisual.md`](contohgayavisual.md).
+2. **Stickman (Kinetik Jalan & Lari):**
+   - Karakter figur garis minimalis dengan artikulasi sendi lincah dan rotasi anggota tubuh fluid.
+3. **Isometric (3D Reka & Tech Grid):**
+   - Proyeksi 30 derajat ortografis dengan blok 3D dan bayangan sudut datar untuk infografis data.
+
+---
+
+## 4. Deep-Dive Alur: Monitor Kuota Realtime Antigravity CLI
+
+Studio terhubung secara lokal dengan daemon Language Server Google Antigravity untuk menampilkan kuota token langsung:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Pengguna
+    participant UI as Studio UI (Pengaturan AI)
+    participant Server as Backend studio.py
+    participant Daemon as .gemini/antigravity/daemon/hub_*.json
+    participant RPC as Connect-RPC LanguageServerService
+
+    Pengguna->>UI: Buka Pengaturan AI / Klik "↻ Segarkan"
+    UI->>Server: GET /api/antigravity/kuota
+    Server->>Daemon: Scan file hub_<port>.json aktif
+    Daemon-->>Server: Ekstrak port internal & csrf_token
+    Server->>RPC: POST /exa.language_server_pb.LanguageServerService/RetrieveUserQuotaSummary
+    Note over Server,RPC: Header: x-codeium-csrf-token, Connect-Protocol-Version: 1
+    RPC-->>Server: JSON Kuota (remainingFraction, resetTime, description)
+    Server-->>UI: Response Kuota Gemini & Claude/GPT
+    UI->>UI: Render SVG Circular Progress (Weekly & 5-Hour Limit)
+```
+
+---
+
+## 5. Deep-Dive Alur: Motion Standar (Short-Form Video)
 
 Modul **Motion Standar** dirancang untuk memproduksi video pendek animasi berorientasi vertikal 9:16 (1080 × 1920) secara cepat:
 
@@ -144,7 +213,7 @@ graph LR
 
 ---
 
-## 4. Deep-Dive Alur: Motion Pro (Long-Form Video $\ge 4$ Menit)
+## 6. Deep-Dive Alur: Motion Pro (Long-Form Video $\ge 4$ Menit)
 
 Modul **Motion Pro** adalah workspace khusus sutradara video panjang berdurasi 4 hingga 15+ menit berbasis integrasi CLI AI Agent resmi:
 
@@ -194,26 +263,30 @@ graph TD
 
 ---
 
-## 5. Ringkasan File & Direktori Inti
+## 7. Ringkasan File & Direktori Inti
 
 | Direktori / File | Peran Utama |
 |---|---|
-| `studio/studio.py` | Server backend lokal, router API (`/api/ekstrak-gaya-video`, `/api/daftar-skills-global`, dll.), serta runner proses CLI. |
-| `studio/index.html` | Antarmuka pengguna (SPA), mencakup Beranda, Klip, Motion, Motion Pro, dan Tools Ekstrak Gaya. |
+| `studio/studio.py` | Server backend lokal, router API (`/api/ekstrak-gaya-video`, `/api/antigravity/kuota`, `/api/daftar-skills-global`, dll.), serta runner proses CLI. |
+| `studio/index.html` | Antarmuka pengguna (SPA), mencakup Beranda, Klip, Motion, Studio Animasi, Motion Pro, dan Tools Ekstrak Gaya. |
 | `scripts/extract_video_style.py` | Engine ekstraksi visual video (scene detection, 5 palet HEX, capture thumbnail 9:16). |
 | `scripts/generate_style_artifacts.py` | Generator artefak otomatis (`SKILL.md`, `preset.tsx`, registrasi `index.ts`, dan `registry.json`). |
 | `studio/aset/gaya/<slug>.jpg` | Folder thumbnail visual 9:16 untuk kartu template di tab Motion dan Ekstrak Gaya. |
 | `motion/skills/` | Modul keahlian AI (skill bawaan + skill baru hasil ekstraksi video referensi). |
 | `motion/skills/registry.json` | Manifest global seluruh skill yang terdaftar di sistem. |
-| `motion/src/presets/` | Folder komponen preset komposisi Remotion kustom. |
+| `motion/src/presets/` | Folder komponen preset komposisi Remotion grafis statis. |
+| `motion/src/presets_animasi/` | Folder komponen preset khusus Studio Animasi Karakter Bergerak. |
 | `motion/src/presets/index.ts` | Indeks sentral yang mengekspor seluruh preset ke `STYLE_PRESETS`. |
-| `motion/src/Video.tsx` | Komposisi inti Remotion dengan *dynamic lookup* gaya. |
+| `motion/src/Video.tsx` | Komposisi inti Remotion untuk Motion Standar & Long-Form. |
+| `motion/src/VideoAnimasi.tsx` | Komposisi Native Remotion untuk Studio Animasi Bergerak (RAM < 600 MB). |
+| `motion/src/Akar.tsx` | Registrasi Root komposisi Remotion (`Video` dan `AnimasiBergerak`). |
+| `docs/workflow_animasi_karakter_bergerak.md` | Dokumentasi arsitektur dan alur kerja teknis Studio Animasi Bergerak. |
 | `motion/svg-aman.mjs` | Filter validator keamanan SVG (mencegah `<script>` dan atribut event). |
-| `studio/index.html#h-faq` | Halaman Tutorial Penggunaan, FAQ terstruktur (Motion, Motion Pro, Ekstrak Gaya), dan integrasi bantuan resmi via WhatsApp (`wa.me/6283862300495`). |
+| `studio/index.html#h-faq` | Halaman Tutorial Penggunaan, FAQ terstruktur (Motion, Motion Pro, Ekstrak Gaya, AI Quota), dan integrasi bantuan resmi via WhatsApp (`wa.me/6283862300495`). |
 
 ---
 
-## 6. Pusat Bantuan & Kontak WhatsApp Resmi
+## 8. Pusat Bantuan & Kontak WhatsApp Resmi
 
 Untuk kebutuhan:
 1. **Otorisasi Kode Akses Motion Pro**: Aktivasi workspace video panjang $\ge 4$ menit.
