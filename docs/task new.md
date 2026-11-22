@@ -108,3 +108,5 @@ Setelah seluruh kode selesai dibuat:
 Apakah Anda juga ingin saya buatkan contoh `metrics.json` hasil ekstraksi dari video A-10 Warthog tadi agar bisa langsung Anda pakai untuk menguji sistem baru ini begitu agen selesai bekerja?
 
 ```
+
+its done
