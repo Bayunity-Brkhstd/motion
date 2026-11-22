@@ -1,5 +1,9 @@
 # Cheat Clip and Motion — Klip + Motion (gratis, jalan di laptopmu)
 
+> 💡 **Panduan Lengkap Langkah demi Langkah:**  
+> Untuk panduan komprehensif mulai dari unduh Klip via GitHub, Motion (Ide, Manual, Animasi Karakter), Motion Pro, Ekstrak Gaya (Chunking 8s), Gemini Canvas (Naskah & SEO), hingga Setup Pengaturan AI, baca:  
+> 👉 **[Buku Manual & Tutorial Penggunaan Lengkap (`docs/TUTORIAL_PENGGUNAAN.md`)](TUTORIAL_PENGGUNAAN.md)**
+
 Aplikasi desktop untuk:
 - **Cheat Clip**: memotong video panjang (link YouTube atau file) jadi klip 9:16 dengan subtitle karaoke, bingkai mengikuti wajah, skor viral, judul, dan caption.
 - **Cheat Motion**: membuat video motion graphic 9:16 dari satu topik (naskah → suara → animasi → MP4).

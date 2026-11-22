@@ -8,15 +8,17 @@
 
 Seluruh dokumentasi proyek, panduan teknis, PRD, dan diagram alur pipeline telah dikelompokkan di folder [`docs/`](docs/):
 
-1. **[Alur Kerja Pipeline & Arsitektur Lengkap (`docs/workflow.md`)](docs/workflow.md)**  
+1. **[Buku Manual & Tutorial Lengkap Penggunaan (`docs/TUTORIAL_PENGGUNAAN.md`)](docs/TUTORIAL_PENGGUNAAN.md)**  
+   *Panduan langkah demi langkah menggunakan seluruh fitur: Klip (download via GitHub), Motion (Ide AI, Naskah Manual, Animasi Karakter Storyboard), Motion Pro (Long-Form 4m+), Ekstrak Gaya Video (Chunking 8s & AI Merger), Ekosistem Gemini Canvas (Naskah & SEO Viral), serta Setup Pengaturan AI lengkap.*
+2. **[Alur Kerja Pipeline & Arsitektur Lengkap (`docs/workflow.md`)](docs/workflow.md)**  
    *Panduan mendalam arsitektur sistem hulu-ke-hilir: Motion Standar, Studio Animasi Bergerak, Motion Pro ($\ge 4$ menit), Tools Ekstrak Gaya Video 2 Kategori, serta Monitor Kuota Token Realtime.*
-2. **[Workflow: Studio Animasi Bergerak Plan B (`docs/workflow_animasi_karakter_bergerak.md`)](docs/workflow_animasi_karakter_bergerak.md)**  
+3. **[Workflow: Studio Animasi Bergerak Plan B (`docs/workflow_animasi_karakter_bergerak.md`)](docs/workflow_animasi_karakter_bergerak.md)**  
    *Panduan teknis eksekusi karakter animasi bergerak berbasis React Remotion Native Canvas, matematika sendi periodik, procedural lip-sync, dan visual QA keyframes dengan memori sangat hemat (< 600 MB RAM).*
-3. **[Dokumentasi Teknis Studio (`docs/DOKUMENTASI.md`)](docs/DOKUMENTASI.md)**  
+4. **[Dokumentasi Teknis Studio (`docs/DOKUMENTASI.md`)](docs/DOKUMENTASI.md)**  
    *Spesifikasi lengkap fitur Studio, integrasi AI lokal & langganan CLI, widget kuota realtime Antigravity, mesin suara VoxCPM, serta sistem tema.*
-4. **[PRD Motion Pro Long-Form AI Studio (`docs/prd_alur_kerja_motion_pro_long_form_ai_studio.md`)](docs/prd_alur_kerja_motion_pro_long_form_ai_studio.md)**  
+5. **[PRD Motion Pro Long-Form AI Studio (`docs/prd_alur_kerja_motion_pro_long_form_ai_studio.md`)](docs/prd_alur_kerja_motion_pro_long_form_ai_studio.md)**  
    *Product Requirement Document untuk orkestrasi video berdurasi panjang berbasis AI Director Agent.*
-5. **[Dokumentasi Penggunaan Lengkap (`docs/README.md`)](docs/README.md)**  
+6. **[Dokumentasi Penggunaan Singkat (`docs/README.md`)](docs/README.md)**  
    *Petunjuk instalasi awal macOS & Windows, dependensi sistem, tabel fitur antarmuka, dan konfigurasi lingkungan.*
 
 ---
