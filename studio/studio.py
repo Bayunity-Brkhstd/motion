@@ -772,6 +772,7 @@ def analisa_cerita_animasi_agent(d: dict) -> dict:
     tokoh2 = (d.get("tokoh2") or "").strip()
     latar_pref = (d.get("latar") or "auto").strip()
     gaya_pref = (d.get("gaya") or "auto").strip()
+    mode_pref = (d.get("mode_cerita") or "auto").strip()
     jml_adegan = int(d.get("jumlah_adegan") or 3)
 
     p = baca_pengaturan()
@@ -779,43 +780,56 @@ def analisa_cerita_animasi_agent(d: dict) -> dict:
     cli_aktif = (p.get("LANGGANAN") or "antigravity").lower()
     model = p.get("MODEL_ANTIGRAVITY") or p.get("MODEL_CLAUDE") or ""
 
+    instruksi_mode = ""
+    if mode_pref != "auto":
+        instruksi_mode = f'- Mode Produksi Pilihan User: "{mode_pref}" (Wajib tetapkan mode_cerita="{mode_pref}", tampilkan_balon={"true" if mode_pref == "dialog" else "false"}).'
+
     prompt_agent = f"""Anda adalah AI Director dan Storyboard Master untuk animasi karakter 2D/3D (Remotion VideoAnimasi).
-Tugas Anda: Analisa konsep cerita dari user, rancang adegan yang konsisten, tentukan latar tempat yang tepat, aksi tokoh, properti, balon dialog, dan teks narasi.
+Tugas Anda: Analisa konsep cerita & narasi dari user berdasarkan Framework 5 Pilar Storyboard:
 
 INPUT USER:
-- Konsep Cerita: "{konsep}"
-- Tokoh 1 (Utama): "{tokoh1}"
-- Tokoh 2 (Lawan Bicara, jika ada): "{tokoh2}"
+- Konsep / Naskah Cerita: "{konsep}"
+- Tokoh Utama: "{tokoh1}"
+- Tokoh Lawan Bicara (opsional): "{tokoh2}"
 - Preferensi Latar: "{latar_pref}"
 - Preferensi Gaya: "{gaya_pref}"
+{instruksi_mode}
 - Target Jumlah Adegan: {jml_adegan}
 
-ATURAN KONSISTENSI VISUAL:
-1. Pilihan 'gaya_visual' wajib salah satu dari: "toon-desa", "toon-3d", "stickman", "anime-cel", "isometric".
-2. Pilihan 'latar' per adegan wajib salah satu dari: "warung-desa", "kursi-bambu", "jalan-desa", "pos-ronda", "senja", "kota", "blueprint", "isometric-grid".
-3. Aksi tokoh wajib salah satu dari: "duduk", "jalan", "bicara", "kaget", "pikir", "tunjuk", "santai".
-4. Benda tokoh wajib salah satu dari: "kopi", "rokok", "tidak_ada".
-5. Balon dialog harus singkat, tajam, dan komikal/alami: "NamaTokoh: 'Isi ucapan'"
-6. Teks narasi adalah penjelasan voice-over yang sinkron dengan adegan.
-7. Durasi detik tiap adegan antara 3.0 s.d. 5.0 detik.
+PEDOMAN ANALISA (DIAGRAM RESMI):
+1. ANALISA KONSEP & TEMA:
+   - Pilih jenis gaya visual template: "toon-desa", "toon-3d", "stickman", "anime-cel", atau "isometric".
+   - Kecocokan narasi dan voice over:
+     * Jika narasi adalah cerita/voiceover yang dibacakan seorang narator (misal kejadian Pak Agus melapor ke Pak RT), aktifkan mode "narator": visual merekonstruksi kejadian narasi secara hidup TANPA balon obrolan yang menutupi layar (tampilkan_balon: false, dialog: "").
+     * Jika naskah adalah drama/sketsa obrolan langsung, aktifkan mode "dialog" dengan balon chat komikal (tampilkan_balon: true).
+
+2. ANALISA STORYBOARD (5 PILAR WAJIB):
+   1. Latar: Tempat spesifik adegan terjadi (misal: "warung-desa", "kursi-bambu", "jalan-desa", "pos-ronda", "senja", "kota", "blueprint", "isometric-grid").
+   2. Aset: Objek interaksi pendukung (misal: "kopi", "rokok", "ponsel", "kertas", "tidak_ada").
+   3. Tokoh ada berapa: Fleksibel per adegan (0 = b-roll suasana/aset, 1 = monolog/beraksi sendiri, 2 = dua tokoh berinteraksi).
+   4. Visualnya seperti apa agar konsisten: Identitas warna baju dan ciri fisik tokoh konsisten dari awal hingga akhir.
+   5. Konsep: Apa yang diperagakan visual (tokoh & latar) untuk merekonstruksi narasi narator secara hidup.
 
 OUTPUT WAJIB:
 Hanya kirimkan blok kode JSON valid dengan format persis seperti ini:
 ```json
 {{
   "judul": "Judul Cerita",
+  "mode_cerita": "narator",
   "gaya_visual": "toon-desa",
   "adegan": [
     {{
       "judul": "Nama Adegan 1",
       "latar": "warung-desa",
       "callout": "📍 BADGE LOKASI",
-      "tokoh1_aksi": "duduk",
-      "tokoh1_benda": "kopi",
-      "tokoh2_aktif": false,
-      "tokoh2_aksi": "bicara",
+      "tokoh_ada_berapa": 2,
+      "tokoh1_aksi": "bicara",
+      "tokoh1_benda": "tidak_ada",
+      "tokoh2_aktif": true,
+      "tokoh2_aksi": "diam",
       "tokoh2_benda": "tidak_ada",
-      "dialog": "{tokoh1}: 'Mbok, kopi tubruk satu ya!'",
+      "tampilkan_balon": false,
+      "dialog": "",
       "teks": "Kalimat narasi voice-over untuk adegan ini.",
       "durasi_detik": 3.5
     }}
@@ -901,6 +915,11 @@ def mulai_motion(d: dict) -> dict:
     if naskah_teks:
         data = json.loads(naskah_teks)
         data["gaya"] = gaya
+        # Kompatibilitas Canvas Gemini (Format 4: blueprint 2.0 visual bible)
+        if "adegan_storyboard" in data and "adegan" not in data:
+            data["adegan"] = data["adegan_storyboard"]
+        if "komposisi" not in data and (data.get("rigDefault") or (data.get("adegan") and len(data["adegan"]) > 0 and data["adegan"][0].get("rig"))):
+            data["komposisi"] = "AnimasiBergerak"
         (MOTION / "naskah").mkdir(exist_ok=True)
         (MOTION / "naskah" / f"{nama}.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     else:
@@ -1782,6 +1801,7 @@ def ekstrak_gaya_video_pro(d: dict) -> dict:
     video_b64 = d.get("video", "") or d.get("data", "")
     video_path_str = d.get("video_path", "")
     auto_purge = bool(d.get("auto_purge", True))
+    chunk_sec = float(d.get("chunk_sec", 8.0) or 8.0)
 
     tmp_video = None
     if video_b64:
@@ -1820,6 +1840,7 @@ def ekstrak_gaya_video_pro(d: dict) -> dict:
         str(scripts_dir / "extract_video_style.py"),
         "--video", str(video_target),
         "--slug", slug,
+        "--chunk-sec", str(chunk_sec),
     ]
     if auto_purge:
         cmd_extract.append("--purge")
@@ -1881,6 +1902,7 @@ def ekstrak_gaya_video_pro(d: dict) -> dict:
         "skill_md": f"motion/skills/{slug}/SKILL.md",
         "preset_tsx": f"motion/src/presets/{slug}.tsx",
         "metrics": metrics,
+        "segment_analysis": metrics.get("segment_analysis", {}),
         "daftar": daftar_skills_pro()["skills"]
     }
 

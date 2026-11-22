@@ -41,6 +41,9 @@ export type AdeganAnimasi = {
   karakter2?: KarakterPose; // Karakter kedua (misal: Ridwan) untuk adegan dialog berdua
   callout?: string;
   kunci?: string[];
+  kataTimings?: { kata: string; start: number; end: number }[];
+  speechStart?: number;
+  speechEnd?: number;
 };
 
 export type PropsAnimasi = {
@@ -151,21 +154,29 @@ const LatarWarungDesa: React.FC<{ width: number; height: number; frame: number }
     ctx.stroke();
 
     // Spanduk Kain Warung Makan ("WARUNG MAKAN SIFOREJO")
+    const bannerX = width * 0.08;
+    const bannerY = height * 0.27;
+    const bannerW = width * 0.68;
+    const bannerH = 114;
     ctx.fillStyle = '#FEF08A';
     ctx.strokeStyle = '#DC2626';
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 5;
     ctx.beginPath();
-    ctx.roundRect(width * 0.08, height * 0.22, width * 0.64, 76, 10);
+    ctx.roundRect(bannerX, bannerY, bannerW, bannerH, 14);
     ctx.fill();
     ctx.stroke();
 
+    const bannerCenterX = bannerX + bannerW / 2;
     ctx.fillStyle = '#991B1B';
-    ctx.font = '900 32px sans-serif';
+    ctx.font = '900 36px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('WARUNG MAKAN SIFOREJO', width * 0.40, height * 0.26 + 6);
-    ctx.font = '700 15px sans-serif';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('WARUNG MAKAN SIFOREJO', bannerCenterX, bannerY + 42);
+
+    ctx.font = '700 16px sans-serif';
     ctx.fillStyle = '#1E293B';
-    ctx.fillText('☕ KOPI TUBRUK • GORENGAN • ROKOK KETENGAN', width * 0.40, height * 0.29 + 6);
+    ctx.fillText('☕ KOPI TUBRUK • GORENGAN • ROKOK KETENGAN', bannerCenterX, bannerY + 82);
+    ctx.textBaseline = 'alphabetic'; // reset baseline
 
     // Meja Kayu Warung di Bawah
     ctx.fillStyle = '#92400E';
@@ -565,33 +576,428 @@ const LatarKota: React.FC<{ width: number; height: number }> = React.memo(({ wid
   </div>
 ));
 
-// Latar Isometric Grid
-const LatarIsometric: React.FC<{ width: number; height: number }> = React.memo(({ width, height }) => {
+// ── Latar Stickman Motion Explainer (Master Production Blueprint) ─────────
+const LatarStickmanExplainer: React.FC<{
+  latarKey: string;
+  width: number;
+  height: number;
+  frame: number;
+}> = React.memo(({ latarKey, width, height, frame }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const t = frame / FPS;
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    ctx.fillStyle = '#0B132B';
+    ctx.clearRect(0, 0, width, height);
+
+    // 1. Base Off-White Paper Texture
+    ctx.fillStyle = '#F8F9FA';
     ctx.fillRect(0, 0, width, height);
-    ctx.strokeStyle = 'rgba(78, 204, 163, 0.18)';
-    ctx.lineWidth = 1.5;
-    const tileW = 120;
-    const tileH = 60;
-    ctx.beginPath();
-    for (let y = -height; y < height * 2; y += tileH) {
-      for (let x = -width; x < width * 2; x += tileW) {
-        ctx.moveTo(x, y + tileH / 2);
-        ctx.lineTo(x + tileW / 2, y);
-        ctx.lineTo(x + tileW, y + tileH / 2);
-        ctx.lineTo(x + tileW / 2, y + tileH);
-        ctx.closePath();
+
+    // Subtle Paper Texture / Fine Grid lines
+    ctx.strokeStyle = 'rgba(26, 26, 26, 0.05)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < width; x += 60) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+    }
+    for (let y = 0; y < height; y += 60) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+    }
+
+    const l = latarKey.toLowerCase();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#1A1A1A';
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    // ── SCENE 1 & 6: Gedung Parlemen Senayan (Kubah Hijau & Pilar) ───────────
+    if (l.includes('senayan') || l.includes('parlemen') || l.includes('gerbang') || l.includes('outro')) {
+      // Langit Senja / Pagi
+      const isOutro = l.includes('outro');
+      if (isOutro) {
+        const sky = ctx.createLinearGradient(0, 0, 0, height * 0.7);
+        sky.addColorStop(0, '#FEF3C7');
+        sky.addColorStop(1, '#F8F9FA');
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, width, height * 0.7);
+      }
+
+      // Lantai Pelataran Senayan
+      ctx.fillStyle = '#E2E8F0';
+      ctx.fillRect(0, height * 0.72, width, height * 0.28);
+      ctx.beginPath();
+      ctx.moveTo(0, height * 0.72);
+      ctx.lineTo(width, height * 0.72);
+      ctx.stroke();
+
+      // Tangga Gedung Parlemen
+      for (let s = 1; s <= 3; s++) {
+        ctx.fillStyle = '#CBD5E1';
+        ctx.fillRect(width * 0.15, height * 0.72 - s * 14, width * 0.7, 14);
+        ctx.strokeRect(width * 0.15, height * 0.72 - s * 14, width * 0.7, 14);
+      }
+
+      // Pilar-pilar Gedung DPR (6 Pilar Neoklasik)
+      const pilarY = height * 0.42;
+      const pilarH = height * 0.26;
+      for (let i = 0; i < 6; i++) {
+        const px = width * 0.22 + i * (width * 0.11);
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(px, pilarY, width * 0.045, pilarH);
+        ctx.strokeRect(px, pilarY, width * 0.045, pilarH);
+      }
+
+      // Balok Atap Penopang
+      ctx.fillStyle = '#F1F5F9';
+      ctx.fillRect(width * 0.18, pilarY - 25, width * 0.64, 25);
+      ctx.strokeRect(width * 0.18, pilarY - 25, width * 0.64, 25);
+
+      // Kubah Hijau Ikonik Parlemen (Gaya Lengkung Senayan)
+      ctx.fillStyle = '#15803D';
+      ctx.beginPath();
+      ctx.ellipse(width / 2, pilarY - 25, width * 0.28, height * 0.18, 0, Math.PI, 0);
+      ctx.fill();
+      ctx.stroke();
+
+      // Garis Tekstur Kubah
+      ctx.strokeStyle = '#166534';
+      ctx.lineWidth = 3;
+      for (let a = -0.7; a <= 0.7; a += 0.35) {
+        ctx.beginPath();
+        ctx.arc(width / 2, pilarY - 25, width * 0.27, Math.PI * (1 + a * 0.3), Math.PI * (1 + (a + 0.2) * 0.3));
+        ctx.stroke();
+      }
+      ctx.strokeStyle = '#1A1A1A';
+      ctx.lineWidth = 5;
+
+      // Tiang Bendera Merah Putih
+      ctx.beginPath();
+      ctx.moveTo(width / 2, pilarY - 25 - height * 0.18);
+      ctx.lineTo(width / 2, pilarY - 25 - height * 0.26);
+      ctx.stroke();
+
+      ctx.fillStyle = '#DC2626';
+      ctx.fillRect(width / 2, pilarY - 25 - height * 0.26, 45, 15);
+      ctx.strokeRect(width / 2, pilarY - 25 - height * 0.26, 45, 15);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(width / 2, pilarY - 25 - height * 0.26 + 15, 45, 15);
+      ctx.strokeRect(width / 2, pilarY - 25 - height * 0.26 + 15, 45, 15);
+
+      // Banner Breaking News jika scene breaking-news
+      if (l.includes('breaking')) {
+        ctx.fillStyle = '#B91C1C';
+        ctx.fillRect(width * 0.08, 90, width * 0.84, 85);
+        ctx.strokeRect(width * 0.08, 90, width * 0.84, 85);
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '900 42px Montserrat, system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🔴 BREAKING NEWS: KAMIS, 12 NOVEMBER 2026', width / 2, 132);
+      }
+
+      // Siluet Rakyat di Outro
+      if (isOutro) {
+        ctx.fillStyle = 'rgba(26, 26, 26, 0.85)';
+        for (let i = 0; i < 18; i++) {
+          const rx = 100 + i * 105 + Math.sin(i) * 20;
+          const ry = height * 0.74;
+          // Kepala
+          ctx.beginPath(); ctx.arc(rx, ry - 35, 16, 0, Math.PI * 2); ctx.fill();
+          // Badan
+          ctx.beginPath(); ctx.roundRect(rx - 14, ry - 18, 28, 45, 6); ctx.fill();
+        }
+
+        // Teks Penutup Babak Baru Konstitusi
+        ctx.fillStyle = '#0F172A';
+        ctx.font = '900 48px system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('MENANTI BABAK BARU KONSTITUSI INDONESIA', width / 2, height * 0.22);
       }
     }
-    ctx.stroke();
-  }, [width, height]);
+
+    // ── SCENE 2: Meja Rapat Bundar & Dokumen Surat Pengunduran Diri ──────────
+    else if (l.includes('meja') || l.includes('dokumen') || l.includes('surat')) {
+      // Dinding Ruang Rapat Minimalis
+      ctx.fillStyle = '#F1F5F9';
+      ctx.fillRect(0, 0, width, height * 0.65);
+      ctx.fillStyle = '#E2E8F0';
+      ctx.fillRect(0, height * 0.65, width, height * 0.35);
+      ctx.beginPath(); ctx.moveTo(0, height * 0.65); ctx.lineTo(width, height * 0.65); ctx.stroke();
+
+      // Meja Bundar Kayu Perspektif
+      ctx.fillStyle = '#CBD5E1';
+      ctx.beginPath();
+      ctx.ellipse(width / 2, height * 0.78, width * 0.38, height * 0.14, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Jam Analog Kartun 20 Menit (di dinding atas)
+      const clockX = width / 2;
+      const clockY = 190;
+      const clockR = 65;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath(); ctx.arc(clockX, clockY, clockR, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      
+      // Jarum Jam Berputar Cepat
+      const needleAngle = (t * 4) % (Math.PI * 2);
+      ctx.beginPath();
+      ctx.moveTo(clockX, clockY);
+      ctx.lineTo(clockX + Math.sin(needleAngle) * 45, clockY - Math.cos(needleAngle) * 45);
+      ctx.lineWidth = 6; ctx.strokeStyle = '#DC2626'; ctx.stroke();
+      ctx.lineWidth = 5; ctx.strokeStyle = '#1A1A1A';
+
+      // Badge "20 MENIT"
+      ctx.fillStyle = '#B91C1C';
+      ctx.fillRect(clockX - 70, clockY + 80, 140, 36);
+      ctx.strokeRect(clockX - 70, clockY + 80, 140, 36);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '800 20px system-ui, sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('⏱️ 20 MENIT', clockX, clockY + 98);
+
+      // Dokumen Surat Pengunduran Diri (Jika scene dokumen)
+      if (l.includes('dokumen') || l.includes('surat')) {
+        const docX = width / 2;
+        const docY = height * 0.48;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(docX - 180, docY - 140, 360, 260);
+        ctx.strokeRect(docX - 180, docY - 140, 360, 260);
+
+        ctx.fillStyle = '#B91C1C';
+        ctx.font = '900 24px system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('SURAT PENGUNDURAN DIRI', docX, docY - 100);
+
+        ctx.fillStyle = '#1A1A1A';
+        ctx.font = '700 18px system-ui, sans-serif';
+        ctx.fillText('DARI JABATAN WAKIL PRESIDEN RI', docX, docY - 65);
+
+        // Cap Merah: ATAS PERMINTAAN SENDIRI
+        ctx.strokeStyle = '#DC2626';
+        ctx.strokeRect(docX - 140, docY - 40, 280, 42);
+        ctx.fillStyle = '#DC2626';
+        ctx.font = '800 18px system-ui, sans-serif';
+        ctx.fillText('★ ATAS PERMINTAAN SENDIRI ★', docX, docY - 19);
+
+        // Kaca Pembesar Kartun dengan Tanda Tanya (?)
+        ctx.strokeStyle = '#1A1A1A';
+        const magX = docX + 80;
+        const magY = docY + 45;
+        ctx.fillStyle = 'rgba(217, 119, 6, 0.2)';
+        ctx.beginPath(); ctx.arc(magX, magY, 35, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(magX + 25, magY + 25); ctx.lineTo(magX + 55, magY + 55); ctx.lineWidth = 8; ctx.stroke();
+        ctx.lineWidth = 5;
+
+        // Tanda Tanya Berdenyut
+        const scaleQ = 1 + Math.sin(t * 8) * 0.15;
+        ctx.fillStyle = '#D97706';
+        ctx.font = `900 ${Math.round(36 * scaleQ)}px system-ui, sans-serif`;
+        ctx.fillText('?', magX, magY + 12);
+      }
+    }
+
+    // ── SCENE 3: Bola Salju Pemakzulan vs Stempel Gugur Otomatis ─────────────
+    else if (l.includes('salju') || l.includes('stempel') || l.includes('pemakzulan')) {
+      const isStempel = l.includes('stempel');
+      // Split Screen Diagonal
+      ctx.fillStyle = isStempel ? '#FEF2F2' : '#EFF6FF';
+      ctx.fillRect(0, 0, width, height);
+
+      // Lantai
+      ctx.fillStyle = '#E2E8F0';
+      ctx.fillRect(0, height * 0.75, width, height * 0.25);
+      ctx.beginPath(); ctx.moveTo(0, height * 0.75); ctx.lineTo(width, height * 0.75); ctx.stroke();
+
+      if (!isStempel) {
+        // Bola Salju Raksasa (Hak Menyatakan Pendapat)
+        const ballX = width * 0.58;
+        const ballY = height * 0.52;
+        ctx.fillStyle = '#E0F2FE';
+        ctx.beginPath(); ctx.arc(ballX, ballY, 190, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = '#1E3A8A';
+        ctx.font = '900 28px system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('HAK MENYATAKAN PENDAPAT', ballX, ballY - 20);
+        ctx.fillStyle = '#DC2626';
+        ctx.fillText('(USULAN PEMAKZULAN)', ballX, ballY + 20);
+
+        // Kertas-kertas Polemik Ijazah Berterbangan
+        for (let p = 0; p < 4; p++) {
+          const px = width * 0.25 + p * 120 + Math.sin(t * 4 + p) * 20;
+          const py = 220 + (p % 2) * 80 + Math.cos(t * 3 + p) * 15;
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(px, py, 90, 60);
+          ctx.strokeRect(px, py, 90, 60);
+          ctx.fillStyle = '#B91C1C';
+          ctx.font = '700 12px system-ui, sans-serif';
+          ctx.fillText('POLEMIK IJAZAH', px + 45, py + 34);
+        }
+      } else {
+        // Stempel Raksasa "OBJEK HUKUM GUGUR OTOMATIS"
+        const stampW = width * 0.65;
+        const stampH = 160;
+        const stampX = (width - stampW) / 2;
+        const stampY = height * 0.32;
+
+        ctx.fillStyle = '#DC2626';
+        ctx.fillRect(stampX, stampY, stampW, stampH);
+        ctx.strokeRect(stampX, stampY, stampW, stampH);
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '900 48px system-ui, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('OBJEK HUKUM GUGUR OTOMATIS', width / 2, stampY + 55);
+
+        ctx.font = '700 26px system-ui, sans-serif';
+        ctx.fillText('JABATAN DILEPAS SECARA SUKARELA', width / 2, stampY + 115);
+
+        // Efek Kepulan Asap (Puff of Smoke)
+        ctx.fillStyle = 'rgba(203, 213, 225, 0.7)';
+        for (let k = 0; k < 6; k++) {
+          const sx = width * 0.3 + k * 80 + Math.sin(t * 6 + k) * 10;
+          const sy = height * 0.68 + (k % 2) * 20;
+          ctx.beginPath(); ctx.arc(sx, sy, 35 + (k % 3) * 10, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+    }
+
+    // ── SCENE 4: Podium Kenegaraan & Jam Pasir 60 Hari ───────────────────────
+    else if (l.includes('podium') || l.includes('jam-pasir') || l.includes('kosong')) {
+      ctx.fillStyle = '#F8FAFC';
+      ctx.fillRect(0, 0, width, height);
+
+      // Lantai Istana Kenegaraan
+      ctx.fillStyle = '#E2E8F0';
+      ctx.fillRect(0, height * 0.72, width, height * 0.28);
+      ctx.beginPath(); ctx.moveTo(0, height * 0.72); ctx.lineTo(width, height * 0.72); ctx.stroke();
+
+      // Dua Kursi Kenegaraan di Belakang
+      // Kursi 1: PRESIDEN (Kiri)
+      const chair1X = width * 0.3;
+      const chairY = height * 0.44;
+      ctx.fillStyle = '#1E3A8A';
+      ctx.fillRect(chair1X - 80, chairY, 160, 220);
+      ctx.strokeRect(chair1X - 80, chairY, 160, 220);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '800 22px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('PRESIDEN', chair1X, chairY + 50);
+
+      // Kursi 2: WAKIL PRESIDEN (Kanan - KOSONG RESMI)
+      const chair2X = width * 0.7;
+      ctx.setLineDash([12, 8]);
+      ctx.fillStyle = 'rgba(241, 245, 249, 0.8)';
+      ctx.fillRect(chair2X - 80, chairY, 160, 220);
+      ctx.strokeRect(chair2X - 80, chairY, 160, 220);
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#B91C1C';
+      ctx.font = '900 20px system-ui, sans-serif';
+      ctx.fillText('WAKIL PRESIDEN', chair2X, chairY + 45);
+
+      // Label Status Kosong Resmi Berkedip
+      ctx.fillStyle = '#DC2626';
+      ctx.fillRect(chair2X - 110, chairY + 95, 220, 48);
+      ctx.strokeRect(chair2X - 110, chairY + 95, 220, 48);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '900 22px system-ui, sans-serif';
+      ctx.fillText('STATUS: KOSONG RESMI', chair2X, chairY + 126);
+
+      // Jam Pasir Raksasa Mengalirkan Pasir Emas (Jika scene jam-pasir)
+      if (l.includes('jam') || l.includes('pasir') || l.includes('60')) {
+        const hgX = width * 0.88;
+        const hgY = height * 0.35;
+        // Kaca Atas
+        ctx.fillStyle = '#FEF3C7';
+        ctx.beginPath(); ctx.moveTo(hgX - 45, hgY - 60); ctx.lineTo(hgX + 45, hgY - 60); ctx.lineTo(hgX, hgY); ctx.closePath(); ctx.fill(); ctx.stroke();
+        // Kaca Bawah
+        ctx.beginPath(); ctx.moveTo(hgX, hgY); ctx.lineTo(hgX - 45, hgY + 60); ctx.lineTo(hgX + 45, hgY + 60); ctx.closePath(); ctx.fill(); ctx.stroke();
+
+        // Aliran Pasir Emas
+        ctx.strokeStyle = '#D97706';
+        ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(hgX, hgY); ctx.lineTo(hgX, hgY + 50); ctx.stroke();
+        ctx.strokeStyle = '#1A1A1A'; ctx.lineWidth = 5;
+
+        // Label Batas Maksimal 60 Hari
+        ctx.fillStyle = '#D97706';
+        ctx.fillRect(hgX - 120, hgY + 75, 240, 42);
+        ctx.strokeRect(hgX - 120, hgY + 75, 240, 42);
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '900 20px system-ui, sans-serif';
+        ctx.fillText('BATAS: 60 HARI', hgX, hgY + 102);
+      }
+    }
+
+    // ── SCENE 5: Whiteboard Rapat Gabungan MPR & DPD (4 Langkah Konstitusi) ──
+    else if (l.includes('whiteboard') || l.includes('tahap') || l.includes('rapat')) {
+      // Papan Tulis Putih Besar
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(width * 0.05, 80, width * 0.9, height * 0.72);
+      ctx.strokeRect(width * 0.05, 80, width * 0.9, height * 0.72);
+
+      // Header Rapat Gabungan
+      ctx.fillStyle = '#0F172A';
+      ctx.fillRect(width * 0.05, 80, width * 0.9, 85);
+      ctx.strokeRect(width * 0.05, 80, width * 0.9, 85);
+      ctx.fillStyle = '#FACC15';
+      ctx.font = '900 36px system-ui, sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('RAPAT GABUNGAN MPR & DPD: JUMAT, 13 NOVEMBER 2026', width / 2, 122);
+
+      // 4 Kotak Tahapan Berjajar
+      const tahapan = [
+        { no: '1', title: 'SIDANG PARIPURNA', icon: '🔨', desc: 'Bahas kekosongan kursi' },
+        { no: '2', title: 'SURAT KE PRESIDEN', icon: '✉️', desc: 'Usul 2 nama calon Wapres' },
+        { no: '3', title: 'TIM VERIFIKASI', icon: '🔍', desc: 'Periksa syarat & dokumen' },
+        { no: '4', title: 'TIM AD HOC', icon: '📝', desc: 'Susun Draf Tap MPR' },
+      ];
+
+      const cardW = (width * 0.84) / 4;
+      for (let i = 0; i < 4; i++) {
+        const cx = width * 0.08 + i * cardW;
+        const cy = 200;
+        const ch = height * 0.52;
+        const isCurrent = (
+          (l.includes('paripurna') && i === 0) ||
+          (l.includes('surat') && i === 1) ||
+          (l.includes('verifikasi') && i === 2) ||
+          (l.includes('adhoc') && i === 3) ||
+          l.includes('whiteboard')
+        );
+
+        ctx.fillStyle = isCurrent ? '#FEF3C7' : '#F8FAFC';
+        ctx.fillRect(cx + 10, cy, cardW - 20, ch);
+        ctx.strokeRect(cx + 10, cy, cardW - 20, ch);
+
+        // Nomor Badge
+        ctx.fillStyle = isCurrent ? '#B91C1C' : '#334155';
+        ctx.beginPath(); ctx.arc(cx + cardW / 2, cy + 50, 28, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '900 24px system-ui, sans-serif';
+        ctx.fillText(tahapan[i].no, cx + cardW / 2, cy + 58);
+
+        // Icon
+        ctx.font = '48px system-ui, sans-serif';
+        ctx.fillText(tahapan[i].icon, cx + cardW / 2, cy + 130);
+
+        // Judul Tahapan
+        ctx.fillStyle = '#0F172A';
+        ctx.font = '900 20px system-ui, sans-serif';
+        ctx.fillText(tahapan[i].title, cx + cardW / 2, cy + 200);
+
+        // Deskripsi
+        ctx.fillStyle = '#475569';
+        ctx.font = '600 16px system-ui, sans-serif';
+        ctx.fillText(tahapan[i].desc, cx + cardW / 2, cy + 245);
+      }
+    }
+  }, [latarKey, width, height, t]);
 
   return <canvas ref={canvasRef} width={width} height={height} style={{ position: 'absolute', top: 0, left: 0 }} />;
 });
@@ -599,6 +1005,20 @@ const LatarIsometric: React.FC<{ width: number; height: number }> = React.memo((
 // Helper Pemilih Latar Dinamis (Resolves Indonesian setting keywords automatically)
 const renderLatarDinamis = (latarKey: string | undefined, width: number, height: number, frame: number) => {
   const l = (latarKey || '').toLowerCase();
+  
+  // 1. Stickman Motion Explainer Scenarios (Senayan, Meja Rapat, Bola Salju, Podium, Whiteboard, Outro)
+  if (
+    l.includes('senayan') || l.includes('parlemen') || l.includes('breaking') ||
+    l.includes('meja') || l.includes('dokumen') || l.includes('surat') ||
+    l.includes('salju') || l.includes('stempel') || l.includes('podium') ||
+    l.includes('jam') || l.includes('pasir') || l.includes('kosong') ||
+    l.includes('whiteboard') || l.includes('tahap') || l.includes('outro') ||
+    l.includes('gerbang')
+  ) {
+    return <LatarStickmanExplainer latarKey={l} width={width} height={height} frame={frame} />;
+  }
+
+  // 2. Rural & Traditional Scenarios
   if (l.includes('warung') || l.includes('kedai') || l.includes('siforejo')) {
     return <LatarWarungDesa width={width} height={height} frame={frame} />;
   }
@@ -617,9 +1037,6 @@ const renderLatarDinamis = (latarKey: string | undefined, width: number, height:
   if (l.includes('kota') || l.includes('kantor')) {
     return <LatarKota width={width} height={height} />;
   }
-  if (l.includes('isometric') || l.includes('grid')) {
-    return <LatarIsometric width={width} height={height} />;
-  }
   if (l.includes('blueprint')) {
     return <LatarBlueprint width={width} height={height} />;
   }
@@ -634,7 +1051,8 @@ const drawSingleRig = (
   pose: KarakterPose,
   posX: number,
   posY: number,
-  t: number
+  t: number,
+  isSpeaking: boolean = false
 ) => {
   const aksi = pose.aksi || 'bicara';
   const ekspresi = pose.ekspresi || 'senyum';
@@ -857,10 +1275,10 @@ const drawSingleRig = (
     }
     ctx.stroke();
 
-    // Mulut Lip-Sync Dinamis
-    const mouthOpen = (aksi === 'bicara' || ekspresi === 'bicara')
-      ? Math.abs(Math.sin(t * 14)) * 14 + 3
-      : (isShocked ? 18 : (ekspresi === 'senyum' ? 6 : 2));
+    // Mulut Lip-Sync Dinamis: hanya buka-tutup jika isSpeaking bernilai TRUE
+    const mouthOpen = isSpeaking
+      ? Math.abs(Math.sin(t * 16)) * 14 + 4
+      : 2;
 
     ctx.fillStyle = '#991B1B';
     ctx.beginPath();
@@ -944,12 +1362,40 @@ const drawSingleRig = (
     ctx.fill();
     ctx.stroke();
 
-    // Mata & Mulut
+    // Mata & Mulut Stickman
     ctx.fillStyle = '#0F172A';
     ctx.beginPath();
     ctx.arc(-10, -4, 4, 0, Math.PI * 2);
     ctx.arc(10, -4, 4, 0, Math.PI * 2);
     ctx.fill();
+
+    // Mulut Stickman Kinetik
+    ctx.strokeStyle = '#0F172A';
+    ctx.lineWidth = 3;
+    const mouthOpen = isSpeaking ? Math.abs(Math.sin(t * 16)) * 8 + 2 : 2;
+    ctx.beginPath();
+    if (mouthOpen > 5) {
+      ctx.arc(0, 12, mouthOpen, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      ctx.arc(0, 10, 8, 0, Math.PI);
+      ctx.stroke();
+    }
+
+    // Peci / Rambut Ciri Khas Karakter
+    if (pose.nama?.toLowerCase().includes('muzani') || pose.nama?.toLowerCase().includes('mpr')) {
+      // Peci hitam khas Ketua MPR
+      ctx.fillStyle = '#0F172A';
+      ctx.fillRect(-24, -42, 48, 18);
+      ctx.strokeRect(-24, -42, 48, 18);
+    } else if (pose.nama?.toLowerCase().includes('gibran')) {
+      // Rambut belah samping khas Gibran
+      ctx.fillStyle = '#1A1A1A';
+      ctx.beginPath();
+      ctx.arc(0, -10, 38, Math.PI * 1.1, Math.PI * -0.1);
+      ctx.fill();
+      ctx.stroke();
+    }
 
     ctx.restore();
     ctx.restore();
@@ -1001,27 +1447,60 @@ const KarakterCanvas: React.FC<{
     ctx.clearRect(0, 0, width, height);
 
     const rig = adegan.rig || 'toon-3d';
-    const char1 = adegan.karakter || {};
+    const char1 = adegan.karakter;
     const char2 = adegan.karakter2;
 
-    const defY = height * 0.68;
+    // Jika adegan tanpa tokoh (misal: b-roll latar / aset saja)
+    if (!char1 && !char2) {
+      return;
+    }
 
-    // Jika ada 2 Karakter (misal Budi & Ridwan saling dialog)
-    if (char2) {
-      // Karakter 1 (Budi) di sebelah KIRI menghadap kanan
+    const defY = height * 0.68;
+    const tDetik = frame / FPS;
+
+    // Cek apakah suara VO sedang aktif di segmen adegan ini
+    const isVoActive = (typeof adegan.speechStart === 'number' && typeof adegan.speechEnd === 'number')
+      ? (tDetik >= adegan.speechStart && tDetik <= adegan.speechEnd)
+      : true;
+
+    // Deteksi tokoh mana yang sedang berbicara untuk aktivasi lip-sync animasi mulut
+    const dialogText = adegan.dialog || (adegan.teks.includes(':') ? adegan.teks : '');
+    const spkName = (adegan.speaker || (dialogText.includes(':') ? dialogText.split(':')[0].replace(/['"]/g, '').trim() : '')).toLowerCase();
+    
+    const name1 = (char1?.nama || 'maya').toLowerCase();
+    const name2 = (char2?.nama || 'rian').toLowerCase();
+
+    // Rian adalah karakter 2 (di kanan)
+    const isRianSpeaking = char2 ? (
+      (name2 && spkName.includes(name2)) ||
+      spkName.includes('rian') ||
+      spkName.includes('ridwan') ||
+      spkName.includes('cowok') ||
+      (!spkName.includes(name1) && spkName.length > 0)
+    ) : false;
+
+    const char2Speaking = isRianSpeaking && isVoActive;
+    const char1Speaking = char2 ? (!isRianSpeaking && isVoActive) : isVoActive;
+
+    if (char1 && char2) {
+      // 2 Karakter: Kiri (char1) & Kanan (char2)
       const x1 = char1.posisiX ?? (width * 0.28);
       const y1 = char1.posisiY ?? defY;
-      drawSingleRig(ctx, char1.aksi ? rig : (char1.warnaBaju ? 'toon-3d' : rig), { ...char1, hadap: char1.hadap ?? 1 }, x1, y1, t);
+      drawSingleRig(ctx, rig, { ...char1, hadap: char1.hadap ?? 1 }, x1, y1, t, char1Speaking);
 
-      // Karakter 2 (Ridwan) di sebelah KANAN menghadap kiri
       const x2 = char2.posisiX ?? (width * 0.72);
       const y2 = char2.posisiY ?? defY;
-      drawSingleRig(ctx, char2.warnaBaju ? 'toon-3d' : rig, { ...char2, hadap: char2.hadap ?? -1 }, x2, y2, t);
-    } else {
+      drawSingleRig(ctx, rig, { ...char2, hadap: char2.hadap ?? -1 }, x2, y2, t, char2Speaking);
+    } else if (char1) {
       // 1 Karakter di Tengah
       const x = char1.posisiX ?? (width / 2);
       const y = char1.posisiY ?? defY;
-      drawSingleRig(ctx, rig, char1, x, y, t);
+      drawSingleRig(ctx, rig, char1, x, y, t, char1Speaking);
+    } else if (char2) {
+      // Karakter 2 saja
+      const x = char2.posisiX ?? (width / 2);
+      const y = char2.posisiY ?? defY;
+      drawSingleRig(ctx, rig, char2, x, y, t, char2Speaking);
     }
   }, [adegan, frame, width, height, t]);
 
@@ -1043,14 +1522,14 @@ const BalonDialog: React.FC<{
   const opacity = interpolate(transisi, [0, 1], [0, 1]);
 
   const isLeft = speakerSide === 'kiri';
-  const bubbleLeft = isLeft ? 60 : (width * 0.20);
-  const bubbleRight = isLeft ? (width * 0.20) : 60;
+  const bubbleLeft = isLeft ? 50 : (width * 0.22);
+  const bubbleRight = isLeft ? (width * 0.22) : 50;
 
   return (
     <div
       style={{
         position: 'absolute',
-        top: height * 0.35,
+        top: height * 0.36,
         left: bubbleLeft,
         right: bubbleRight,
         opacity,
@@ -1076,11 +1555,11 @@ const BalonDialog: React.FC<{
           <div
             style={{
               display: 'inline-block',
-              background: isLeft ? '#2563EB' : '#EA580C',
+              background: isLeft ? '#EC4899' : '#0284C7',
               color: '#FFFFFF',
               fontWeight: 900,
               fontSize: 22,
-              padding: '4px 14px',
+              padding: '4px 16px',
               borderRadius: 8,
               marginBottom: 8,
               letterSpacing: 1,
@@ -1103,12 +1582,12 @@ const BalonDialog: React.FC<{
           {dialogTeks}
         </div>
 
-        {/* Speech Bubble Tail Pointing to Character */}
+        {/* Speech Bubble Tail Menunjuk Tepat ke Karakter */}
         <div
           style={{
             position: 'absolute',
             bottom: -22,
-            [isLeft ? 'left' : 'right']: 80,
+            [isLeft ? 'left' : 'right']: isLeft ? 270 : 280,
             width: 0,
             height: 0,
             borderLeft: '18px solid transparent',
@@ -1120,7 +1599,7 @@ const BalonDialog: React.FC<{
           style={{
             position: 'absolute',
             bottom: -16,
-            [isLeft ? 'left' : 'right']: 82,
+            [isLeft ? 'left' : 'right']: isLeft ? 272 : 282,
             width: 0,
             height: 0,
             borderLeft: '16px solid transparent',
@@ -1146,98 +1625,108 @@ const SingleAdeganAnimasi: React.FC<{
   const translateY = interpolate(transisi, [0, 1], [40, 0]);
   const opacity = interpolate(transisi, [0, 1], [0, 1]);
 
-  // Subtitle Word Highlight Sync
+  // Subtitle Word Highlight Sync Presisi
   const kata = adegan.teks.split(/\s+/).filter(Boolean);
   const durasiAdegan = adegan.durasi_detik ?? adegan.durasi ?? 3.5;
   const frameTotal = durasiAdegan * fps;
-  const kataIdxAktif = Math.min(
-    kata.length - 1,
-    Math.floor((frame / frameTotal) * kata.length)
-  );
+  const tDetik = frame / fps;
+
+  let kataIdxAktif = -1;
+  if (adegan.kataTimings && adegan.kataTimings.length > 0) {
+    for (let k = 0; k < adegan.kataTimings.length; k++) {
+      const kt = adegan.kataTimings[k];
+      if (tDetik >= kt.start && tDetik <= kt.end) {
+        kataIdxAktif = k;
+        break;
+      }
+    }
+    if (kataIdxAktif === -1) {
+      if (tDetik < (adegan.kataTimings[0]?.start ?? 0)) {
+        kataIdxAktif = -1; // Belum mulai bicara
+      } else {
+        // Cari kata terdekat yang sudah lewat
+        for (let k = adegan.kataTimings.length - 1; k >= 0; k--) {
+          if (tDetik >= adegan.kataTimings[k].start) {
+            kataIdxAktif = k;
+            break;
+          }
+        }
+      }
+    }
+  } else {
+    kataIdxAktif = Math.min(
+      kata.length - 1,
+      Math.floor((frame / frameTotal) * kata.length)
+    );
+  }
 
   // Deteksi dialog dari teks atau field dialog
   const dialogText = adegan.dialog || (adegan.teks.includes(':') ? adegan.teks : '');
   const speakerName = adegan.speaker || (dialogText.includes(':') ? dialogText.split(':')[0].replace(/['"]/g, '').trim() : '');
   const cleanDialog = dialogText.includes(':') ? dialogText.split(':').slice(1).join(':').replace(/^['"\s]+|['"\s]+$/g, '') : dialogText;
-  const speakerSide = (speakerName.toLowerCase().includes('ridwan') || speakerName.toLowerCase().includes('teman')) ? 'kanan' : 'kiri';
+
+  const char1Name = (adegan.karakter?.nama || 'Maya').toLowerCase();
+  const char2Name = (adegan.karakter2?.nama || 'Rian').toLowerCase();
+  const spkLower = speakerName.toLowerCase();
+
+  // Jika Tokoh 2 yang bicara, posisikan balon di KANAN di atas Tokoh 2
+  // Jika Tokoh 1 yang bicara, posisikan balon di KIRI di atas Tokoh 1
+  const isRightSpeaker = adegan.karakter2 ? (
+    (char2Name && spkLower.includes(char2Name)) ||
+    spkLower.includes('rian') ||
+    spkLower.includes('ridwan') ||
+    spkLower.includes('cowok') ||
+    (!spkLower.includes(char1Name) && spkLower.length > 0)
+  ) : false;
+
+  const speakerSide: 'kiri' | 'kanan' = isRightSpeaker ? 'kanan' : 'kiri';
 
   // Native Remotion Stepped Frame Stop-Motion (12 FPS standar)
   const stopFps = (adegan as any).stop_motion_fps || (propsUtama as any).stop_motion_fps || 12;
   const step = Math.max(1, Math.round(fps / stopFps));
   const steppedFrame = Math.floor(frame / step) * step;
 
+  const isLandscape = width > height;
+
   return (
     <AbsoluteFill style={{ overflow: 'hidden' }}>
-      {/* 1. Latar Belakang Dinamis (Warung Desa, Kursi Bambu, Jalanan, dll.) */}
+      {/* 1. Latar Belakang Dinamis (Warung Desa, Senayan, Meja Rapat, dll.) */}
       {renderLatarDinamis(adegan.latar, width, height, steppedFrame)}
 
-      {/* 2. Top Callout Badge (misal: "📍 WARUNG SIFOREJO") */}
-      {adegan.callout ? (
-        <div
-          style={{
-            position: 'absolute',
-            top: 70,
-            left: 70,
-            opacity,
-            transform: `translateY(${translateY}px)`,
-            zIndex: 10,
-          }}
-        >
-          <span
-            style={{
-              background: '#0B0B0B',
-              color: '#FACC15',
-              fontFamily: 'system-ui, -apple-system, sans-serif',
-              fontWeight: 900,
-              fontSize: 30,
-              padding: '12px 24px',
-              borderRadius: '999px',
-              border: '2px solid #FACC15',
-              boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-              letterSpacing: 1.5,
-            }}
-          >
-            {adegan.callout}
-          </span>
-        </div>
-      ) : null}
-
-      {/* 3. Judul Adegan (Pop-up Clean Card) */}
+      {/* 2. Top Callout Badge Layar Bersatu */}
       <div
         style={{
           position: 'absolute',
-          top: 145,
-          left: 70,
-          right: 70,
+          top: isLandscape ? 40 : 60,
+          left: isLandscape ? 60 : 60,
           opacity,
           transform: `translateY(${translateY}px)`,
-          zIndex: 10,
+          zIndex: 15,
         }}
       >
         <span
           style={{
-            display: 'inline-block',
-            background: 'rgba(15, 23, 42, 0.92)',
-            color: '#FFFFFF',
+            background: 'rgba(15, 23, 42, 0.95)',
+            color: '#FACC15',
             fontFamily: 'system-ui, -apple-system, sans-serif',
             fontWeight: 900,
-            fontSize: 48,
-            lineHeight: 1.25,
-            padding: '16px 28px',
-            borderRadius: 16,
-            border: '2px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 12px 32px rgba(0,0,0,0.4)',
+            fontSize: isLandscape ? 26 : 32,
+            padding: isLandscape ? '10px 22px' : '12px 26px',
+            borderRadius: '999px',
+            border: '2px solid #FACC15',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+            letterSpacing: 1,
           }}
         >
-          {adegan.judul}
+          {adegan.callout || `📍 ${adegan.judul}`}
         </span>
       </div>
 
-      {/* 4. Canvas Karakter Bergerak (Multi-Rig Support) */}
+      {/* 3. Canvas Karakter Bergerak (Multi-Rig Support dengan Lip-Sync Aktif) */}
       <KarakterCanvas adegan={adegan} frame={frame} width={width} height={height} />
 
-      {/* 5. Balon Dialog Percakapan (Speech Bubble) jika ada dialog */}
-      {cleanDialog ? (
+      {/* 5. Balon Dialog Percakapan (Hanya jika mode dialog dan balon diizinkan aktif) */}
+      {cleanDialog && (adegan as any).tampilkanBalon !== false && (adegan as any).tampilkan_balon !== false ? (
         <BalonDialog
           dialogTeks={cleanDialog}
           speaker={speakerName}
@@ -1253,9 +1742,9 @@ const SingleAdeganAnimasi: React.FC<{
       <div
         style={{
           position: 'absolute',
-          bottom: 220,
-          left: 70,
-          right: 70,
+          bottom: isLandscape ? 55 : 220,
+          left: isLandscape ? 120 : 70,
+          right: isLandscape ? 120 : 70,
           textAlign: 'center',
           zIndex: 20,
         }}
@@ -1263,30 +1752,33 @@ const SingleAdeganAnimasi: React.FC<{
         <div
           style={{
             display: 'inline-block',
+            maxWidth: isLandscape ? 1600 : 940,
             background: 'rgba(11, 15, 25, 0.94)',
             color: '#FFFFFF',
-            padding: '18px 32px',
+            padding: isLandscape ? '16px 28px' : '18px 32px',
             borderRadius: 24,
             border: '3px solid #38BDF8',
             boxShadow: '0 16px 40px rgba(0,0,0,0.5)',
             fontFamily: 'system-ui, -apple-system, sans-serif',
-            fontSize: 40,
+            fontSize: isLandscape ? 32 : 40,
             fontWeight: 800,
             lineHeight: 1.4,
           }}
         >
           {kata.map((k, i) => {
             const aktif = i === kataIdxAktif;
+            const sudahLewat = kataIdxAktif >= 0 && i <= kataIdxAktif;
             return (
               <span
                 key={i}
                 style={{
                   display: 'inline-block',
                   margin: '0 8px',
-                  color: aktif ? '#FACC15' : '#FFFFFF',
-                  transform: aktif ? 'scale(1.12)' : 'scale(1)',
-                  transition: 'transform 0.1s ease',
-                  opacity: i <= kataIdxAktif ? 1 : 0.45,
+                  color: aktif ? '#FACC15' : (sudahLewat ? '#FFFFFF' : '#94A3B8'),
+                  transform: aktif ? 'scale(1.15)' : 'scale(1)',
+                  fontWeight: aktif ? 900 : 700,
+                  transition: 'transform 0.08s ease',
+                  opacity: sudahLewat ? 1 : 0.55,
                 }}
               >
                 {k}

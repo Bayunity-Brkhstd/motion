@@ -225,8 +225,8 @@ flowchart TD
 
 #### Step 1: Menentukan Materi & Mode Input
 Pilih salah satu metode input naskah di aplikasi:
-- **Aplikasi Canvas Gemini (Akses Cepat di Beranda):**
-  - Klik kartu *Aplikasi Canvas Gemini* di Beranda atau buka [Gemini Canvas Naskah](https://share.gemini.google/3dn27OWTHgaF) untuk merancang, mengedit, dan memformat naskah hook serta adegan secara visual dan kolaboratif. Naskah yang dihasilkan langsung siap disalin dan ditempel ke tab Motion.
+- **Aplikasi Canvas Gemini (Akses Cepat di Beranda & 1-Klik Impor):**
+  - Klik kartu *Generator Naskah Video Pendek, TTS & Visual Bible* di Beranda atau buka [Gemini Canvas Naskah Video Pendek](https://share.gemini.google/NFulYmtV6Anl) untuk merancang naskah per adegan, audio TTS bersih siap baca, dan kamus konsistensi tokoh/latar (Visual Bible). Naskah (Format 1 Tag Latar atau Format 4 JSON) langsung siap diimpor ke tab Motion lewat tab **📥 Impor dari Canvas Gemini (1-Klik)**.
   - Klik kartu *Generated SEO for YT dan Social Media* atau buka [Gemini Canvas SEO](https://share.gemini.google/BVWFVYHdez50) untuk riset kata kunci, judul ber-CTR tinggi, deskripsi algoritma, dan tag/hashtag viral bagi YouTube Shorts, TikTok, serta Instagram Reels.
 1. **Mode A: Dari Topik (AI Otomatis):**
    - Masukkan topik bahasan (contoh: *"3 Alasan Mengapa Bangun Jam 5 Pagi Mengubah Hidup"*).
@@ -363,16 +363,21 @@ Anda dapat menggabungkan keunggulan video nyata (*real-footage*) dari fitur **Kl
 
 ---
 
-## H. Fitur Tools Mandiri: Ekstrak Gaya Video Global
+## H. Fitur Tools Mandiri: Ekstrak Gaya Video Global (Chunking 8s & AI Merger)
 
-Fitur ini mengubah video referensi favorit dari platform apa pun (.mp4 / .mov / .webm) menjadi Template Remotion baru dan AI Agent Skill yang terdaftar secara global:
+Fitur ini mengubah video referensi favorit dari platform apa pun (.mp4 / .mov / .webm) menjadi Template Remotion baru dan AI Agent Skill yang terdaftar secara global menggunakan arsitektur **Chunked Multi-Step Analysis (Map-Reduce)**:
 1. **Pemisahan Kategori Visual:**
    - **Animasi Bergerak (Karakter & 3D Cel-Shaded):** Dialokasikan ke `motion/src/presets_animasi/` untuk engine Studio Animasi Bergerak.
    - **Grafis Statis (SVG & Motion Grafis):** Dialokasikan ke `motion/src/presets/` untuk engine Motion Standar.
-2. **Kuantisasi Warna 5 HEX & Pacing Otomatis:** Sistem mendeteksi pergantian scene dengan FFmpeg dan mengekstrak 5 warna HEX dominan via algoritma MedianCut Pillow.
-3. **Screenshot 9:16 Otomatis:** Mengambil thumbnail vertikal (270×480 px) ke `studio/aset/gaya/<slug>.jpg`.
-4. **Auto-Purge Video Mentah:** Opsi saklar untuk menghapus file video sumber berukuran besar setelah ekstraksi selesai agar menghemat ruang disk.
-5. **Pustaka Global & Penghapusan 1-Klik:** Template baru langsung muncul di menu Motion, Motion Pro, dan Studio Animasi dengan tombol hapus instan jika tidak lagi digunakan.
+2. **Segmentasi Waktu (Chunking 8 Detik):** Video referensi dipotong bertahap per 8 detik (0–8s, 8–16s, ... N) untuk mencegah detail transisi mikro dan pacing terlewat.
+3. **Analisa Mikro & Snapshot Thumbnail Tiap Step:** Setiap potongan dianalisis oleh AI Agent untuk mengekstrak titik cut, kecepatan pacing, palet 5 HEX lokal, dan snapshot 9:16 di `studio/aset/gaya/segments/<slug>_step_XX.jpg`.
+4. **Konsolidasi AI Agent (The Merger Phase):** Menggabungkan seluruh data segmen menjadi 1 kesatuan master:
+   - Kuantisasi 5 warna HEX master paling konsisten.
+   - Rata-rata pacing tertimbang seluruh video.
+   - Pemilihan cover poster terbaik untuk `studio/aset/gaya/<slug>.jpg`.
+5. **Auto-Purge Video Mentah:** Opsi saklar untuk menghapus file video sumber berukuran besar setelah ekstraksi selesai agar menghemat ruang disk.
+6. **Pustaka Global & Penghapusan 1-Klik:** Template baru langsung muncul di menu Motion, Motion Pro, dan Studio Animasi dengan tombol hapus instan jika tidak lagi digunakan.
+7. **Tabel Breakdown di File Skill:** Hasil analisis multi-segmen otomatis tercatat rapi di Bagian 6 file `motion/skills/<slug>/SKILL.md`.
 
 ---
 

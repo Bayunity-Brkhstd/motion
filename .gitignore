@@ -43,3 +43,12 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+
+# QA test screenshots & artifacts
+qa_*.png
+**/qa_*.png
+
+# Dynamic style segments cache
+studio/aset/gaya/segments/*
+!studio/aset/gaya/segments/.gitkeep
+

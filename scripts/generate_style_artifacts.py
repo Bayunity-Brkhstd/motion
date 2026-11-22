@@ -87,6 +87,23 @@ Seluruh ilustrasi adegan yang dibuat oleh AI Director dan dimasukkan ke properti
 - **Transisi Antar Adegan:** `{physics.get('dominant_transition', 'zoom-punch')}`
 - **Camera Shake on Impact:** `{str(physics.get('camera_shake_on_impact', True)).lower()}`
 """
+    # 6. Hasil Chunked Segment Analysis jika tersedia
+    seg = metrics.get("segment_analysis", {})
+    steps = seg.get("steps", [])
+    if steps:
+        chunk_val = seg.get("chunk_sec", 8.0)
+        content += f"""
+## 6. Hasil Analisis Multi-Segmen Video Referensi (Chunked {chunk_val}s)
+Video referensi telah diiris menjadi {len(steps)} segmen waktu (@ ~{chunk_val} detik per langkah) dan disintesis oleh AI Agent:
+
+| Step | Rentang Waktu | Pacing | Scene Cuts | Palet Dominan Segmen |
+|:---:|:---:|:---:|:---:|:---|
+"""
+        for s in steps:
+            p_hex = s.get("palette_hex", [])
+            pal_str = " ".join([f"`{c}`" for c in p_hex[:3]])
+            content += f"| **Step {s.get('step')}** | `{s.get('time_range')}` | ~{s.get('pacing_sec')}s | {s.get('scene_cuts')} cuts | {pal_str} |\n"
+
     target_path.parent.mkdir(parents=True, exist_ok=True)
     target_path.write_text(content, encoding="utf-8")
 

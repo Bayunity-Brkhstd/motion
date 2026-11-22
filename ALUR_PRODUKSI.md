@@ -86,17 +86,42 @@ flowchart TD
 
 ---
 
-## 3. Rincian 5 Pilar Pengarah Storyboard
+## 3. Rincian 5 Pilar Pengarah Storyboard (Sesuai Diagram Asli)
 
-Agar output cerita tidak berubah-ubah di tengah jalan, AI Agent dipandu memetakan 5 elemen wajib pada setiap kartu adegan (*scene card*):
+Sesuai diagram arsitektur asli, AI Agent memproses naskah mentah melalui **Analisa Konsep & Tema** dan **Analisa Storyboard (5 Pilar Kunci)**:
 
-| No | Elemen Analisa | Parameter yang Dikunci Sistem | Contoh Penerapan |
+```
++-----------------------------------------------------------------------------------+
+| 1. ANALISA KONSEP & TEMA                                                          |
+|    - Jenis gaya visual template (toon-desa, toon-3d, stickman, anime-cel, dll.)   |
+|    - Kecocokan narasi dan voice over:                                             |
+|      * Mode A: Narator Utama / Voiceover (Visual menceritakan kejadian narasi)    |
+|      * Mode B: Dialog Sketsa (Dubbing percakapan langsung antar-tokoh)            |
++-----------------------------------------------------------------------------------+
+| 2. ANALISA STORYBOARD (5 PILAR)                                                   |
+|    1. Latar: Tempat spesifik adegan (misal: Pelataran Masjid Baitussalam)         |
+|    2. Aset: Objek interaksi pendukung (misal: motor raib, buku catatan, kopi)     |
+|    3. Tokoh ada berapa: Fleksibel sesuai adegan (0 tokoh, 1 tokoh, atau 2+ tokoh) |
+|    4. Visualnya seperti apa agar konsisten: Palet warna, pakaian, & proporsi tokoh|
+|    5. Konsep: Apa yang diperagakan visual untuk merekonstruksi narasi narator     |
+|               (Balon dialog OFF jika mode narator; Balon ON hanya jika dialog)    |
++-----------------------------------------------------------------------------------+
+```
+
+### Tabel Parameter Storyboard:
+
+| No | Elemen Analisa | Parameter yang Dikunci Sistem | Contoh Penerapan (Kasus Pak Agus) |
 |---|---|---|---|
-| **1** | **Latar Tempat (*Environment*)** | Nama latar, suasana ruang, palet warna langit/dinding | *Warung Makan Desa Siforejo (Spanduk & Kopi)* |
-| **2** | **Aset & Properti** | Objek interaksi tangan tokoh | *Gelas Kopi Tubruk, Kursi Bambu Panjang* |
-| **3** | **Jumlah Tokoh** | Jumlah karakter aktif di scene (1 tokoh vs 2 tokoh) | *Scene 1: Budi sendiri; Scene 2: Budi + Ridwan* |
-| **4** | **Konsistensi Visual** | Palet 5 HEX dominan, ciri pakaian & warna kulit | *Budi: Kaos Hijau `#22c55e`; Ridwan: Kemeja Biru* |
-| **5** | **Konsep & Dialog** | Judul scene, callout badge layar, balon teks pop-up, naskah VO | *Badge: `📍 WARUNG SIFOREJO`<br/>Balon: `Mbok, kopi tubruk satu ya!`* |
+| **1** | **Latar Tempat (*Environment*)** | Nama latar, detail suasana, palet warna langit/lingkungan | *Pelataran Masjid Baitussalam (Kubah, Halaman Parkir)* |
+| **2** | **Aset & Properti** | Objek kunci yang memperkuat penceritaan | *Tempat Parkir Kosong, Sandal Masjid, Catatan Pak RT* |
+| **3** | **Tokoh Ada Berapa** | Fleksibel: 0 (b-roll latar/aset), 1 (monolog/panik), 2 (interaksi) | *Scene 1: Pak Agus sendiri (1); Scene 2: Pak Agus + Pak RT (2)* |
+| **4** | **Konsistensi Visual** | Palet 5 HEX dominan, ciri pakaian & warna kulit tokoh | *Pak Agus: Baju Koko Cokelat `#78350F`; Pak RT: Peci Hitam `#0F172A`* |
+| **5** | **Konsep & Rekonstruksi** | Aksi peraga yang menghidupkan narasi voiceover tanpa balon komik | *Visual merekonstruksi Pak Agus panik melapor ke Pak RT yang menyimak, tanpa balon obrolan menutupi layar* |
+
+> [!NOTE]
+> **Aturan Balon Obrolan (*Speech Bubble*):**
+> - **Mode Narator Tunggal (Umum):** `tampilkan_balon: false`. Audio diisi suara narator, sedangkan visual memperagakan cerita. Layar bersih, luas, fokus pada latar dan aksi tokoh. Subtitle narasi mengalir di bawah.
+> - **Mode Dialog Komik (Khusus):** `tampilkan_balon: true`. Hanya digunakan jika naskah secara eksplisit merupakan sketsa percakapan bolak-balik dengan audio suara karakter langsung.
 
 ---
 
@@ -255,6 +280,72 @@ File jembatan ini menjadi satu-satunya sumber kebenaran (*single source of truth
    Konsumsi RAM selama kompilasi dan render Remotion wajib berada di bawah **600 MB**, dengan menggunakan kompresi SVG aman dan pembersihan buffer canvas.
 3. **Kepatuhan Terhadap Keyframe QA:**  
    Sebelum merender keseluruhan video secara penuh, CLI wajib memastikan snapshot *Keyframe QA* adegan pertama berhasil diekstrak dan valid secara visual.
+
+---
+
+## 9. Mode Produksi Cerita & Floating Real-Time Diagnostic Console
+
+### 9.1 Empat Mode Produksi Cerita (Studio UI)
+Pengguna dapat memilih arketipe cerita di Studio Web sebelum AI Agent menganalisa naskah:
+1. **🎙️ Mode Narator & Reka Visual (Default):**
+   - Suara narator membawakan naskah/VO.
+   - Tokoh dan latar merekonstruksi adegan secara hidup.
+   - **Balon obrolan dimatikan (OFF)** agar layar bersih dari bubble teks komik.
+2. **💬 Mode Sketsa Dialog Interaktif:**
+   - Obrolan timbal balik 2 tokoh secara langsung.
+   - **Balon obrolan adaptif menyala (ON)** dengan penempatan otomatis di atas kepala tokoh yang sedang berbicara.
+3. **👤 Mode Monolog / POV Curhat:**
+   - 1 Tokoh menghadap ke arah audiens/kamera, membawakan cerita atau opini secara ekspresif.
+4. **📊 Mode Infografis Kinetik:**
+   - Tokoh presenter/stickman memandu penjelasan data, grafik, dan teks sorot kinetik dinamis.
+
+### 9.2 Floating Diagnostic Console & Human Error Translator
+Widget mengambang (*floating pill & panel*) di pojok kanan bawah Studio Web UI:
+- **Status Real-Time:** Menampilkan indikator dot dinamis (`IDLE` hijau, `RUNNING` biru berkedip, `ERROR` merah berdenyut).
+- **Penerjemah Bahasa Manusia (*Human-Friendly Error Translator*):**
+  Mengubah pesan galat teknis yang membingungkan menjadi diagnosa ramah dan panduan solusi praktis:
+  - **Kuota Habis (403/429/RESOURCE_EXHAUSTED):** Diterjemahkan sebagai *"Batas Kuota Gemini API Habis"* lengkap dengan instruksi menambah rolling key.
+  - **FFmpeg Hilang (ENOENT/ffmpeg not found):** Diterjemahkan sebagai *"FFmpeg Belum Terpasang"* dengan perintah instalasi cepat via `winget`.
+  - **Memori Habis (JavaScript heap out of memory):** Diterjemahkan sebagai *"Memori RAM Penuh"* dengan saran rasio vertikal dan pemangkasan adegan.
+  - **Durasi Desync:** Diterjemahkan sebagai *"Naskah Melebihi Durasi Audio"* dengan tombol pintas *"⚡ Sesuaikan ke Akhir Audio"*.
+- **Auto-Popup:** Panel diagnostik otomatis terbuka ketika terjadi kendala agar pengguna segera mengetahui penyebab dan solusinya tanpa harus membuka terminal hitam.
+
+---
+
+## 10. Pipeline Ekstraksi Gaya Video: Chunking 8 Detik & AI Merger (Map-Reduce)
+
+Untuk memastikan gaya visual dari video referensi (TikTok, Reels, Shorts) dapat diekstrak secara presisi tanpa ada detail transisi dan pacing yang terlewat, sistem menggunakan arsitektur **Map-Reduce Time-Sliced**:
+
+```mermaid
+flowchart LR
+    A["1. Upload Video Referensi"] --> B["2. Chunking Video<br>(Potong per 8s: 0-8s, 8-16s, ... N)"]
+    B --> C["3. Analisis Mikro Per Segmen<br>• Pacing & Scene Cuts<br>• Palet Lokal 5-HEX<br>• Snapshot Thumbnail 9:16"]
+    C --> D["4. AI Agent Merger (Konsolidasi)<br>• Master 5-HEX Palette<br>• Rata-rata Pacing Tertimbang<br>• Seleksi Cover Poster Terbaik"]
+    D --> E["5. Output Ready-to-Use<br>• motion/skills/slug/SKILL.md<br>• motion/src/presets/slug.tsx<br>• Cover studio/aset/gaya/slug.jpg"]
+```
+
+### Rincian Tahap Chunking & Merger:
+1. **Segmentasi Waktu (Window 8 Detik):** Video referensi durasi $D$ dipotong menjadi $N = \lceil D / 8.0 \rceil$ langkah.
+2. **Analisis Mikro Per Segmen (Step 1..N):** Setiap segmen dianalisis individual oleh AI Agent, menghasilkan `step_XX_metrics.json` dan snapshot 9:16 `studio/aset/gaya/segments/<slug>_step_XX.jpg`.
+3. **Konsolidasi / The Merger:** AI Agent menggabungkan seluruh file segmen menjadi 1 file `metrics.json` konsolidasi dan menyusun tabel ringkasan di `SKILL.md` (Bagian 6).
+4. **Registrasi Otomatis:** Template Remotion instan muncul di galeri Studio tanpa perlu me-restart server.
+
+---
+
+## 11. Pipeline Canvas Gemini: Generator Naskah Video Pendek, TTS & Visual Bible
+
+Integrasi hulu naskah kini mengarah ke aplikasi Canvas Gemini terbaru:  
+🔗 **URL Resmi:** `https://share.gemini.google/NFulYmtV6Anl`
+
+### Format Output yang Didukung:
+1. **Format 1 (Naskah Tag Latar):**
+   Format teks standar `[ADEGAN X | LATAR: ...]`, langsung diparsing menjadi adegan visual terpisah di Storyboard.
+2. **Format 2 (Naskah Bersih TTS):**
+   Teks audio bebas timestamp dan kurung siku, siap ditempel ke ElevenLabs atau Google AI Studio TTS.
+3. **Format 3 (Visual Bible & Konsistensi Tokoh):**
+   Kamus visual yang mengunci detail pakaian tokoh, warna dinding latar, dan pencahayaan agar 100% konsisten antar-adegan.
+4. **Format 4 (Manifest Storyboard JSON):**
+   Format deterministik JSON (`adegan_storyboard`) yang dapat diimpor langsung ke tab Motion Studio via **📥 Impor dari Canvas Gemini (1-Klik)**.
 
 ---
 *Dokumen ini merupakan pedoman resmi alur produksi video animasi Cheat Clip & Motion. Seluruh modifikasi kode di masa mendatang wajib merujuk pada standar arsitektur di atas.*

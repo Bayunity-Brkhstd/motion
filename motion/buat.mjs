@@ -68,6 +68,11 @@ const opsi = Object.fromEntries(argv.filter((a) => a.startsWith('--')).map((a) =
 const fileNaskah = argv.find((a) => !a.startsWith('--')) ?? 'naskah/contoh.json';
 const rawNaskah = readFileSync(fileNaskah, 'utf8').replace(/^\uFEFF/, '');
 const naskah = JSON.parse(rawNaskah);
+// Kompatibilitas Canvas Gemini (Format 4: blueprint 2.0 visual bible)
+if (naskah.adegan_storyboard && !naskah.adegan) {
+  naskah.adegan = naskah.adegan_storyboard;
+}
+if (!Array.isArray(naskah.adegan)) naskah.adegan = [];
 const nama = basename(fileNaskah, '.json');
 if (opsi.gaya) naskah.gaya = opsi.gaya;
 // SVG objek per adegan (gambar.mjs atau naskah tempelan): saring lagi sebelum dirender

@@ -3945,6 +3945,142 @@
         padding: 18px 16px
       }
     }
+
+    /* Floating Diagnostic Log Console */
+    .fl-log-wadah {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 99999;
+      font-family: var(--sans);
+      pointer-events: none;
+    }
+    .fl-log-pill {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(17, 23, 37, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      padding: 7px 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 1px rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      margin-left: auto;
+    }
+    .fl-log-pill:hover {
+      background: rgba(21, 28, 44, 0.98);
+      border-color: var(--aksen);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65), 0 0 12px rgba(34, 211, 238, 0.35);
+    }
+    .fl-log-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #10b981;
+      display: inline-block;
+      box-shadow: 0 0 8px #10b981;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    .fl-log-dot.jalan {
+      background: #38bdf8;
+      box-shadow: 0 0 10px #38bdf8;
+      animation: flPulse 1.2s infinite;
+    }
+    .fl-log-dot.gagal {
+      background: #ef4444;
+      box-shadow: 0 0 12px #ef4444;
+      animation: flPulse 0.8s infinite;
+    }
+    @keyframes flPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.25); }
+    }
+    .fl-log-teks {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--teks);
+      white-space: nowrap;
+    }
+    .fl-log-badge {
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--redup);
+      font-family: var(--mono);
+    }
+    .fl-log-btn-mini {
+      background: none;
+      border: none;
+      color: var(--redup);
+      font-size: 10px;
+      cursor: pointer;
+      padding: 0 2px;
+      line-height: 1;
+    }
+    .fl-log-panel {
+      pointer-events: auto;
+      width: 520px;
+      max-width: calc(100vw - 32px);
+      background: rgba(17, 23, 37, 0.97);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 1px rgba(255, 255, 255, 0.3);
+      overflow: hidden;
+      margin-bottom: 8px;
+      animation: flMuncul 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    @keyframes flMuncul {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .fl-log-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--garis);
+    }
+    .fl-status-tag {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+    .tag-idle { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .tag-jalan { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .tag-gagal { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .fl-log-terminal {
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.55;
+      padding: 12px 14px;
+      max-height: 250px;
+      overflow-y: auto;
+      background: #080c14;
+      color: #94a3b8;
+    }
+    .fl-log-baris {
+      word-break: break-word;
+      white-space: pre-wrap;
+      margin-bottom: 2px;
+    }
+    .fl-log-baris.fl-info { color: #94a3b8; }
+    .fl-log-baris.fl-sukses { color: #34d399; font-weight: 600; }
+    .fl-log-baris.fl-warn { color: #fbbf24; }
+    .fl-log-baris.fl-error { color: #f87171; font-weight: 600; background: rgba(239, 68, 68, 0.1); padding: 1px 4px; border-radius: 4px; }
   </style>
 </head>
 
@@ -4113,7 +4249,7 @@
           </div>
 
           <!-- Section Generator Naskah via Canvas Gemini -->
-          <div class="kartu b-canvas" data-url="https://share.gemini.google/3dn27OWTHgaF" title="Buka Aplikasi Canvas Gemini">
+          <div class="kartu b-canvas" data-url="https://share.gemini.google/NFulYmtV6Anl" title="Buka Generator Naskah Video Pendek, TTS & Visual Bible">
             <div class="canvas-info">
               <div class="canvas-tag">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
@@ -4122,12 +4258,12 @@
                 <span>Aplikasi Canvas Gemini</span>
                 <span class="dot-online"></span>
               </div>
-              <h3>Generate Naskah Video Terstruktur</h3>
-              <p>Rancang alur cerita, kalimat hook memikat, dan rincian adegan demi adegan secara visual & interaktif menggunakan Gemini Canvas. Naskah yang dihasilkan langsung siap disalin dan ditempel ke tab Motion.</p>
+              <h3>Generator Naskah Video Pendek, TTS &amp; Visual Bible</h3>
+              <p>Rancang alur adegan [ADEGAN X | LATAR: ...], audio TTS bersih siap baca, dan kamus konsistensi latar &amp; tokoh (Visual Bible) di Canvas Gemini. Hasilnya langsung siap diterapkan ke tab Motion dengan 1-klik.</p>
             </div>
             <div class="canvas-aksi">
-              <a href="https://share.gemini.google/3dn27OWTHgaF" target="_blank" rel="noopener noreferrer" class="tombol utama tombol-canvas" data-url="https://share.gemini.google/3dn27OWTHgaF">
-                <span>Buka Canvas Gemini</span>
+              <a href="https://share.gemini.google/NFulYmtV6Anl" target="_blank" rel="noopener noreferrer" class="tombol utama tombol-canvas" data-url="https://share.gemini.google/NFulYmtV6Anl">
+                <span>Buka Generator Naskah Canvas</span>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                   <polyline points="15 3 21 3 21 9" />
@@ -4456,62 +4592,102 @@
 
               <!-- SEKSI 1: STORYBOARD ADEGAN & DIALOG (Interaktif) -->
               <div id="boxAnimasiStoryboard">
-                <!-- Box Input Konsep Cerita & Parameter Sutradara -->
-                <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:12px">
-                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-                    <label style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:6px">
-                      <span>🎬 Konsep Cerita Animasi:</span>
-                    </label>
-                    <span style="font-size:10px;color:var(--aksen);font-weight:600">AI Director &amp; Storyboard Engine</span>
-                  </div>
-                  <textarea class="input" id="animasiTemaCerita" rows="2"
-                    style="font-size:12px;padding:7px 10px;min-height:56px;line-height:1.4"
-                    placeholder="misal: Budi lagi ngopi di warung makan pinggir desa Siforejo. Tiba-tiba Ridwan teman akrabnya datang ke kursi bambu depan warung dan menagih hutang rokok sebungkus malam takbiran. Budi kaget lalu pura-pura lupa..."></textarea>
-                  
-                  <!-- Pengaturan Nama Tokoh & Preferensi Latar -->
-                  <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:6px;margin-top:8px">
-                    <div>
-                      <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Tokoh Utama (Karakter 1):</label>
-                      <input type="text" class="input" id="animasiTokoh1" value="Budi" placeholder="misal: Budi" style="font-size:11px;padding:5px 8px" />
-                    </div>
-                    <div>
-                      <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Tokoh 2 (Lawan Bicara):</label>
-                      <input type="text" class="input" id="animasiTokoh2" value="Ridwan" placeholder="misal: Ridwan (opsional)" style="font-size:11px;padding:5px 8px" />
-                    </div>
-                    <div>
-                      <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Preferensi Nuansa Latar:</label>
-                      <select class="input" id="animasiLatarPreferensi" style="font-size:11px;padding:5px 8px">
-                        <option value="auto" selected>🤖 Otomatis Dianalisa AI Agent</option>
-                        <option value="warung-desa">🛖 Warung Makan Desa (Siforejo)</option>
-                        <option value="kursi-bambu">🎋 Kursi Bambu Depan Warung</option>
-                        <option value="pos-ronda">🥁 Pos Ronda / Gardu Kamling</option>
-                        <option value="jalan-desa">🌾 Jalanan Sawah Desa</option>
-                        <option value="senja">🌇 Langit Senja Cel-Shaded</option>
-                        <option value="kota">🏙️ Kota &amp; Perkantoran Modern</option>
-                        <option value="blueprint">📐 Blueprint Edukasi Teknis</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <!-- Tombol Utama Analisa AI & Chip Contoh Cepat -->
-                  <button type="button" id="tblSusunAdeganAI" class="tombol utama"
-                    style="width:100%;font-size:12px;padding:7px 14px;margin-top:10px;gap:6px">
-                    ✨ Analisa Konsep &amp; Susun Adegan (AI Agent)
+                <!-- PILIH SUMBER NASKAH (Tampilan Bersih untuk Awam) -->
+                <div class="pil" style="margin:0 0 12px 0;width:100%;display:grid;grid-template-columns:1.2fr 1fr">
+                  <button type="button" class="aktif" id="btnTabSumberCanvas" onclick="pilihSumberInputAnimasi('canvas')">
+                    📥 Impor dari Canvas Gemini (1-Klik)
                   </button>
+                  <button type="button" id="btnTabSumberAI" onclick="pilihSumberInputAnimasi('ai')">
+                    ✍️ Tulis Konsep Manual
+                  </button>
+                </div>
 
-                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px">
-                    <span style="font-size:10px;color:var(--redup)">Inspirasi Cepat:</span>
-                    <button type="button" class="chip-cerita" onclick="isiContohCerita('rokok')"
-                      style="font-size:10.5px;padding:2px 7px;border-radius:5px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#f59e0b;cursor:pointer">
-                      🚬 Hutang Rokok Siforejo
+                <!-- PANEL A: IMPOR DARI CANVAS GEMINI (DEFAULT, SUPER BERSIH) -->
+                <div id="panelSumberCanvas" style="background:rgba(56,189,248,0.04);border:1px dashed var(--aksen);border-radius:10px;padding:12px;margin-bottom:14px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                    <b style="font-size:12.5px;color:var(--aksen)">📋 Tempelkan Hasil Naskah dari Canvas Gemini:</b>
+                    <span style="font-size:10.5px;color:var(--redup)">Format 1 (Tag Latar) atau Format 4 (JSON)</span>
+                  </div>
+                  <textarea class="input" id="teksImporUtama" rows="3"
+                    style="font-family:var(--mono);font-size:11.5px;line-height:1.45;min-height:85px"
+                    placeholder="Tinggal 'Salin' di Canvas Gemini, lalu klik kanan &amp; 'Paste' di sini...&#10;&#10;Contoh Format 1:&#10;[ADEGAN 1 | LATAR: Halaman Sekolah]&#10;Pagi itu Pak Budi datang lebih awal..."></textarea>
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+                    <span style="font-size:11px;color:var(--redup)">✨ Latar &amp; karakter otomatis terisi rapi ke Storyboard.</span>
+                    <button type="button" class="tombol utama kecil" onclick="prosesImporUtama()"
+                      style="background:var(--aksen);color:#031418;font-weight:700;padding:6px 16px;font-size:12px">
+                      ⚡ Terapkan Naskah
                     </button>
-                    <button type="button" class="chip-cerita" onclick="isiContohCerita('ngopi')"
-                      style="font-size:10.5px;padding:2px 7px;border-radius:5px;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);color:#38bdf8;cursor:pointer">
-                      ☕ Ngopi &amp; Reuni Desa
-                    </button>
-                    <button type="button" class="chip-cerita" onclick="isiContohCerita('ronda')"
-                      style="font-size:10.5px;padding:2px 7px;border-radius:5px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.25);color:#c084fc;cursor:pointer">
-                      🥁 Sketsa Pos Ronda
+                  </div>
+                </div>
+
+                <!-- PANEL B: TULIS KONSEP MANUAL (Tersembunyi by default agar tidak membingungkan) -->
+                <div id="panelSumberManual" style="display:none;margin-bottom:14px">
+                  <!-- Mode Produksi Cerita (4 Mode Fleksibel) -->
+                  <div style="background:rgba(255,255,255,0.015);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:12px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                      <label style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:6px">
+                        <span>🎭 Mode Produksi Cerita:</span>
+                      </label>
+                      <span id="badgeModeAktif" style="font-size:10px;padding:2px 8px;border-radius:12px;background:rgba(56,189,248,0.15);color:#38bdf8;font-weight:600">🎙️ Narator (Visual Re-enactment)</span>
+                    </div>
+                    <input type="hidden" id="modeProduksiCerita" value="narator" />
+                    <div id="wadahModeCerita" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:8px">
+                      <div class="kartu-mode-cerita aktif" data-mode="narator" style="cursor:pointer;padding:8px 10px;border-radius:8px;border:2px solid var(--aksen);background:rgba(56,189,248,0.08);transition:all 0.2s">
+                        <div style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:5px">🎙️ Narator</div>
+                        <div style="font-size:10px;color:var(--redup);line-height:1.3;margin-top:2px">VO bercerita, visual reka adegan. Balon OFF.</div>
+                      </div>
+                      <div class="kartu-mode-cerita" data-mode="dialog" style="cursor:pointer;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02);transition:all 0.2s">
+                        <div style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:5px">💬 Dialog</div>
+                        <div style="font-size:10px;color:var(--redup);line-height:1.3;margin-top:2px">Obrolan timbal-balik 2 tokoh. Balon chat ON.</div>
+                      </div>
+                      <div class="kartu-mode-cerita" data-mode="monolog" style="cursor:pointer;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02);transition:all 0.2s">
+                        <div style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:5px">👤 Monolog</div>
+                        <div style="font-size:10px;color:var(--redup);line-height:1.3;margin-top:2px">1 Tokoh POV menghadap audiens secara ekspresif.</div>
+                      </div>
+                      <div class="kartu-mode-cerita" data-mode="infografis" style="cursor:pointer;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02);transition:all 0.2s">
+                        <div style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:5px">📊 Infografis</div>
+                        <div style="font-size:10px;color:var(--redup);line-height:1.3;margin-top:2px">Presenter kinetik + teks sorot dinamis &amp; data.</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Box Input Konsep Cerita & Parameter Sutradara -->
+                  <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:12px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                      <label style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:6px">
+                        <span>🎬 Ide / Topik Cerita Animasi:</span>
+                      </label>
+                      <span style="font-size:10px;color:var(--aksen);font-weight:600">AI Director &amp; Storyboard Engine</span>
+                    </div>
+                    <textarea class="input" id="animasiTemaCerita" rows="2"
+                      style="font-size:12px;padding:7px 10px;min-height:56px;line-height:1.4"
+                      placeholder="misal: Budi lagi ngopi di warung makan pinggir desa Siforejo..."></textarea>
+                    
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:6px;margin-top:8px">
+                      <div>
+                        <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Tokoh Utama:</label>
+                        <input type="text" class="input" id="animasiTokoh1" value="Budi" placeholder="Budi" style="font-size:11px;padding:5px 8px" />
+                      </div>
+                      <div>
+                        <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Tokoh 2 (Lawan Bicara):</label>
+                        <input type="text" class="input" id="animasiTokoh2" value="Ridwan" placeholder="Ridwan" style="font-size:11px;padding:5px 8px" />
+                      </div>
+                      <div>
+                        <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Preferensi Latar:</label>
+                        <select class="input" id="animasiLatarPreferensi" style="font-size:11px;padding:5px 8px">
+                          <option value="auto" selected>🤖 Otomatis AI</option>
+                          <option value="warung-desa">🛖 Warung Makan Desa</option>
+                          <option value="kursi-bambu">🎋 Kursi Bambu</option>
+                          <option value="pos-ronda">🥁 Pos Ronda</option>
+                          <option value="jalan-desa">🌾 Jalanan Sawah</option>
+                          <option value="kota">🏙️ Perkantoran Modern</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <button type="button" id="tblSusunAdeganAI" class="tombol utama"
+                      style="width:100%;font-size:12px;padding:7px 14px;margin-top:10px;gap:6px">
+                      ✨ Analisa Konsep &amp; Susun Adegan (AI Agent)
                     </button>
                   </div>
                 </div>
@@ -4562,26 +4738,9 @@
                 </div>
               </div>
 
-              <!-- Rig Karakter Picker Cards -->
-              <div class="bidang" style="margin-bottom:10px">
-                <label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px">Pilih Rig Karakter Animasi:</label>
-                <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(110px, 1fr));gap:8px" id="wadahPilihanRig">
-                  <div class="kartu-rig aktif" data-rig="toon-3d" style="border:2px solid var(--aksen);border-radius:8px;padding:8px;background:rgba(56,189,248,0.08);cursor:pointer;text-align:center">
-                    <div style="font-size:22px;margin-bottom:2px">🎭</div>
-                    <b style="font-size:12px;display:block">Toon 3D</b>
-                    <small style="font-size:10px;color:var(--redup)">Perspektif & Cel-Shaded</small>
-                  </div>
-                  <div class="kartu-rig" data-rig="stickman" style="border:1px solid var(--border);border-radius:8px;padding:8px;background:rgba(255,255,255,0.02);cursor:pointer;text-align:center">
-                    <div style="font-size:22px;margin-bottom:2px">🏃</div>
-                    <b style="font-size:12px;display:block">Stickman</b>
-                    <small style="font-size:10px;color:var(--redup)">Kinetik Jalan & Lari</small>
-                  </div>
-                  <div class="kartu-rig" data-rig="isometric" style="border:1px solid var(--border);border-radius:8px;padding:8px;background:rgba(255,255,255,0.02);cursor:pointer;text-align:center">
-                    <div style="font-size:22px;margin-bottom:2px">📐</div>
-                    <b style="font-size:12px;display:block">Isometric</b>
-                    <small style="font-size:10px;color:var(--redup)">3D Balok & Tech Grid</small>
-                  </div>
-                </div>
+              <!-- Rig Karakter tersimpan otomatis mengikuti Template Visual pilihan di kanan -->
+              <div id="wadahPilihanRig" style="display:none">
+                <div class="kartu-rig aktif" data-rig="toon-3d"></div>
               </div>
 
               <!-- Rasio Aspek Video -->
@@ -4887,52 +5046,8 @@
                 </button>
               </div>
 
-              <!-- PUSTAKA & PILIHAN LATAR TEMPAT (ENVIRONMENT) -->
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-                <label style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:6px">
-                  <span>🏞️ Pilihan Latar Tempat:</span>
-                  <span id="labelLatarAktif" style="font-size:10px;background:rgba(56,189,248,0.15);color:var(--aksen);padding:1px 6px;border-radius:4px">Warung Siforejo</span>
-                </label>
-                <span style="font-size:10px;color:var(--redup)">Canvas 2D Prosedural</span>
-              </div>
-              <div class="pustaka-latar-grid" id="wadahPilihanLatarGlobal" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));gap:6px;margin-bottom:12px">
-                <div class="kartu-latar aktif" data-latar="warung-desa" style="padding:6px 8px;border-radius:6px;background:rgba(56,189,248,0.12);border:1px solid var(--aksen);cursor:pointer;font-size:11px">
-                  <div style="font-weight:600;margin-bottom:2px">🛖 Warung Siforejo</div>
-                  <small style="color:var(--redup);display:block;font-size:9.5px">Spanduk &amp; Kopi Tubruk</small>
-                </div>
-                <div class="kartu-latar" data-latar="kursi-bambu" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
-                  <div style="font-weight:600;margin-bottom:2px">🎋 Kursi Bambu</div>
-                  <small style="color:var(--redup);display:block;font-size:9.5px">Teras Depan &amp; Rokok</small>
-                </div>
-                <div class="kartu-latar" data-latar="jalan-desa" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
-                  <div style="font-weight:600;margin-bottom:2px">🌾 Sawah Pedesaan</div>
-                  <small style="color:var(--redup);display:block;font-size:9.5px">Jalan &amp; Tiang Listrik</small>
-                </div>
-                <div class="kartu-latar" data-latar="pos-ronda" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
-                  <div style="font-weight:600;margin-bottom:2px">🥁 Pos Ronda</div>
-                  <small style="color:var(--redup);display:block;font-size:9.5px">Gardu &amp; Kentongan</small>
-                </div>
-                <div class="kartu-latar" data-latar="senja" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
-                  <div style="font-weight:600;margin-bottom:2px">🌇 Langit Senja</div>
-                  <small style="color:var(--redup);display:block;font-size:9.5px">Siluet Sunset Cel</small>
-                </div>
-                <div class="kartu-latar" data-latar="kota" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
-                  <div style="font-weight:600;margin-bottom:2px">🏙️ Kota Modern</div>
-                  <small style="color:var(--redup);display:block;font-size:9.5px">Gedung &amp; Kantor</small>
-                </div>
-                <div class="kartu-latar" data-latar="blueprint" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
-                  <div style="font-weight:600;margin-bottom:2px">📐 Blueprint</div>
-                  <small style="color:var(--redup);display:block;font-size:9.5px">Grid Teknis Edukasi</small>
-                </div>
-                <div class="kartu-latar" data-latar="isometric-grid" style="padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid var(--border);cursor:pointer;font-size:11px">
-                  <div style="font-weight:600;margin-bottom:2px">🧊 Isometric Grid</div>
-                  <small style="color:var(--redup);display:block;font-size:9.5px">3D Balok &amp; Grid</small>
-                </div>
-              </div>
-
-              <div style="padding:8px 10px;background:rgba(56,189,248,0.06);border:1px dashed rgba(56,189,248,0.3);border-radius:6px;font-size:11px;color:var(--redup);line-height:1.4">
-                🎨 <b>Latar Dinamis:</b> Klik kartu latar di atas untuk memilih latar utama atau atur latar per adegan di Storyboard.
-              </div>
+              <!-- Pustaka Latar otomatis mengikuti adegan di naskah / Storyboard -->
+              <div id="wadahPilihanLatarGlobal" style="display:none"></div>
             </div>
             <div class="bidang" style="margin-top:12px">
               <label style="display:block;margin-bottom:6px;font-weight:500;font-size:13px">Audio Narasi</label>
@@ -5419,6 +5534,27 @@
                 <small style="font-size:10.5px;color:var(--redup);margin-top:4px;display:block">
                   Akan menjadi nama folder skill <code>motion/skills/&lt;slug&gt;</code> dan template kustom terdaftar.
                 </small>
+              </div>
+
+              <!-- Mode Chunking Multi-Step (Alur Video Segmentasi & AI Merger) -->
+              <div style="margin-top:14px;background:rgba(255,255,255,0.03);border:1px solid var(--garis);border-radius:8px;padding:12px">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                  <label style="font-size:12px;font-weight:700;color:var(--teks);display:flex;align-items:center;gap:6px">
+                    ✂️ Alur Ekstraksi: Chunking &amp; AI Merger
+                  </label>
+                  <span style="font-size:9.5px;padding:2px 7px;border-radius:99px;background:rgba(245,158,11,0.18);color:#f59e0b;font-weight:700;border:1px solid rgba(245,158,11,0.3)">Map-Reduce AI</span>
+                </div>
+                <div style="font-size:11px;color:var(--redup);line-height:1.4;margin-bottom:8px">
+                  Video dibagi menjadi potongan mikro bertahap (0–8s, 8–16s, dst), dianalisis per segmen (gerak, warna, snapshot), lalu <b>digabungkan utuh</b> menjadi 1 Skill &amp; Template ready-to-use.
+                </div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="font-size:11px;color:var(--teks);white-space:nowrap;font-weight:600">Durasi Per Potongan:</span>
+                  <select id="pilihChunkSecGlobal" class="input" style="padding:5px 8px;font-size:11.5px;border-radius:6px;background:var(--kartu);color:var(--teks);flex:1">
+                    <option value="6.0">⚡ 6 Detik (Super Mikro &amp; Sangat Detail)</option>
+                    <option value="8.0" selected>🎯 8 Detik (Rekomendasi Standar)</option>
+                    <option value="12.0">🕒 12 Detik (Video Panjang / Pacing Santai)</option>
+                  </select>
+                </div>
               </div>
 
               <!-- Checkbox Auto-Purge -->
@@ -6533,6 +6669,34 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
       if (mode === 'storyboard') renderDaftarAdeganAnimasi();
     });
 
+    // ── Mode Produksi Cerita (Narator / Dialog / Monolog / Infografis) ────
+    function pilihModeCerita(mode) {
+      const input = $('#modeProduksiCerita');
+      if (input) input.value = mode;
+      const badge = $('#badgeModeAktif');
+      const wadah = $('#wadahModeCerita');
+      if (wadah) {
+        $$('.kartu-mode-cerita', wadah).forEach(k => {
+          const match = k.dataset.mode === mode;
+          k.classList.toggle('aktif', match);
+          k.style.border = match ? '2px solid var(--aksen)' : '1px solid var(--border)';
+          k.style.background = match ? 'rgba(56,189,248,0.08)' : 'rgba(255,255,255,0.02)';
+        });
+      }
+      const labelMap = {
+        narator: '🎙️ Narator (Visual Re-enactment)',
+        dialog: '💬 Dialog Interaktif',
+        monolog: '👤 Monolog POV',
+        infografis: '📊 Infografis Kinetik'
+      };
+      if (badge) badge.textContent = labelMap[mode] || mode;
+    }
+    window.pilihModeCerita = pilihModeCerita;
+
+    $$('#wadahModeCerita .kartu-mode-cerita').forEach(k => {
+      k.onclick = () => pilihModeCerita(k.dataset.mode);
+    });
+
     // ── Storyboard Adegan Animasi Karakter & Dialog ────────────────────────
     let DATA_ADEGAN_ANIMASI = [];
 
@@ -6742,6 +6906,116 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
     }
     window.isiContohCerita = isiContohCerita;
 
+    // ── Logika Impor Naskah dari Canvas Gemini (Format 1 & Format 4) ────
+    // Tab Switch: Impor dari Canvas vs Tulis Konsep Manual
+    function pilihSumberInputAnimasi(mode) {
+      const panelCanvas = $('#panelSumberCanvas');
+      const panelManual = $('#panelSumberManual');
+      const btnCanvas = $('#btnTabSumberCanvas');
+      const btnAI = $('#btnTabSumberAI');
+
+      if (mode === 'canvas') {
+        if (panelCanvas) panelCanvas.style.display = 'block';
+        if (panelManual) panelManual.style.display = 'none';
+        if (btnCanvas) btnCanvas.classList.add('aktif');
+        if (btnAI) btnAI.classList.remove('aktif');
+      } else {
+        if (panelCanvas) panelCanvas.style.display = 'none';
+        if (panelManual) panelManual.style.display = 'block';
+        if (btnCanvas) btnCanvas.classList.remove('aktif');
+        if (btnAI) btnAI.classList.add('aktif');
+      }
+    }
+    window.pilihSumberInputAnimasi = pilihSumberInputAnimasi;
+
+    function prosesImporUtama() {
+      const raw = ($('#teksImporUtama')?.value || $('#teksImporCanvas')?.value || '').trim();
+      if (!raw) return toast('Tempelkan hasil salinan naskah atau JSON dari Canvas Gemini terlebih dahulu.', true);
+
+      // 1. Deteksi Format 4: Manifest Storyboard JSON (blueprint 2.0 visual bible)
+      if (raw.startsWith('{')) {
+        try {
+          const parsed = JSON.parse(raw);
+          const adeganList = parsed.adegan_storyboard || parsed.adegan;
+          if (Array.isArray(adeganList) && adeganList.length > 0) {
+            DATA_ADEGAN_ANIMASI = adeganList;
+            if (parsed.judul && $('#animasiTemaCerita')) {
+              $('#animasiTemaCerita').value = parsed.judul;
+            }
+            if (parsed.mode_cerita && window.pilihModeCerita) {
+              window.pilihModeCerita(parsed.mode_cerita);
+            }
+            renderDaftarAdeganAnimasi();
+            return toast(`✅ Berhasil menerapkan ${adeganList.length} adegan dari Canvas Gemini!`);
+          }
+        } catch (e) {
+          // Lanjutkan ke parser teks jika bukan JSON murni
+        }
+      }
+
+      // 2. Deteksi Format 1: Naskah Tag Latar [ADEGAN X | LATAR: ...]
+      const regexAdegan = /\[ADEGAN\s*(\d+)?\s*\|\s*LATAR:\s*([^\]]+)\]([\s\S]*?)(?=(?:\[ADEGAN\s*\d*\s*\|\s*LATAR:|$))/gi;
+      const matches = [...raw.matchAll(regexAdegan)];
+
+      if (matches.length > 0) {
+        const listAdegan = matches.map((m, idx) => {
+          const no = m[1] || (idx + 1);
+          const namaLatar = m[2].trim();
+          const teksNarasi = m[3].trim();
+          let latarSlug = namaLatar.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+          if (latarSlug.includes('sekolah') || latarSlug.includes('halaman')) latarSlug = 'jalan-desa';
+          else if (latarSlug.includes('kelas') || latarSlug.includes('kantor') || latarSlug.includes('ruang')) latarSlug = 'warung-desa';
+          else if (!latarSlug) latarSlug = 'warung-desa';
+
+          return {
+            judul: `Adegan ${no}: ${namaLatar.slice(0, 24)}`,
+            teks: teksNarasi,
+            dialog: '',
+            durasi_detik: Math.max(3.0, Math.min(8.0, Math.round(teksNarasi.split(/\s+/).length * 0.45 * 10) / 10)),
+            latar: latarSlug,
+            callout: `📍 ${namaLatar.toUpperCase()}`,
+            tokoh_ada_berapa: 1,
+            tokoh1_aksi: idx === 0 ? 'bicara' : 'tunjuk',
+            tokoh1_benda: 'tidak_ada',
+            tokoh2_aktif: false,
+            karakter: {
+              nama: $('#animasiTokoh1')?.value.trim() || 'Pak Budi',
+              posisiX: 540,
+              hadap: 1
+            }
+          };
+        });
+
+        DATA_ADEGAN_ANIMASI = listAdegan;
+        if (window.pilihModeCerita) window.pilihModeCerita('narator');
+        renderDaftarAdeganAnimasi();
+        return toast(`✅ Berhasil menerapkan ${listAdegan.length} adegan naskah dari Canvas!`);
+      }
+
+      // 3. Fallback: Parse per baris naskah
+      const baris = raw.split(/\n+/).map(b => b.trim()).filter(Boolean);
+      if (baris.length > 0) {
+        DATA_ADEGAN_ANIMASI = baris.map((b, idx) => ({
+          judul: b.slice(0, 28),
+          teks: b,
+          durasi_detik: 3.5,
+          latar: idx === 0 ? 'warung-desa' : (idx === 1 ? 'kursi-bambu' : 'jalan-desa'),
+          callout: `ADEGAN ${idx + 1}`,
+          tokoh_ada_berapa: 1,
+          tokoh1_aksi: 'bicara',
+          tokoh1_benda: 'tidak_ada',
+          tokoh2_aktif: false,
+          karakter: { nama: 'Budi', posisiX: 540, hadap: 1 }
+        }));
+        renderDaftarAdeganAnimasi();
+        return toast(`✅ Berhasil mengimpor ${baris.length} baris naskah ke storyboard!`);
+      }
+
+      toast('Format tidak dikenali. Gunakan Format 1 [ADEGAN X | LATAR: ...] atau Format 4 JSON.', true);
+    }
+    window.prosesImporUtama = prosesImporUtama;
+    window.prosesImporCanvas = prosesImporUtama;
+
     async function susunAdeganAnimasiAI() {
       const konsep = $('#animasiTemaCerita')?.value.trim();
       if (!konsep) return toast('Ketik konsep atau ide cerita Anda terlebih dahulu.', true);
@@ -6756,9 +7030,13 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
       }
 
       try {
-        const res = await api('/api/animasi/analisa-cerita', { konsep, tokoh1, tokoh2, latar });
+        const mode_cerita = $('#modeProduksiCerita')?.value || 'narator';
+        const res = await api('/api/animasi/analisa-cerita', { konsep, tokoh1, tokoh2, latar, mode_cerita });
         if (res.ok && res.data && res.data.adegan && res.data.adegan.length > 0) {
           DATA_ADEGAN_ANIMASI = res.data.adegan;
+          if (res.data.mode_cerita && window.pilihModeCerita) {
+            window.pilihModeCerita(res.data.mode_cerita);
+          }
           if (res.data.gaya_visual) {
             const elPilGaya = $('#pilGayaAnimasi');
             if (elPilGaya) {
@@ -6808,12 +7086,16 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
       const rasioPilihan = nilaiPil('#pilRasioAnimasi') || 'vertikal';
       const subMode = nilaiPil('#pilSubAnimasi') || 'storyboard';
       const audioNarasi = $('#namaAudioNarasi')?.dataset?.path || undefined;
+      const modeCerita = $('#modeProduksiCerita')?.value || 'narator';
+      const tampilBalon = modeCerita === 'dialog';
 
       if (subMode === 'storyboard' && DATA_ADEGAN_ANIMASI && DATA_ADEGAN_ANIMASI.length > 0) {
         const namaTokoh1 = $('#animasiTokoh1')?.value.trim() || 'Budi';
         const namaTokoh2 = $('#animasiTokoh2')?.value.trim() || 'Ridwan';
         return {
           judul: $('#animasiTemaCerita')?.value.trim() || 'Animasi Karakter Bergerak',
+          modeCerita: modeCerita,
+          tampilkanBalon: tampilBalon,
           rigDefault: rigPilihan,
           rasio: rasioPilihan,
           stop_motion_fps: 12,
@@ -6824,8 +7106,10 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
             return {
               judul: a.judul,
               teks: a.teks,
-              dialog: a.dialog || undefined,
+              dialog: tampilBalon ? (a.dialog || undefined) : undefined,
               speaker: speakerName,
+              tampilkanBalon: tampilBalon,
+              modeCerita: modeCerita,
               durasi_detik: a.durasi_detik || 3.5,
               rig: rigPilihan,
               latar: a.latar || 'warung-desa',
@@ -6853,6 +7137,8 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
         const latarBebas = $('#animasiLatarBebas')?.value || 'warung-desa';
         return {
           judul: baris[0]?.slice(0, 36) || 'Animasi Karakter Bergerak',
+          modeCerita: modeCerita,
+          tampilkanBalon: tampilBalon,
           rigDefault: rigPilihan,
           rasio: rasioPilihan,
           stop_motion_fps: 12,
@@ -6861,6 +7147,8 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
           adegan: baris.map((b, idx) => ({
             judul: b.slice(0, 30),
             teks: b,
+            tampilkanBalon: tampilBalon,
+            modeCerita: modeCerita,
             durasi_detik: 3.5,
             rig: rigPilihan,
             latar: latarBebas || (idx === 0 ? 'warung-desa' : (idx === 1 ? 'kursi-bambu' : 'jalan-desa')),
@@ -7613,7 +7901,13 @@ Aturan:
       if ($('#chkModeAnimatorDebug')) $('#chkModeAnimatorDebug').checked = String(PENG.MODE_ANIMATOR_DEBUG || 'false').toLowerCase() === 'true';
       for (const k of ['GEMINI_MODEL', 'OPENAI_BASE_URL', 'OPENAI_MODEL', 'SUARA_MAC', 'OPENCODE_MODEL', 'CLAUDE_CODE_MODEL', 'CODEX_MODEL', 'ANTIGRAVITY_MODEL', 'VOXCPM_DESAIN']) if ($('#' + k)) $('#' + k).value = PENG[k] || '';
       $$('[data-list]').forEach(sinkronDropdown);
-      for (const k of ['GEMINI_API_KEY', 'OPENAI_API_KEY']) { $('#' + k).value = ''; $('#' + k).placeholder = PENG[k] ? `tersimpan (${PENG[k]}) — isi untuk mengganti` : $('#' + k).placeholder; }
+      for (const k of ['GEMINI_API_KEY', 'OPENAI_API_KEY', 'GEMINI_API_KEYS']) {
+        const el = $('#' + k);
+        if (el) {
+          el.value = '';
+          el.placeholder = PENG[k] ? `tersimpan (${PENG[k]}) — isi untuk mengganti` : (el.placeholder || '');
+        }
+      }
 
       // Gemini Multi-Key & Rolling Status
       const keyCount = PENG.gemini_keys_count || (PENG.GEMINI_API_KEYS ? PENG.GEMINI_API_KEYS.split(/[\r\n,]+/).filter(Boolean).length : (PENG.GEMINI_API_KEY ? 1 : 0));
@@ -7869,6 +8163,9 @@ Aturan:
       $('#lk' + id).innerHTML = daftar.map(([n], i) => `<div class="lk ${i < sampai || status === 'selesai' ? 'beres' : i === sampai ? 'jalan' : ''}"><b>${String(i + 1).padStart(2, '0')} · ${n}</b>${i < sampai || status === 'selesai' ? 'Beres' : i === sampai ? (status === 'gagal' ? 'Gagal' : 'Berjalan…') : 'Menunggu'}</div>`).join('');
       $('#batang' + id).style.width = (status === 'selesai' ? 100 : Math.max(6, ((sampai + 0.5) / daftar.length) * 100)) + '%';
       const lg = $('#log' + id); lg.textContent = log.join('\n'); lg.scrollTop = lg.scrollHeight;
+      if (window.updateFloatingLog) {
+        window.updateFloatingLog(log, status);
+      }
     }
     let pantau = null;
     let idTerakhir = 0;
@@ -7910,8 +8207,8 @@ Aturan:
 
         // Validasi batas durasi audio narasi
         if (modeSuara === 'unggah' && DURASI_AUDIO_FILE > 0) {
-          if (DURASI_AUDIO_FILE > 180) {
-            return toast('Durasi audio maksimal adalah 180 detik (3 menit). Silakan pangkas audio Anda.', true);
+          if (DURASI_AUDIO_FILE > 300) {
+            return toast('Durasi audio maksimal adalah 300 detik (5 menit). Silakan pangkas audio Anda.', true);
           }
           if (DURASI_AUDIO_FILE > 60 && !cekBatasDurasiAudio(DURASI_AUDIO_FILE)) {
             return toast('Audio > 60 detik dengan AI Gambar aktif butuh minimal 2 Gemini Key (Rolling), matikan saklar gambar AI, atau centang opsi Override.', true);
@@ -7926,6 +8223,9 @@ Aturan:
           if (raw) {
             try {
               const parsed = JSON.parse(raw);
+              if (parsed.adegan_storyboard && !parsed.adegan) {
+                parsed.adegan = parsed.adegan_storyboard;
+              }
               parsed.komposisi = 'AnimasiBergerak';
               if (audioNarasi) parsed.audioNarasi = audioNarasi;
               naskahFinal = JSON.stringify(parsed);
@@ -9732,19 +10032,20 @@ Aturan:
           const slug = rawSlug || 'style-' + Date.now();
           const autoPurge = checkPurge ? checkPurge.checked : true;
           const kategoriPilihan = nilaiPil('#pilKategoriEkstrak') || 'animasi';
+          const chunkSec = parseFloat($('#pilihChunkSecGlobal')?.value || '8.0') || 8.0;
 
           btnProses.disabled = true;
           if (boxStatus) {
             boxStatus.style.display = 'block';
             boxStatus.innerHTML = `
-              <div style="display:flex;align-items:center;gap:8px;color:#f59e0b;font-weight:700">
+              <div style="display:flex;align-items:center;gap:8px;color:#f59e0b;font-weight:700;font-size:12.5px">
                 <span style="width:14px;height:14px;border:2px solid rgba(245,158,11,0.3);border-top-color:#f59e0b;border-radius:50%;display:inline-block;animation:spin .8s linear infinite"></span>
-                Sedang Mengekstrak ${kategoriPilihan === 'animasi' ? 'Karakter &amp; Rig Animasi' : 'DNA Visual &amp; Pacing'}...
+                Sedang Menjalankan Ekstraksi Chunking &amp; AI Merger...
               </div>
-              <div style="font-size:11px;color:var(--redup);margin-top:6px;line-height:1.4">
-                1. Menganalisis pergantian adegan &amp; pacing durasi<br>
-                2. Mengekstrak keyframe &amp; ${kategoriPilihan === 'animasi' ? 'karakteristik rig gerak' : 'kuantisasi 5 palet warna'}<br>
-                3. Mendaftarkan template ke <b>${kategoriPilihan === 'animasi' ? 'Studio Animasi Bergerak' : 'Pustaka Gaya Statis'}</b>
+              <div style="margin-top:8px;font-size:11px;color:var(--redup);line-height:1.5;background:rgba(0,0,0,0.25);padding:8px 10px;border-radius:6px;border:1px solid var(--garis)">
+                <div style="color:#fbbf24;font-weight:600">✂️ Fase 1: Membagi video ke segmen @ ${chunkSec} detik</div>
+                <div style="color:var(--teks);margin:2px 0">🤖 Fase 2: Analisis mikro AI Agent (pacing, warna &amp; snapshot)</div>
+                <div style="color:var(--redup)">🧩 Fase 3: Sintesis AI menggabungkan semua step jadi 1 Skill &amp; Template utuh</div>
               </div>`;
           }
 
@@ -9763,32 +10064,65 @@ Aturan:
               video: base64,
               slug: slug,
               kategori: kategoriPilihan,
+              chunk_sec: chunkSec,
               auto_purge: autoPurge
             });
 
             if (res.ok) {
-              toast(`Gaya '${res.slug}' berhasil dibuat & terdaftar secara global!`);
+              toast(`Gaya '${res.slug}' berhasil disintesis & terdaftar secara global!`);
               if (boxStatus) {
                 const paletHtml = (res.palette_hex || []).map((c) => `
-                  <span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:${c};border:1px solid #ffffff33;cursor:pointer" title="${c}" onclick="navigator.clipboard.writeText('${c}');toast('Warna ${c} disalin!')"></span>
+                  <span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:${c};border:1px solid #ffffff33;cursor:pointer" title="${c}" onclick="navigator.clipboard.writeText('${c}');toast('Warna ${c} disalin!')"></span>
                 `).join('');
+
+                const seg = res.segment_analysis || {};
+                const steps = seg.steps || [];
+                const stepsHtml = steps.length ? `
+                  <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--garis)">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                      <span style="font-size:11px;font-weight:700;color:var(--teks)">
+                        🧩 Snapshot ${steps.length} Potongan Segmen (@ ${seg.chunk_sec || chunkSec}s) yang Digabungkan:
+                      </span>
+                      <span style="font-size:10px;font-family:var(--mono);color:#34d399">✓ ${steps.length} Step Sukses</span>
+                    </div>
+                    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px">
+                      ${steps.map(s => `
+                        <div style="flex-shrink:0;width:75px;background:rgba(0,0,0,0.35);border:1px solid var(--garis);border-radius:6px;overflow:hidden;text-align:center;padding-bottom:4px">
+                          <div style="width:100%;aspect-ratio:9/16;background:#000;overflow:hidden">
+                            <img src="${s.thumb_url}?t=${Date.now()}" alt="${s.label}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
+                          </div>
+                          <div style="font-size:9.5px;font-weight:700;color:var(--teks);margin-top:3px">${s.label}</div>
+                          <div style="font-size:8.5px;color:var(--redup);font-family:var(--mono)">${s.time_range}</div>
+                          <div style="display:flex;justify-content:center;gap:2px;margin-top:2px">
+                            ${(s.palette_hex || []).slice(0,3).map(c => `<span style="width:6px;height:6px;border-radius:50%;background:${c}"></span>`).join('')}
+                          </div>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                ` : '';
+
                 boxStatus.innerHTML = `
-                  <div style="color:#10b981;font-weight:700;font-size:13px;margin-bottom:6px">
-                    ✓ Sukses Didaftarkan Secara Global!
+                  <div style="color:#10b981;font-weight:700;font-size:13px;margin-bottom:6px;display:flex;align-items:center;gap:6px">
+                    <span>✓ Selesai! ${steps.length || 'Seluruh'} Segmen Berhasil Digabungkan Menjadi 1 Skill &amp; Template</span>
                   </div>
                   <div style="font-size:11.5px;color:var(--teks);margin-bottom:4px">
-                    <b>Nama Gaya:</b> <code>${esc(res.slug)}</code> · <b>Pacing:</b> ~${res.avg_pacing_sec} detik
+                    <b>Nama Gaya:</b> <code>${esc(res.slug)}</code> · <b>Rata-rata Pacing:</b> ~${res.avg_pacing_sec} detik
                   </div>
                   <div style="display:flex;align-items:center;gap:6px;margin:8px 0">
-                    <span style="font-size:11px;color:var(--redup)">Palet HEX:</span> ${paletHtml}
+                    <span style="font-size:11px;color:var(--redup)">Palet Master:</span> ${paletHtml}
                   </div>
                   <div style="font-size:10.5px;color:var(--redup);background:var(--kartu);padding:8px;border-radius:6px;line-height:1.4;margin-top:6px">
                     📄 Skill Global: <code>${esc(res.skill_md)}</code><br>
                     🎬 Remotion Preset: <code>${esc(res.preset_tsx)}</code>
                   </div>
+                  ${stepsHtml}
                   <div style="margin-top:10px;display:flex;gap:8px">
                     <button class="tombol kedua kecil" onclick="navigator.clipboard.writeText('${esc(res.slug)}');toast('Slug gaya disalin!')">
                       Salin Slug Gaya
+                    </button>
+                    <button class="tombol kedua kecil" onclick="ke('motion');toast('Pilih template \\'${esc(res.slug)}\\' di galeri!')">
+                      Gunakan di Motion →
                     </button>
                     <button class="tombol utama kecil" onclick="ke('motion-pro')" style="background:linear-gradient(135deg,#a855f7,#6366f1)">
                       Buka di Motion Pro →
@@ -10010,8 +10344,8 @@ Aturan:
         jadwal = 0;
         const baru = antre.filter((el) => el.isConnected && el.offsetParent); antre = [];
         if (kurang.matches) return;
-        baru.slice(0, 14).forEach((el, i) => anim(el, [{ opacity: 0, transform: 'translateY(18px) scale(.985)', filter: 'blur(5px)' },
-        { opacity: 1, transform: 'none', filter: 'blur(0)' }], { duration: 650, delay: Math.min(i, 10) * 45 }));
+        baru.slice(0, 14).forEach((el, i) => anim(el, [{ opacity: 0, transform: 'translateY(10px)' },
+        { opacity: 1, transform: 'none' }], { duration: 300, delay: Math.min(i, 8) * 30 }));
       }
       new MutationObserver((ms) => {
         for (const m of ms) for (const n of m.addedNodes) {
@@ -10022,6 +10356,301 @@ Aturan:
         if (antre.length && !jadwal) jadwal = requestAnimationFrame(munculkan);
       }).observe(document.querySelector('main'), { childList: true, subtree: true });
       document.querySelectorAll(SELEKTOR).forEach((el) => sudah.add(el));
+    })();
+  </script>
+
+  <!-- ============================================================ -->
+  <!-- FLOATING REAL-TIME LOG CONSOLE & HUMAN ERROR TRANSLATOR     -->
+  <!-- ============================================================ -->
+  <div id="floatingLogConsole" class="fl-log-wadah">
+    <!-- Panel Rinci (Expandable) -->
+    <div id="flLogPanel" class="fl-log-panel" style="display:none">
+      <div class="fl-log-header">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:14px">📟</span>
+          <b style="font-size:12px;color:var(--teks)">Live Diagnostic &amp; Logs</b>
+          <span id="flLogStatusTag" class="fl-status-tag tag-idle">IDLE</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button type="button" class="tombol kedua kecil" style="padding:2px 8px;font-size:10px" onclick="salinSemuaLogFloating()">📋 Salin</button>
+          <button type="button" class="tombol kedua kecil" style="padding:2px 8px;font-size:10px" onclick="bersihkanLogFloating()">🧹 Bersih</button>
+          <button type="button" class="tombol kedua kecil" style="padding:2px 8px;font-size:10px" onclick="toggleFloatingLog(false)">✕</button>
+        </div>
+      </div>
+
+      <!-- Human Error Banner (Otomatis Muncul jika Error Terjadi) -->
+      <div id="flHumanErrorBanner" style="display:none;margin:10px;padding:12px;border-radius:10px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4)">
+        <div style="display:flex;align-items:flex-start;gap:10px">
+          <span style="font-size:24px;line-height:1">🚨</span>
+          <div style="flex:1">
+            <div id="flHumanErrorTitle" style="font-weight:700;font-size:12.5px;color:#fca5a5;margin-bottom:4px">Kendala Teknis Terdeteksi</div>
+            <div id="flHumanErrorDesc" style="font-size:11.5px;color:var(--teks);line-height:1.45;margin-bottom:8px"></div>
+            <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 10px;font-size:11px;border-left:3px solid #38bdf8">
+              <b style="color:#67e8f9">💡 Solusi Praktis:</b>
+              <div id="flHumanErrorSolution" style="margin-top:4px;color:var(--teks);line-height:1.4"></div>
+            </div>
+            <details style="margin-top:8px;font-size:10px;color:var(--redup)">
+              <summary style="cursor:pointer;color:var(--redup)">Lihat Cuplikan Log Error Asli</summary>
+              <pre id="flHumanErrorRaw" style="margin-top:4px;padding:6px;background:rgba(0,0,0,0.4);border-radius:4px;font-family:var(--mono);color:#fca5a5;white-space:pre-wrap;max-height:90px;overflow-y:auto"></pre>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Terminal Stream -->
+      <div id="flLogTerminal" class="fl-log-terminal">
+        <div class="fl-log-baris fl-info">[SYSTEM] Floating Diagnostic Monitor siap. Menunggu aktivitas studio...</div>
+      </div>
+    </div>
+
+    <!-- Pill Header (Selalu Mengambang di Pojok Bawah) -->
+    <div id="flLogPill" class="fl-log-pill" onclick="toggleFloatingLog()">
+      <span class="fl-log-dot" id="flLogDot"></span>
+      <span class="fl-log-teks" id="flLogPillTeks">Studio Monitor Siap</span>
+      <span class="fl-log-badge" id="flLogCountBadge">0 log</span>
+      <button type="button" class="fl-log-btn-mini" title="Perbesar / Perkecil" onclick="event.stopPropagation();toggleFloatingLog()">
+        <span id="flLogIconToggle">▲</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // ── Logika Floating Diagnostic Console & Human Error Translator ──────
+    (function() {
+      let isFloatingLogOpen = false;
+      let riwayatLogFloating = [];
+      let statusTerakhirFloating = 'idle';
+
+      function toggleFloatingLog(forceState) {
+        if (typeof forceState === 'boolean') {
+          isFloatingLogOpen = forceState;
+        } else {
+          isFloatingLogOpen = !isFloatingLogOpen;
+        }
+        const panel = document.getElementById('flLogPanel');
+        const icon = document.getElementById('flLogIconToggle');
+        if (panel) panel.style.display = isFloatingLogOpen ? 'block' : 'none';
+        if (icon) icon.textContent = isFloatingLogOpen ? '▼' : '▲';
+        if (isFloatingLogOpen) {
+          const terminal = document.getElementById('flLogTerminal');
+          if (terminal) terminal.scrollTop = terminal.scrollHeight;
+        }
+      }
+      window.toggleFloatingLog = toggleFloatingLog;
+
+      // Kamus Penerjemah Log Teknis ke Bahasa Manusia
+      function terjemahkanErrorManusia(logLines, status) {
+        const fullText = (Array.isArray(logLines) ? logLines.join('\n') : String(logLines || '')).trim();
+
+        if (/403|401|429|RESOURCE_EXHAUSTED|API_KEY_INVALID|Quota exceeded|API key not valid|quota/i.test(fullText)) {
+          return {
+            judul: '🔑 Kuota Gemini API Habis / API Key Bermasalah',
+            pesan: 'Permintaan pembuatan naskah/gambar ditolak server Google AI Studio karena kuota harian/menit akun Anda telah habis (Rate Limit / Quota Exceeded) atau API Key tidak sah.',
+            solusi: '1. Buka menu <b>Pengaturan</b> di Studio.<br>2. Masukkan Gemini API Key cadangan atau gunakan lebih dari 1 key (Rolling Key).<br>3. Atau ganti model ke Gemini 2.5 Flash yang lebih hemat kuota.',
+            snippet: fullText.slice(-300)
+          };
+        }
+
+        if (/ffmpeg.*not found|ENOENT.*ffmpeg|Cannot find ffmpeg|ffmpeg is not recognized/i.test(fullText)) {
+          return {
+            judul: '🎬 FFmpeg Belum Terpasang di Komputer',
+            pesan: 'Remotion membutuhkan alat bantu FFmpeg untuk menggabungkan frame gambar animasi dengan audio narasi menjadi file video MP4 utuh.',
+            solusi: '1. Pasang FFmpeg di Windows via terminal PowerShell: <code>winget install Gyan.FFmpeg</code>.<br>2. Restart aplikasi Studio setelah instalasi selesai.',
+            snippet: fullText.slice(-300)
+          };
+        }
+
+        if (/JavaScript heap out of memory|ENOMEM|out of memory|Allocation failed/i.test(fullText)) {
+          return {
+            judul: '💾 Memori Komputer (RAM) Penuh',
+            pesan: 'Proses render Remotion terhenti karena Node.js kehabisan alokasi memori RAM saat memproses banyak elemen visual berat.',
+            solusi: '1. Tutup aplikasi berat lain yang sedang berjalan.<br>2. Pilih rasio vertikal (1080x1920) atau kurangi durasi adegan.<br>3. Coba render ulang dengan tenang.',
+            snippet: fullText.slice(-300)
+          };
+        }
+
+        if (/durasi.*melebihi|audio duration|desync|melebihi durasi/i.test(fullText)) {
+          return {
+            judul: '⏱️ Naskah Melebihi Durasi File Audio',
+            pesan: 'Total durasi adegan naskah lebih panjang daripada file audio narasi rekaman suara Anda.',
+            solusi: 'Klik tombol <b>⚡ Sesuaikan ke Akhir Audio</b> di bawah player audio agar adegan terakhir dipangkas tepat saat suara narator selesai.',
+            snippet: fullText.slice(-300)
+          };
+        }
+
+        if (/TS\d+|SyntaxError|ReferenceError|Cannot find module|Failed to compile|Compilation failed/i.test(fullText)) {
+          return {
+            judul: '🧩 Kesalahan Komponen Animasi (TypeScript/React)',
+            pesan: 'Terdapat penulisan variabel aset atau properti yang belum didefinisikan pada script video animasi.',
+            solusi: 'Periksa kembali adegan di storyboard atau klik <b>✨ Analisa Konsep &amp; Susun Adegan</b> ulang agar AI merapikan struktur data adegan.',
+            snippet: fullText.slice(-300)
+          };
+        }
+
+        if (/audio.*not found|ENOENT.*wav|ENOENT.*mp3|Failed to read audio/i.test(fullText)) {
+          return {
+            judul: '🎵 File Audio Narasi Tidak Ditemukan',
+            pesan: 'Sistem tidak dapat menemukan file rekaman suara yang hendak dipasangkan ke video animasi.',
+            solusi: '1. Pastikan Anda sudah memilih file audio melalui tombol <b>Unggah Audio Narasi</b>.<br>2. Pastikan file audio tidak dipindahkan atau dihapus saat proses render berlangsung.',
+            snippet: fullText.slice(-300)
+          };
+        }
+
+        if (/ECONNREFUSED|Failed to fetch|NetworkError|Network request failed/i.test(fullText)) {
+          return {
+            judul: '🌐 Koneksi Server Studio Terputus',
+            pesan: 'Halaman web tidak dapat berkomunikasi dengan backend Studio (studio.py).',
+            solusi: 'Pastikan jendela terminal Python <code>python studio/studio.py</code> masih berjalan dan tidak tertutup secara tidak sengaja.',
+            snippet: fullText.slice(-300)
+          };
+        }
+
+        return {
+          judul: '⚠️ Terjadi Kendala Eksekusi Studio',
+          pesan: 'Sistem mendeteksi adanya kendala teknis saat memproses tugas animasi atau render video.',
+          solusi: 'Periksa rincian cuplikan log di bawah ini, atau coba ulangi proses sekali lagi.',
+          snippet: fullText.slice(-300) || '(Tidak ada cuplikan log spesifik)'
+        };
+      }
+      window.terjemahkanErrorManusia = terjemahkanErrorManusia;
+
+      function tampilkanDiagnosaError(terjemahan, rawSnippet) {
+        const banner = document.getElementById('flHumanErrorBanner');
+        const elJudul = document.getElementById('flHumanErrorTitle');
+        const elDesc = document.getElementById('flHumanErrorDesc');
+        const elSolusi = document.getElementById('flHumanErrorSolution');
+        const elRaw = document.getElementById('flHumanErrorRaw');
+
+        if (elJudul) elJudul.textContent = terjemahan.judul;
+        if (elDesc) elDesc.innerHTML = terjemahan.pesan;
+        if (elSolusi) elSolusi.innerHTML = terjemahan.solusi;
+        if (elRaw) elRaw.textContent = rawSnippet || terjemahan.snippet || '';
+        if (banner) banner.style.display = 'block';
+
+        // Hanya buka otomatis jika sedang menjalankan proses render aktif yang gagal
+        if (document.body.classList.contains('bekerja')) {
+          toggleFloatingLog(true);
+        }
+      }
+      window.tampilkanDiagnosaError = tampilkanDiagnosaError;
+
+      function sembunyikanDiagnosaError() {
+        const banner = document.getElementById('flHumanErrorBanner');
+        if (banner) banner.style.display = 'none';
+      }
+
+      function updateFloatingLog(logs, status) {
+        if (!Array.isArray(logs)) return;
+        riwayatLogFloating = logs;
+        statusTerakhirFloating = status || statusTerakhirFloating;
+
+        const dot = document.getElementById('flLogDot');
+        const teksPill = document.getElementById('flLogPillTeks');
+        const badge = document.getElementById('flLogCountBadge');
+        const tagStatus = document.getElementById('flLogStatusTag');
+        const terminal = document.getElementById('flLogTerminal');
+
+        if (badge) badge.textContent = `${logs.length} log`;
+
+        // Update dot & pill label
+        if (dot) {
+          dot.className = 'fl-log-dot';
+          if (status === 'jalan') dot.classList.add('jalan');
+          else if (status === 'gagal') dot.classList.add('gagal');
+        }
+
+        if (tagStatus) {
+          tagStatus.className = 'fl-status-tag';
+          if (status === 'jalan') {
+            tagStatus.classList.add('tag-jalan');
+            tagStatus.textContent = 'RUNNING';
+          } else if (status === 'gagal') {
+            tagStatus.classList.add('tag-gagal');
+            tagStatus.textContent = 'ERROR';
+          } else if (status === 'selesai') {
+            tagStatus.classList.add('tag-idle');
+            tagStatus.textContent = 'DONE ✓';
+          } else {
+            tagStatus.classList.add('tag-idle');
+            tagStatus.textContent = 'IDLE';
+          }
+        }
+
+        const logTerakhir = logs[logs.length - 1] || '';
+
+        if (status === 'gagal' || /error|failed|fatal|exception|gagal/i.test(logTerakhir)) {
+          if (teksPill) teksPill.textContent = '🚨 Terjadi Kendala (Buka Diagnosa)';
+          const t = terjemahkanErrorManusia(logs, status);
+          tampilkanDiagnosaError(t, logs.slice(-5).join('\n'));
+        } else if (status === 'jalan') {
+          if (teksPill) teksPill.textContent = logTerakhir ? logTerakhir.slice(0, 32) + '...' : '⚙️ Sedang Memproses...';
+          sembunyikanDiagnosaError();
+        } else if (status === 'selesai') {
+          if (teksPill) teksPill.textContent = '✅ Proses Selesai!';
+          sembunyikanDiagnosaError();
+        } else {
+          if (teksPill) teksPill.textContent = 'Studio Monitor Siap';
+        }
+
+        // Render baris terminal
+        if (terminal) {
+          terminal.innerHTML = logs.map(b => {
+            let cls = 'fl-info';
+            if (/error|failed|fatal|exception|gagal/i.test(b)) cls = 'fl-error';
+            else if (/selesai|beres|done|sukses|berhasil|✓/i.test(b)) cls = 'fl-sukses';
+            else if (/warn|warning|hati-hati|peringatan/i.test(b)) cls = 'fl-warn';
+            return `<div class="fl-log-baris ${cls}">${escapeHtml(b)}</div>`;
+          }).join('');
+          terminal.scrollTop = terminal.scrollHeight;
+        }
+      }
+      window.updateFloatingLog = updateFloatingLog;
+
+      function catatErrorFloating(pesan) {
+        const baris = `[ERROR] ${new Date().toLocaleTimeString()} - ${pesan}`;
+        riwayatLogFloating.push(baris);
+        updateFloatingLog(riwayatLogFloating, 'gagal');
+      }
+      window.catatErrorFloating = catatErrorFloating;
+
+      function salinSemuaLogFloating() {
+        const isi = riwayatLogFloating.join('\n');
+        if (!isi) {
+          if (window.toast) window.toast('Log masih kosong.');
+          return;
+        }
+        navigator.clipboard.writeText(isi).then(() => {
+          if (window.toast) window.toast('📋 Semua baris log berhasil disalin ke clipboard!');
+        }).catch(() => {
+          if (window.toast) window.toast('Gagal menyalin log.', true);
+        });
+      }
+      window.salinSemuaLogFloating = salinSemuaLogFloating;
+
+      function bersihkanLogFloating() {
+        riwayatLogFloating = [];
+        sembunyikanDiagnosaError();
+        updateFloatingLog(['[SYSTEM] Log dibersihkan. Studio Monitor siap.'], 'idle');
+        if (window.toast) window.toast('Log diagnostic dibersihkan.');
+      }
+      window.bersihkanLogFloating = bersihkanLogFloating;
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      // Hanya catat uncaught rejection jika sedang bekerja
+      window.addEventListener('unhandledrejection', (e) => {
+        if (document.body.classList.contains('bekerja')) {
+          catatErrorFloating(e.reason?.message || e.reason || 'Promise error tak terduga');
+        }
+      });
     })();
   </script>
 </body>

@@ -51,9 +51,9 @@ graph TD
 
 ---
 
-## 2. Deep-Dive Pipeline: Ekstraksi Gaya Video (A sampai Z)
+## 2. Deep-Dive Pipeline: Ekstraksi Gaya Video (A sampai Z) — Chunked Analysis & AI Merger
 
-Pipeline ini memungkinkan video referensi dari platform apa pun (seperti video TikTok, Reels, atau YouTube Shorts) dibedah DNA visual dan ritme editing-nya, lalu otomatis diterjemahkan menjadi **Remotion Template baru** dan **AI Skill baru**.
+Pipeline ini memungkinkan video referensi dari platform apa pun (seperti video TikTok, Reels, atau YouTube Shorts) dibedah DNA visual dan ritme editing-nya secara bertahap (**Time-Sliced Chunking per 8 Detik**) lalu disintesis oleh AI Agent (**The Merger Phase**) menjadi **Remotion Template baru** dan **AI Skill baru ready-to-use**.
 
 ```mermaid
 sequenceDiagram
@@ -63,40 +63,72 @@ sequenceDiagram
     participant Server as Backend (studio.py)
     participant Extractor as extract_video_style.py
     participant FFmpeg as FFmpeg / ffprobe
+    participant Merger as AI Agent Merger
     participant Generator as generate_style_artifacts.py
     participant Registry as Preset & Skill Registry
     participant MotionUI as Tab Motion
 
-    User->>UI: Unggah video referensi & isi slug gaya
-    UI->>Server: POST /api/ekstrak-gaya-video (base64, slug, auto_purge)
-    Server->>Extractor: Jalankan extract_video_style.py (--video, --slug)
-    Extractor->>FFmpeg: Scene cut detection gt(scene,0.35) & duration
-    FFmpeg-->>Extractor: Timestamps pergantian adegan & pacing
-    Extractor->>FFmpeg: Ekstrak 8-12 keyframe representatif
-    Extractor->>Extractor: Kuantisasi warna Pillow MedianCut (5 Palet HEX)
-    Extractor->>Extractor: Crop center 9:16 (270x480) & simpan studio/aset/gaya/slug.jpg
-    Extractor-->>Server: Simpan tmp_style_frames/slug/metrics.json
+    User->>UI: Unggah video referensi & pilih ukuran chunk (default 8s)
+    UI->>Server: POST /api/ekstrak-gaya-video (base64, slug, chunk_sec, auto_purge)
+    Server->>Extractor: Jalankan extract_video_style.py (--video, --slug, --chunk-sec 8.0)
+    
+    loop Segmentasi & Analisis Mikro (Step 1 .. N)
+        Extractor->>FFmpeg: Potong jendela waktu (mis. 0s-8s, 8s-16s, ...)
+        FFmpeg-->>Extractor: Deteksi cuts lokal, pacing detik, & ekstrak keyframe
+        Extractor->>Extractor: Kuantisasi palet 5-HEX lokal & crop snapshot 9:16
+        Extractor->>Extractor: Simpan step_XX_metrics.json & segments/<slug>_step_XX.jpg
+    end
+
+    Extractor->>Merger: Kirim seluruh N file segmen analisis
+    Merger->>Merger: Kuantisasi Master Palette global (5 HEX)
+    Merger->>Merger: Rata-rata pacing tertimbang & seleksi Cover Poster terbaik
+    Merger->>Extractor: Simpan master metrics.json konsolidasi
+
     Server->>Generator: Jalankan generate_style_artifacts.py (--slug)
-    Generator->>Registry: Buat motion/skills/slug/SKILL.md
+    Generator->>Registry: Buat motion/skills/slug/SKILL.md (lengkap tabel Step 1..N)
     Generator->>Registry: Buat motion/src/presets/slug.tsx
     Generator->>Registry: Daftarkan ke motion/src/presets/index.ts
     Generator->>Registry: Catat ke motion/skills/registry.json
     Generator-->>Server: Sukses (OK: true)
-    Server-->>UI: Response JSON (slug, palette_hex, avg_pacing, thumbnail)
+    Server-->>UI: Response JSON (slug, master palette, segment_analysis steps, cover)
+    UI->>UI: Tampilkan galeri snapshot potongan segmen yang digabung
     UI->>MotionUI: sinkronGayaMotion() otomatis berjalan
     MotionUI-->>User: Kartu template baru muncul di posisi teratas tab Motion!
 ```
 
 ### Tahapan Rinci:
 
-#### 1. Input & Preparasi
+#### 1. Input & Konfigurasi Chunking
 - Pengguna memilih file video (`.mp4`, `.mov`, `.webm`) melalui drag-and-drop di tab **Ekstrak Gaya**.
+- **Pemilihan Ukuran Potongan Waktu (Chunking):** Default 8 Detik (Rekomendasi Standar), dengan opsi 6 Detik (Super Mikro) atau 12 Detik (Video Panjang).
 - **Pemilihan Kategori:** Pengguna memilih antara:
   - **🎬 Animasi Bergerak (Karakter & 3D Cel-Shaded):** Template dialokasikan ke `motion/src/presets_animasi/` untuk engine Studio Animasi.
   - **🖼️ Grafis Statis (SVG & Motion Grafis):** Template dialokasikan ke `motion/src/presets/` untuk engine Motion Standar.
 - Sistem menghasilkan saran slug otomatis dari nama file (misal: `toon-3d-celshaded`).
-- Pengguna dapat mencentang **Auto-Hapus video mentah** untuk menghemat ruang disk.
-- File dikirim ke backend `/api/ekstrak-gaya-video` dengan parameter `kategori`.
+- File dikirim ke backend `/api/ekstrak-gaya-video` dengan parameter `chunk_sec`.
+
+#### 2. Segmentasi Waktu & Analisa Mikro Per Segmen (Step 1 .. N)
+- Video dipotong secara logis menjadi $N = \lceil \text{durasi} / \text{chunk\_sec} \rceil$ segmen waktu.
+- Untuk setiap segmen:
+  - Mendeteksi titik pergantian adegan lokal menggunakan filter `gt(scene, 0.30)` FFmpeg.
+  - Menghitung kecepatan pacing lokal per detik.
+  - Mengambil frame representatif di titik $\approx 40\%$ durasi segmen.
+  - Mengekstrak 5 warna HEX lokal via kuantisasi MedianCut Pillow.
+  - Menyimpan thumbnail 9:16 per segmen di `studio/aset/gaya/segments/<slug>_step_XX.jpg`.
+  - Menyimpan file data segmen `tmp_style_frames/<slug>/segments/step_XX/step_metrics.json`.
+
+#### 3. Konsolidasi & Penggabungan AI Agent (The Merger Phase)
+- AI Agent membaca kesepuluh (atau $N$) file data segmen:
+  - **Master Palette Selection:** Memilih 5 warna HEX master yang paling harmonis dan konsisten antar-segmen (background, text/stroke, secondary, accent 1, accent 2).
+  - **Overall Pacing:** Menghitung rata-rata pacing tertimbang seluruh video.
+  - **Cover Poster Utama:** Memilih frame paling dinamis dari step tengah dan menyalinnya ke `studio/aset/gaya/<slug>.jpg`.
+  - **Segment Recap:** Menyusun metadata `segment_analysis` lengkap untuk antarmuka pengguna dan dokumentasi skill.
+
+#### 4. Generasi Artefak Skill & Remotion Preset
+- Menghasilkan `motion/skills/<slug>/SKILL.md` dengan Bagian 6 (Tabel Analisis Multi-Segmen Video Referensi).
+- Menghasilkan komponen preset React Remotion di `motion/src/presets/<slug>.tsx`.
+- Memperbarui `motion/src/presets/index.ts` dan `motion/skills/registry.json`.
+- Template baru langsung otomatis aktif di tab Motion, Motion Pro, dan Studio Animasi.
 
 #### 2. Analisis Visual & Pacing (`scripts/extract_video_style.py`)
 - **Pendeteksian Pacing:** `ffprobe` membaca metadata durasi, lalu `ffmpeg` mengeksekusi filter `select='gt(scene,0.35)'` untuk mendeteksi setiap cut pergantian scene. Rata-rata durasi per adegan dihitung (`avg_pacing_sec = total_durasi / scene_count`).
@@ -295,4 +327,30 @@ Untuk kebutuhan:
 
 Hubungi admin/developer langsung melalui WhatsApp resmi:  
 👉 **[WhatsApp Admin: +62 838-6230-0495 (wa.me/6283862300495)](https://wa.me/6283862300495?text=Halo%20Admin%20Cheat%20Clip%20%26%20Motion,%20saya%20ingin%20akses%20Motion%20Pro%20dan%20ada%20pertanyaan)**
+
+---
+
+## 9. Integrasi Canvas Gemini: Generator Naskah, TTS & Visual Bible
+
+Penyusunan naskah video pendek terhubung langsung dengan aplikasi Canvas Gemini:  
+🌐 **Akses Tool Canvas:** [Generator Naskah Video Pendek & TTS (share.gemini.google/NFulYmtV6Anl)](https://share.gemini.google/NFulYmtV6Anl)
+
+### Alur Kerja Naskah ke Storyboard:
+1. **Perancangan di Canvas Gemini:** Pengguna memilih niche/topik, mode narator (1 Narator vs Dialog), alur perpindahan latar tempat, dan ciri fisik tokoh.
+2. **Ekspor Format:**
+   * **Format 1:** Naskah berformat `[ADEGAN X | LATAR: ...]`
+   * **Format 2:** Naskah bersih siap baca untuk mesin suara TTS (ElevenLabs / Google AI Studio).
+   * **Format 3:** Visual Bible penentu konsistensi pakaian tokoh & pencahayaan.
+   * **Format 4:** Manifest Storyboard JSON deterministik (`adegan_storyboard`).
+3. **1-Klik Impor ke Studio:** Di tab Motion Studio, klik tab **📥 Impor dari Canvas Gemini (1-Klik)**, tempelkan teks Format 1 atau JSON Format 4, lalu klik **⚡ Terapkan Naskah**. Daftar adegan, latar, dan dialog langsung terisi instan tanpa konfigurasi manual.
+
+---
+
+## 10. Live Floating Diagnostic Console & Status Monitor
+
+Studio dilengkapi konsol diagnostik mengambang di pojok kanan bawah:
+* **Indikator Live:** Menampilkan dot indikator hijau (`IDLE`), biru berdenyut (`RUNNING`), atau merah (`ERROR`).
+* **Penerjemah Bahasa Manusia:** Mengonversi error teknis (API key, durasi audio melebihi naskah, memori) menjadi rekomendasi solusi praktis.
+* **Non-Intrusif:** Tidak memunculkan popup merah mendadak saat awal startup, dan hanya aktif ketika proses render sungguhan mengalami kendala.
+
 
