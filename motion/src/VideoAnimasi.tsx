@@ -600,34 +600,52 @@ const LatarRumahDanHalaman: React.FC<{
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // 1. Langit Malam / Misteri Atmosferik
+    // 1. Langit Malam / Misteri Atmosferik Pekat (Sesuai Referensi)
     const sky = ctx.createLinearGradient(0, 0, 0, height);
-    sky.addColorStop(0, cSkyTop);
-    sky.addColorStop(0.55, cSkyMid);
-    sky.addColorStop(1, cTanah);
+    sky.addColorStop(0, '#0A0F1D');
+    sky.addColorStop(0.4, '#151D2A');
+    sky.addColorStop(0.75, '#1A2332');
+    sky.addColorStop(1, '#0D1117');
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, width, height);
 
-    // Bintang-bintang / partikel malam
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-    for (let i = 0; i < 20; i++) {
-      const bx = (i * 137.5) % width;
-      const by = (i * 83.1) % (height * 0.45);
-      ctx.fillRect(bx, by, (i % 2) + 1.5, (i % 2) + 1.5);
+    // Bintang-bintang kecil di langit malam
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+    const starCoords = [
+      [120, 80], [280, 140], [450, 95], [680, 120], [890, 75],
+      [180, 260], [340, 210], [610, 240], [820, 190], [980, 250],
+      [90, 390], [310, 350], [750, 320], [920, 380]
+    ];
+    for (const [sx, sy] of starCoords) {
+      ctx.fillRect(sx, sy, 2, 2);
     }
 
-    // Bulan / Cahaya Remang di Sudut Atas
-    const moonGrad = ctx.createRadialGradient(width * 0.8, height * 0.16, 20, width * 0.8, height * 0.16, 120);
-    moonGrad.addColorStop(0, cAksen + '44');
-    moonGrad.addColorStop(1, 'transparent');
-    ctx.fillStyle = moonGrad;
+    // Rembulan Bulat Penuh Terang di Kanan Atas (Sesuai Referensi)
+    const moonX = width * 0.78;
+    const moonY = height * 0.135;
+    const moonR = 64;
+
+    const moonGlow = ctx.createRadialGradient(moonX, moonY, moonR * 0.5, moonX, moonY, moonR * 2.8);
+    moonGlow.addColorStop(0, 'rgba(254, 240, 199, 0.28)');
+    moonGlow.addColorStop(0.5, 'rgba(254, 240, 199, 0.08)');
+    moonGlow.addColorStop(1, 'transparent');
+    ctx.fillStyle = moonGlow;
     ctx.beginPath();
-    ctx.arc(width * 0.8, height * 0.16, 120, 0, Math.PI * 2);
+    ctx.arc(moonX, moonY, moonR * 2.8, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = '#FEF9C3';
+    // Badan Bulan dengan Kawah Halus
+    ctx.fillStyle = '#E8E4CE';
     ctx.beginPath();
-    ctx.arc(width * 0.8, height * 0.16, 36, 0, Math.PI * 2);
+    ctx.arc(moonX, moonY, moonR, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Kawah Bulan
+    ctx.fillStyle = 'rgba(190, 185, 160, 0.4)';
+    ctx.beginPath();
+    ctx.arc(moonX - 16, moonY - 14, 15, 0, Math.PI * 2);
+    ctx.arc(moonX + 18, moonY + 20, 12, 0, Math.PI * 2);
+    ctx.arc(moonX + 22, moonY - 10, 9, 0, Math.PI * 2);
     ctx.fill();
 
     // 2. Bangunan Rumah & Lantai Atas / Jendela
@@ -684,119 +702,118 @@ const LatarRumahDanHalaman: React.FC<{
       ctx.fillRect(winX - 25, winY + winH, winW + 50, 28);
     } else {
       // Halaman Rumah Kosong / Samping Bangunan Rumah
-      // Tampak Depan Rumah No. 13 Kosong (Gaya Referensi)
-      const rX = width * 0.15;
-      const rW = width * 0.7;
-      const rY = height * 0.28;
-      const rH = height * 0.44;
+      // Tampak Depan Rumah No. 13 Kosong (Presisi 1:1 Sesuai Referensi)
+      const rX = width * 0.18;
+      const rW = width * 0.64;
+      const rY = height * 0.36;
+      const rH = height * 0.35;
 
-      // 1. Dinding Kayu Papan Rumah Abu-Abu Putih Kusam
-      ctx.fillStyle = '#D1D5DB';
-      ctx.fillRect(rX, rY + 80, rW, rH - 80);
-      ctx.strokeStyle = '#374151';
-      ctx.lineWidth = 3;
-      ctx.strokeRect(rX, rY + 80, rW, rH - 80);
+      // 1. Dinding Kayu Papan Rumah Abu-Abu Muda (#CBD5E1)
+      ctx.fillStyle = '#CBD5E1';
+      ctx.fillRect(rX, rY + 70, rW, rH - 70);
+      ctx.strokeStyle = '#1E293B';
+      ctx.lineWidth = 3.5;
+      ctx.strokeRect(rX, rY + 70, rW, rH - 70);
 
-      // Garis-garis papan kayu horizontal
-      ctx.strokeStyle = 'rgba(55, 65, 81, 0.45)';
+      // Garis-garis papan kayu horizontal tipis
+      ctx.strokeStyle = 'rgba(71, 85, 105, 0.4)';
       ctx.lineWidth = 2;
-      for (let ly = rY + 110; ly < rY + rH; ly += 24) {
+      for (let ly = rY + 95; ly < rY + rH; ly += 22) {
         ctx.beginPath();
         ctx.moveTo(rX, ly);
         ctx.lineTo(rX + rW, ly);
         ctx.stroke();
       }
 
-      // 2. Atap Segitiga Rumah
-      ctx.fillStyle = '#4B5563';
+      // 2. Atap Segitiga Rumah Abu-abu Gelap (#475569)
+      ctx.fillStyle = '#475569';
       ctx.beginPath();
-      ctx.moveTo(rX - 30, rY + 80);
-      ctx.lineTo(width / 2, rY - 30);
-      ctx.lineTo(rX + rW + 30, rY + 80);
+      ctx.moveTo(rX - 35, rY + 70);
+      ctx.lineTo(width / 2, rY - 35);
+      ctx.lineTo(rX + rW + 35, rY + 70);
       ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = '#1F2937';
+      ctx.strokeStyle = '#0F172A';
       ctx.lineWidth = 4;
       ctx.stroke();
 
-      // Ventilasi Bulat di Bawah Atap
-      ctx.fillStyle = '#111827';
+      // Ventilasi Bulat Hitam di Bawah Atap
+      ctx.fillStyle = '#1E293B';
       ctx.beginPath();
-      ctx.arc(width / 2, rY + 35, 26, 0, Math.PI * 2);
+      ctx.arc(width / 2, rY + 30, 24, 0, Math.PI * 2);
       ctx.fill();
 
-      // 3. Jendela Kiri (Disalib Papan Kayu X)
-      const winKW = rW * 0.32;
-      const winKH = 120;
-      const winKX = rX + 40;
-      const winKY = rY + 110;
+      // Retakan halus di atap kiri
+      ctx.strokeStyle = '#1E293B';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(width / 2 - 110, rY + 20);
+      ctx.lineTo(width / 2 - 95, rY + 35);
+      ctx.lineTo(width / 2 - 80, rY + 30);
+      ctx.stroke();
+
+      // 3. Jendela Kiri (Disalib Papan Kayu X Tebal Cokelat Muda)
+      const winKW = rW * 0.34;
+      const winKH = 115;
+      const winKX = rX + 36;
+      const winKY = rY + 95;
       ctx.fillStyle = '#111827';
       ctx.fillRect(winKX, winKY, winKW, winKH);
-      ctx.strokeStyle = '#1F2937';
+      ctx.strokeStyle = '#0F172A';
+      ctx.lineWidth = 3;
       ctx.strokeRect(winKX, winKY, winKW, winKH);
 
-      // Dua papan kayu silang cokelat
+      // Dua papan kayu silang cokelat (#B45309) dengan paku bulat
       ctx.save();
-      ctx.fillStyle = '#92400E';
+      ctx.fillStyle = '#B45309';
       ctx.strokeStyle = '#451A03';
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 3;
       // Batang 1 (\)
       ctx.beginPath();
-      ctx.moveTo(winKX - 10, winKY + 10);
-      ctx.lineTo(winKX + winKW + 10, winKY + winKH - 10);
-      ctx.lineTo(winKX + winKW + 5, winKY + winKH + 10);
-      ctx.lineTo(winKX - 15, winKY + 30);
+      ctx.moveTo(winKX - 15, winKY + 8);
+      ctx.lineTo(winKX + winKW + 15, winKY + winKH - 12);
+      ctx.lineTo(winKX + winKW + 10, winKY + winKH + 10);
+      ctx.lineTo(winKX - 20, winKY + 30);
       ctx.closePath();
       ctx.fill(); ctx.stroke();
       // Batang 2 (/)
       ctx.beginPath();
-      ctx.moveTo(winKX - 10, winKY + winKH - 15);
-      ctx.lineTo(winKX + winKW + 10, winKY + 15);
-      ctx.lineTo(winKX + winKW + 15, winKY + 35);
-      ctx.lineTo(winKX - 5, winKY + winKH + 5);
+      ctx.moveTo(winKX - 15, winKY + winKH - 15);
+      ctx.lineTo(winKX + winKW + 15, winKY + 10);
+      ctx.lineTo(winKX + winKW + 20, winKY + 32);
+      ctx.lineTo(winKX - 10, winKY + winKH + 7);
       ctx.closePath();
       ctx.fill(); ctx.stroke();
       ctx.restore();
 
-      // 4. Jendela Kanan (Tirai Kuning Bercahaya & Siluet)
+      // 4. Jendela Kanan (Tirai Cokelat/Kuning & Siluet Kepala Hitam)
       const winRW = winKW;
       const winRH = winKH;
-      const winRX = rX + rW - winRW - 40;
+      const winRX = rX + rW - winRW - 36;
       const winRY = winKY;
-      // Cahaya Kuning hangat jendela
-      ctx.fillStyle = '#D97706';
+      // Latar belakang kamar gelap di balik tirai
+      ctx.fillStyle = '#261C14';
       ctx.fillRect(winRX, winRY, winRW, winRH);
-      // Tirai kiri & kanan
-      ctx.fillStyle = '#F59E0B';
+
+      // Tirai cokelat kemerahan di kiri dan kanan
+      ctx.fillStyle = '#451A03';
+      ctx.fillRect(winRX, winRY, 28, winRH);
+      ctx.fillRect(winRX + winRW - 28, winRY, 28, winRH);
+
+      // Bayangan Siluet Orang Berdiri di Balik Tirai Jendela Kanan
+      ctx.fillStyle = '#0F172A';
       ctx.beginPath();
-      ctx.moveTo(winRX, winRY);
-      ctx.lineTo(winRX + 25, winRY);
-      ctx.quadraticCurveTo(winRX + 15, winRY + winRH * 0.5, winRX + 30, winRY + winRH);
-      ctx.lineTo(winRX, winRY + winRH);
+      ctx.arc(winRX + winRW / 2, winRY + 46, 26, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(winRX + winRW / 2 - 32, winRY + winRH);
+      ctx.quadraticCurveTo(winRX + winRW / 2, winRY + 65, winRX + winRW / 2 + 32, winRY + winRH);
       ctx.closePath();
       ctx.fill();
 
-      ctx.beginPath();
-      ctx.moveTo(winRX + winRW, winRY);
-      ctx.lineTo(winRX + winRW - 25, winRY);
-      ctx.quadraticCurveTo(winRX + winRW - 15, winRY + winRH * 0.5, winRX + winRW - 30, winRY + winRH);
-      ctx.lineTo(winRX + winRW, winRY + winRH);
-      ctx.closePath();
-      ctx.fill();
-
-      // Siluet Misterius di Jendela Kanan
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
-      ctx.beginPath();
-      ctx.arc(winRX + winRW / 2, winRY + 45, 24, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(winRX + winRW / 2 - 28, winRY + winRH);
-      ctx.quadraticCurveTo(winRX + winRW / 2, winRY + 65, winRX + winRW / 2 + 28, winRY + winRH);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.strokeStyle = '#1F2937';
-      ctx.lineWidth = 3;
+      // Kusen Luar Jendela Kanan
+      ctx.strokeStyle = '#0F172A';
+      ctx.lineWidth = 3.5;
       ctx.strokeRect(winRX, winRY, winRW, winRH);
       // Garis kusen tengah
       ctx.beginPath();
@@ -805,91 +822,121 @@ const LatarRumahDanHalaman: React.FC<{
       ctx.stroke();
 
       // 5. Plat Nomor Rumah "13"
-      const platW = 60;
-      const platH = 34;
+      const platW = 54;
+      const platH = 32;
       const platX = width / 2 - platW / 2;
-      const platY = rY + 245;
+      const platY = rY + 225;
       ctx.fillStyle = '#FEF3C7';
       ctx.fillRect(platX, platY, platW, platH);
-      ctx.strokeStyle = '#1F2937';
+      ctx.strokeStyle = '#0F172A';
       ctx.lineWidth = 2.5;
       ctx.strokeRect(platX, platY, platW, platH);
-      ctx.fillStyle = '#111827';
+      ctx.fillStyle = '#0F172A';
       ctx.font = '900 20px system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('13', width / 2, platY + platH / 2);
 
-      // Pintu Kayu Rumah
-      const pintuW = 90;
-      const pintuH = 145;
+      // Pintu Kayu Cokelat (#78350F)
+      const pintuW = 86;
+      const pintuH = 135;
       const pintuX = width / 2 - pintuW / 2;
-      const pintuY = platY + platH + 8;
+      const pintuY = platY + platH + 6;
       ctx.fillStyle = '#78350F';
       ctx.fillRect(pintuX, pintuY, pintuW, pintuH);
-      ctx.strokeStyle = '#1F2937';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#0F172A';
+      ctx.lineWidth = 3.5;
       ctx.strokeRect(pintuX, pintuY, pintuW, pintuH);
 
-      // 6. Pagar Kayu Berjejer Rapi (Gaya Referensi)
-      const pagarY = rY + rH - 30;
-      ctx.fillStyle = '#374151';
-      ctx.strokeStyle = '#111827';
-      ctx.lineWidth = 2.5;
-      const stepPagar = 44;
+      // Gagang Pintu Bulat Emas
+      ctx.fillStyle = '#FACC15';
+      ctx.beginPath();
+      ctx.arc(pintuX + 16, pintuY + pintuH * 0.52, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 6. Pagar Kayu Berjejer Rapi Abu-abu Gelap (#334155)
+      const pagarY = rY + rH - 25;
+      ctx.fillStyle = '#334155';
+      ctx.strokeStyle = '#0F172A';
+      ctx.lineWidth = 3;
+      const stepPagar = 40;
       for (let px = 20; px < width - 20; px += stepPagar) {
-        if (px > width / 2 - 50 && px < width / 2 + 50) continue; // Celah pintu masuk
+        if (px > width / 2 - 45 && px < width / 2 + 45) continue; // Celah pintu pagar tengah
         ctx.beginPath();
-        ctx.moveTo(px, pagarY + 110);
+        ctx.moveTo(px, pagarY + 115);
         ctx.lineTo(px, pagarY + 20);
-        ctx.lineTo(px + 12, pagarY);
-        ctx.lineTo(px + 24, pagarY + 20);
-        ctx.lineTo(px + 24, pagarY + 110);
+        ctx.lineTo(px + 10, pagarY);
+        ctx.lineTo(px + 20, pagarY + 20);
+        ctx.lineTo(px + 20, pagarY + 115);
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
       }
-      // Palang horizontal pagar
-      ctx.fillRect(10, pagarY + 35, width - 20, 14);
-      ctx.strokeRect(10, pagarY + 35, width - 20, 14);
-      ctx.fillRect(10, pagarY + 75, width - 20, 14);
-      ctx.strokeRect(10, pagarY + 75, width - 20, 14);
+      // Pintu Pagar Tengah yang Terbuka Sedikit
+      ctx.save();
+      ctx.translate(width / 2 - 40, pagarY + 20);
+      ctx.rotate(0.08);
+      for (let g = 0; g < 2; g++) {
+        const gx = g * 28;
+        ctx.beginPath();
+        ctx.moveTo(gx, 95); ctx.lineTo(gx, 20); ctx.lineTo(gx + 10, 0); ctx.lineTo(gx + 20, 20); ctx.lineTo(gx + 20, 95);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+      }
+      ctx.fillRect(-5, 30, 60, 12); ctx.strokeRect(-5, 30, 60, 12);
+      ctx.fillRect(-5, 68, 60, 12); ctx.strokeRect(-5, 68, 68, 12);
+      ctx.restore();
 
-      // Pohon Ranting Kering di Sisi Kiri & Kanan (Siluet Misterius)
-      ctx.strokeStyle = '#1F2937';
-      ctx.lineWidth = 5;
+      // Palang horizontal pagar kiri dan kanan
+      ctx.fillRect(10, pagarY + 35, width / 2 - 60, 12);
+      ctx.strokeRect(10, pagarY + 35, width / 2 - 60, 12);
+      ctx.fillRect(10, pagarY + 75, width / 2 - 60, 12);
+      ctx.strokeRect(10, pagarY + 75, width / 2 - 60, 12);
+
+      ctx.fillRect(width / 2 + 50, pagarY + 35, width / 2 - 60, 12);
+      ctx.strokeRect(width / 2 + 50, pagarY + 35, width / 2 - 60, 12);
+      ctx.fillRect(width / 2 + 50, pagarY + 75, width / 2 - 60, 12);
+      ctx.strokeRect(width / 2 + 50, pagarY + 75, width / 2 - 60, 12);
+
+      // Pohon Ranting Siluet Kering Hitam di Kiri & Kanan (Sesuai Referensi)
+      ctx.strokeStyle = '#0F172A';
+      ctx.lineWidth = 6;
+      ctx.lineCap = 'round';
       // Pohon kiri
       ctx.beginPath();
-      ctx.moveTo(60, height * 0.72);
-      ctx.lineTo(60, height * 0.3);
-      ctx.lineTo(20, height * 0.22);
-      ctx.moveTo(60, height * 0.42);
-      ctx.lineTo(110, height * 0.35);
+      ctx.moveTo(50, height * 0.72);
+      ctx.lineTo(40, height * 0.38);
+      ctx.lineTo(15, height * 0.3);
+      ctx.moveTo(40, height * 0.48);
+      ctx.lineTo(95, height * 0.42);
+      ctx.moveTo(40, height * 0.58);
+      ctx.lineTo(10, height * 0.54);
       ctx.stroke();
       // Pohon kanan
       ctx.beginPath();
-      ctx.moveTo(width - 60, height * 0.72);
-      ctx.lineTo(width - 60, height * 0.32);
-      ctx.lineTo(width - 20, height * 0.25);
-      ctx.moveTo(width - 60, height * 0.45);
-      ctx.lineTo(width - 105, height * 0.38);
+      ctx.moveTo(width - 50, height * 0.72);
+      ctx.lineTo(width - 40, height * 0.4);
+      ctx.lineTo(width - 15, height * 0.32);
+      ctx.moveTo(width - 40, height * 0.5);
+      ctx.lineTo(width - 95, height * 0.44);
+      ctx.moveTo(width - 40, height * 0.6);
+      ctx.lineTo(width - 15, height * 0.56);
       ctx.stroke();
 
-      // Tanah / Jalanan Gelap Berkabut
-      const kabutGrad = ctx.createLinearGradient(0, height * 0.65, 0, height);
-      kabutGrad.addColorStop(0, 'rgba(15, 23, 42, 0.7)');
-      kabutGrad.addColorStop(0.3, '#111827');
-      kabutGrad.addColorStop(1, '#030712');
+      // Tanah / Jalanan Gelap Pekat Berkabut
+      const kabutGrad = ctx.createLinearGradient(0, height * 0.66, 0, height);
+      kabutGrad.addColorStop(0, 'rgba(10, 15, 29, 0.75)');
+      kabutGrad.addColorStop(0.35, '#0F172A');
+      kabutGrad.addColorStop(1, '#020617');
       ctx.fillStyle = kabutGrad;
       ctx.fillRect(0, height * 0.68, width, height * 0.32);
 
-      // Jalan Setapak Tengah Menuju Pintu
-      ctx.fillStyle = 'rgba(55, 65, 81, 0.45)';
+      // Jalan Setapak Tengah Menuju Pintu Rumah
+      ctx.fillStyle = 'rgba(30, 41, 59, 0.6)';
       ctx.beginPath();
-      ctx.moveTo(width / 2 - 40, pintuY + pintuH);
-      ctx.lineTo(width / 2 + 40, pintuY + pintuH);
-      ctx.lineTo(width / 2 + 110, height);
-      ctx.lineTo(width / 2 - 110, height);
+      ctx.moveTo(width / 2 - 32, pintuY + pintuH);
+      ctx.lineTo(width / 2 + 32, pintuY + pintuH);
+      ctx.lineTo(width / 2 + 95, height);
+      ctx.lineTo(width / 2 - 95, height);
       ctx.closePath();
       ctx.fill();
     }
@@ -2099,33 +2146,95 @@ const SingleAdeganAnimasi: React.FC<{
         {renderLatarDinamis(adegan.latar, width, height, steppedFrame, paletAktif, adegan.callout || adegan.judul)}
       </div>
 
-      {/* 2. Top Callout Badge Layar Bersatu */}
+      {/* 2. Top HUD Bar & Tag (Sesuai Referensi Snaptik Video) */}
+      {/* 2a. Sisi Kiri: Waktu & Tanggal HUD */}
       <div
         style={{
           position: 'absolute',
-          top: isLandscape ? 40 : 60,
-          left: isLandscape ? 60 : 60,
-          opacity,
-          transform: `translateY(${translateY}px)`,
+          top: 60,
+          left: 55,
+          color: '#FFFFFF',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
           zIndex: 15,
         }}
       >
-        <span
+        <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: 1.5, opacity: 0.9 }}>HARI 7</div>
+        <div style={{ fontSize: 34, fontWeight: 900, lineHeight: 1.1, fontFamily: 'monospace' }}>23.47</div>
+        <div style={{ fontSize: 14, fontWeight: 800, letterSpacing: 1, opacity: 0.75, marginTop: 4 }}>
+          {adegan.latar?.toUpperCase().replace(/-/g, ' ') || 'RUMAH NOMOR 13'}
+        </div>
+      </div>
+
+      {/* 2b. Sisi Kanan: Badge Part & Watermark */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 60,
+          right: 55,
+          textAlign: 'right',
+          zIndex: 15,
+        }}
+      >
+        <div
           style={{
-            background: 'rgba(15, 23, 42, 0.95)',
-            color: '#FACC15',
+            display: 'inline-block',
+            background: '#DC2626',
+            color: '#FFFFFF',
             fontFamily: 'system-ui, -apple-system, sans-serif',
             fontWeight: 900,
-            fontSize: isLandscape ? 26 : 32,
-            padding: isLandscape ? '10px 22px' : '12px 26px',
-            borderRadius: '999px',
-            border: '2px solid #FACC15',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+            fontSize: 16,
+            padding: '6px 16px',
+            borderRadius: 8,
             letterSpacing: 1,
+            boxShadow: '0 4px 12px rgba(220,38,38,0.4)',
           }}
         >
-          {adegan.callout || `📍 ${adegan.judul}`}
-        </span>
+          PART 1
+        </div>
+        <div style={{ fontSize: 13, color: '#94A3B8', fontWeight: 600, marginTop: 6 }}>
+          dibuat pakai Claude
+        </div>
+      </div>
+
+      {/* 2c. Header Judul Besar Berwarna Putih & Kuning (1:1 Mirip Referensi) */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 195,
+          left: 40,
+          right: 40,
+          textAlign: 'center',
+          zIndex: 15,
+        }}
+      >
+        <div
+          style={{
+            fontFamily: 'Impact, Arial Black, sans-serif',
+            fontSize: 48,
+            fontWeight: 900,
+            color: '#FFFFFF',
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+            textShadow: '3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 0 6px 14px rgba(0,0,0,0.8)',
+            lineHeight: 1.2,
+          }}
+        >
+          KONON, RUMAH NO. 13
+        </div>
+        <div
+          style={{
+            fontFamily: 'Impact, Arial Black, sans-serif',
+            fontSize: 44,
+            fontWeight: 900,
+            color: '#FACC15',
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+            textShadow: '3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 0 6px 14px rgba(0,0,0,0.8)',
+            marginTop: 4,
+          }}
+        >
+          KOSONG 10 TAHUN
+        </div>
       </div>
 
       {/* 3. Canvas Karakter Bergerak (Multi-Rig Support dengan Lip-Sync Aktif) */}
@@ -2144,54 +2253,48 @@ const SingleAdeganAnimasi: React.FC<{
         />
       ) : null}
 
-      {/* 6. Subtitle Narasi Sinkron Per Kata di Bagian Bawah */}
+      {/* 6. Subtitle Narasi Bersih Minimalis di Bagian Bawah (Sesuai Referensi) */}
       <div
         style={{
           position: 'absolute',
-          bottom: isLandscape ? 55 : 220,
-          left: isLandscape ? 120 : 70,
-          right: isLandscape ? 120 : 70,
+          bottom: 110,
+          left: 60,
+          right: 60,
           textAlign: 'center',
           zIndex: 20,
         }}
       >
-        <div
+        <span
           style={{
             display: 'inline-block',
-            maxWidth: isLandscape ? 1600 : 940,
-            background: 'rgba(11, 15, 25, 0.94)',
             color: '#FFFFFF',
-            padding: isLandscape ? '16px 28px' : '18px 32px',
-            borderRadius: 24,
-            border: '3px solid #38BDF8',
-            boxShadow: '0 16px 40px rgba(0,0,0,0.5)',
             fontFamily: 'system-ui, -apple-system, sans-serif',
-            fontSize: isLandscape ? 32 : 40,
+            fontSize: 34,
             fontWeight: 800,
-            lineHeight: 1.4,
+            lineHeight: 1.35,
+            letterSpacing: 0.5,
+            textShadow: '0 2px 8px rgba(0,0,0,0.9), 0 0 2px #000, 0 0 1px #000',
           }}
         >
           {kata.map((k, i) => {
             const aktif = i === kataIdxAktif;
-            const sudahLewat = kataIdxAktif >= 0 && i <= kataIdxAktif;
             return (
               <span
                 key={i}
                 style={{
                   display: 'inline-block',
-                  margin: '0 8px',
-                  color: aktif ? '#FACC15' : (sudahLewat ? '#FFFFFF' : '#94A3B8'),
-                  transform: aktif ? 'scale(1.15)' : 'scale(1)',
+                  margin: '0 6px',
+                  color: aktif ? '#FACC15' : '#FFFFFF',
+                  transform: aktif ? 'scale(1.12)' : 'scale(1)',
                   fontWeight: aktif ? 900 : 700,
                   transition: 'transform 0.08s ease',
-                  opacity: sudahLewat ? 1 : 0.55,
                 }}
               >
                 {k}
               </span>
             );
           })}
-        </div>
+        </span>
       </div>
 
       {/* 7. Audio Adegan jika ada */}
