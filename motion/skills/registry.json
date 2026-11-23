@@ -106,5 +106,21 @@
     "thumbnail": "/aset/gaya/kartun-gerak.jpg",
     "created_at": "2026-11-23T10:50:53.240244+00:00",
     "inti": false
+  },
+  {
+    "slug": "snaptik-animasi-ref",
+    "name": "Snaptik Animasi Ref",
+    "description": "Preset gaya visual diekstrak melalui chunking 4 segmen (@ 8.0s). Rata-rata pacing ~3.33s, palet master: #9B937C, #5D5A62, #3F404D, #282836, #F7E2C7.",
+    "palette_hex": [
+      "#9B937C",
+      "#5D5A62",
+      "#3F404D",
+      "#282836",
+      "#F7E2C7"
+    ],
+    "avg_pacing_sec": 3.33,
+    "thumbnail": "/aset/gaya/snaptik-animasi-ref.jpg",
+    "created_at": "2026-11-23T11:46:16.107604+00:00",
+    "inti": false
   }
 ]

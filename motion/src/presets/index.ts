@@ -16,6 +16,7 @@ for (const [key, tema] of Object.entries(TEMA)) {
 import { preset_preset_3d_custom } from './3d-custom';
 import { preset_dijadikan_kontak_darurat_pinjol_wajib_bayar_shorts_hukum_semenit_1080p_h264 } from './dijadikan-kontak-darurat-pinjol-wajib-bayar-shorts-hukum-semenit-1080p-h264';
 import { preset_kartun_gerak } from './kartun-gerak';
+import { preset_snaptik_animasi_ref } from './snaptik-animasi-ref';
 // CUSTOM_PRESETS_END
 
 export const STYLE_PRESETS: Record<string, StylePreset> = {
@@ -23,6 +24,7 @@ export const STYLE_PRESETS: Record<string, StylePreset> = {
   '3d-custom': preset_preset_3d_custom,
   'dijadikan-kontak-darurat-pinjol-wajib-bayar-shorts-hukum-semenit-1080p-h264': preset_dijadikan_kontak_darurat_pinjol_wajib_bayar_shorts_hukum_semenit_1080p_h264,
   'kartun-gerak': preset_kartun_gerak,
+  'snaptik-animasi-ref': preset_snaptik_animasi_ref,
 };
 
 export const getPreset = (name?: string): StylePreset => {
