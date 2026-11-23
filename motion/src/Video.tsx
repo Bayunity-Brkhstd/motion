@@ -377,20 +377,6 @@ export const Video: React.FC<Props> = (p) => {
           ))}
         </div>
       ) : null}
-      {p.handle ? (
-        <div
-          style={{
-            position: 'absolute',
-            top: t.label === 'progres' ? 150 : 110,
-            right: 90,
-            fontSize: 30,
-            color: warnaAdegan(t, iAktif, p.aksen).redup,
-            fontFamily: t.fontLabel,
-          }}
-        >
-          {p.handle}
-        </div>
-      ) : null}
       {t.label !== 'progres' ? (
         <div style={{position: 'absolute', bottom: 0, left: 0, height: 8, width: `${(f / total) * 100}%`, background: aksen}} />
       ) : null}
