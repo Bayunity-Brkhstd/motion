@@ -1,0 +1,24 @@
+{
+  "id": "flat-vector",
+  "nama": "Flat Vector Pastel Modern",
+  "badge": "Modern Pastel",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Ilustrasi flat vector modern: warna pastel lembut tanpa outline hitam, bayangan transparan halus bertumpuk, bukit bergelombang, awan bulat bervolume, matahari cerah.",
+  "pacingSec": 3.5,
+  "aksen": "#38BDF8",
+  "thumbnail": "/aset/gaya/flat.jpg",
+  "palette_hex": [
+    "#F8FAFC",
+    "#38BDF8",
+    "#FB7185",
+    "#FCD34D",
+    "#4ADE80"
+  ],
+  "fiturVisual": [
+    "Warna Pastel Hangat Tanpa Outline",
+    "Bayangan Transparan Minimalis",
+    "Kurva Geometris Mulus Modern",
+    "Awan Melayang & Bukit Berombak"
+  ],
+  "prompt_blueprint": "Ilustrasi flat vector modern. Warna pastel lembut tanpa outline, bayangan transparan halus, bukit bergelombang, awan bulat, pohon berbentuk lingkaran, matahari kuning sederhana."
+}

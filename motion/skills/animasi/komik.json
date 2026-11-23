@@ -1,0 +1,24 @@
+{
+  "id": "komik",
+  "nama": "Komik Halftone Pop-Art",
+  "badge": "Pop-Art Comic",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Gaya buku komik pop-art: outline hitam tebal, warna primer datar (merah, biru, kuning), latar pola titik halftone, garis kecepatan dinamis, balon efek suara besar (VROOM!).",
+  "pacingSec": 2.8,
+  "aksen": "#DC2626",
+  "thumbnail": "/aset/gaya/komik.jpg",
+  "palette_hex": [
+    "#DC2626",
+    "#2563EB",
+    "#FACC15",
+    "#111827",
+    "#FFFFFF"
+  ],
+  "fiturVisual": [
+    "Titik-Titik Halftone Screen Ben-Day",
+    "Outline Hitam Kontur Tebal Tegas",
+    "Balon Onomatopoeia Efek Suara",
+    "Garis Kecepatan Aksi Kinetik"
+  ],
+  "prompt_blueprint": "Gaya buku komik. Outline hitam tebal, warna primer datar (merah, biru, kuning), latar titik-titik halftone, garis kecepatan di belakang objek. Tulisan efek suara besar seperti 'VROOM!' dan 'BRUK!' di dalam balon bergerigi, semuanya di dalam bingkai panel komik."
+}

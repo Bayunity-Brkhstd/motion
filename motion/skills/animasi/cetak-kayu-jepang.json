@@ -1,0 +1,24 @@
+{
+  "id": "cetak-kayu-jepang",
+  "nama": "Cetak Kayu Jepang Ukiyo-e",
+  "badge": "Ukiyo-e Wave",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Balok cetak kayu klasik Jepang ala Hokusai di kertas krem: warna nila, biru laut, dan merah bata, garis tepi kayu tegas seragam, ombak bergulung dengan buih cakar, stempel merah vertikal.",
+  "pacingSec": 3.8,
+  "aksen": "#E63946",
+  "thumbnail": "/aset/gaya/sinematik.jpg",
+  "palette_hex": [
+    "#0F1E36",
+    "#1D3557",
+    "#457B9D",
+    "#E63946",
+    "#F1FAEE"
+  ],
+  "fiturVisual": [
+    "Buih Ombak Melengkung Berbentuk Cakar",
+    "Palet Nila Indigo & Biru Laut Klasik",
+    "Awan Garis Horizontal Pipih Berlapis",
+    "Stempel Hanko Cap Merah di Pojok"
+  ],
+  "prompt_blueprint": "Cetakan balok kayu ala Jepang klasik di kertas krem bertekstur. Warna terbatas: nila, biru, biru muda, krem, dan merah bata. Garis tepi tegas dengan tebal yang sama, ombak besar bergulung dengan buih putih berbentuk cakar, garis air berlapis, awan berupa garis datar, dan stempel merah vertikal di pojok."
+}

@@ -1,0 +1,24 @@
+{
+  "id": "gouache-malam",
+  "nama": "Gouache Malam Matte Sinematik",
+  "badge": "Night Gouache",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Cat gouache malam hari pekat: bidang warna solid dan matte tanpa outline, palet biru malam misterius, bulan besar krem berkawah halus, bintang berkelip, siluet tajam.",
+  "pacingSec": 3.5,
+  "aksen": "#5BC0BE",
+  "thumbnail": "/aset/gaya/sinematik.jpg",
+  "palette_hex": [
+    "#0B132B",
+    "#1C2541",
+    "#3A506B",
+    "#5BC0BE",
+    "#6FFFE9"
+  ],
+  "fiturVisual": [
+    "Warna Solid Matte Tanpa Kilap Refleksi",
+    "Bulan Penuh Besar Berkawah Lembut",
+    "Siluet Gelap Tegas di Depan Terang",
+    "Butiran Kertas Tekstur Halus Alami"
+  ],
+  "prompt_blueprint": "Cat gouache malam hari: bentuk datar dengan warna pekat dan matte, tanpa kilap dan tanpa outline. Palet biru malam, bulan besar krem dengan kawah lembut, bintang kecil berkelip, siluet gelap tegas di depan bulan, butiran kertas tipis."
+}

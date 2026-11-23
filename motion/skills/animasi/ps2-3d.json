@@ -1,0 +1,24 @@
+{
+  "id": "ps2-3d",
+  "nama": "PS2 3D Low-Poly Retro",
+  "badge": "PS2 Low-Poly",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "3D low-poly ala game PlayStation 2: mesin 3D sederhana dari balok dan silinder bersisi sedikit, pencahayaan flat, kabut tipis, dither buram, dan scanline horizontal CRT.",
+  "pacingSec": 3.5,
+  "aksen": "#F59E0B",
+  "thumbnail": "/aset/gaya/ps2.jpg",
+  "palette_hex": [
+    "#1E293B",
+    "#64748B",
+    "#94A3B8",
+    "#F59E0B",
+    "#0F172A"
+  ],
+  "fiturVisual": [
+    "Model Geometri Low-Poly Sederhana",
+    "Pencahayaan Flat Directional Shading",
+    "Efek Dithering & Scanline CRT Tipis",
+    "Kabut Misterius Keabuan (Fog Distance)"
+  ],
+  "prompt_blueprint": "3D low-poly ala game PlayStation 2. Buat mesin 3D sederhana sendiri di canvas: objek dari kotak dan silinder bersisi sedikit, pencahayaan datar dari satu arah, kabut tipis di kejauhan. Render di seperempat resolusi lalu perbesar agar agak buram, warna dibulatkan dengan sedikit dither, tambahkan garis scanline tipis."
+}

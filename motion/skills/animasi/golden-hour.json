@@ -1,0 +1,24 @@
+{
+  "id": "golden-hour",
+  "nama": "Golden Hour Siluet Senja",
+  "badge": "Sunset Silhouette",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Siluet senja magis matahari terbenam: langit bergradasi spektakuler ungu-merah muda-oranye-kuning, matahari besar di cakrawala, semua objek siluet coklat gelap tanpa detail, rumput bergoyang.",
+  "pacingSec": 3.5,
+  "aksen": "#FF9E00",
+  "thumbnail": "/aset/gaya/sinematik.jpg",
+  "palette_hex": [
+    "#3C096C",
+    "#7B2CBF",
+    "#C77DFF",
+    "#FF9E00",
+    "#FF6000"
+  ],
+  "fiturVisual": [
+    "Gradasi Spektakuler Ungu-Pink-Oranye",
+    "Siluet Penuh Objek Hitam-Coklat Pekat",
+    "Matahari Emas Besar Menyentuh Cakrawala",
+    "Ilalang & Dedaunan Bergoyang Angin"
+  ],
+  "prompt_blueprint": "Siluet saat matahari terbenam. Langit bergradasi ungu, merah muda, oranye, lalu kuning, dengan matahari besar bercahaya di cakrawala. Semua objek berupa siluet coklat gelap tanpa detail, pohon akasia berpayung datar, rumput yang bergoyang, butiran halus."
+}

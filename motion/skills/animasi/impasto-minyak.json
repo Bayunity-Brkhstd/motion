@@ -1,0 +1,24 @@
+{
+  "id": "impasto-minyak",
+  "nama": "Impasto Cat Minyak Van Gogh",
+  "badge": "Van Gogh Swirl",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Lukisan cat minyak tebal bertekstur (Starry Night style): langit tersusun dari ribuan goresan kuas pendek melingkar dinamis, pusaran kuning-biru, bintang berpendar, kanvas kasar.",
+  "pacingSec": 3.8,
+  "aksen": "#F59E0B",
+  "thumbnail": "/aset/gaya/sinematik.jpg",
+  "palette_hex": [
+    "#0C1821",
+    "#1E3A8A",
+    "#F59E0B",
+    "#FDE047",
+    "#1E293B"
+  ],
+  "fiturVisual": [
+    "Ribuan Goresan Kuas Pendek Berputar",
+    "Pusaran Awan Dinamis Warna Kuning-Biru",
+    "Halo Cahaya Bintang Melingkar Hangat",
+    "Tekstur Timbul Kanvas Kasar (Impasto)"
+  ],
+  "prompt_blueprint": "Lukisan cat minyak tebal (impasto). Langit terbuat dari ribuan sapuan kuas pendek yang mengikuti arah pusaran dan berputar pelan, warna biru tua, biru muda, dan kuning. Bintang berpendar berlapis, pohon cemara gelap di depan, tekstur kanvas halus di seluruh layar."
+}

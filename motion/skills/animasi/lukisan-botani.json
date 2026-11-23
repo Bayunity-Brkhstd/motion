@@ -1,0 +1,24 @@
+{
+  "id": "lukisan-botani",
+  "nama": "Lukisan Botani Antik Ilmiah",
+  "badge": "Botanical Art",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Ilustrasi botani ensiklopedia ilmiah lama: kertas perkamen tua krem, garis tinta sangat halus dengan pewarnaan lembut transparan, label nomor pelat 'Pl. 07', nama latin miring.",
+  "pacingSec": 4.0,
+  "aksen": "#2D5A27",
+  "thumbnail": "/aset/gaya/hangat.jpg",
+  "palette_hex": [
+    "#F5EBE0",
+    "#2D5A27",
+    "#588157",
+    "#A3B18A",
+    "#BC4749"
+  ],
+  "fiturVisual": [
+    "Kertas Perkamen Tua Berbingkai Tipis",
+    "Garis Tinta Botani Sangat Detail",
+    "Label Klasik 'Pl. 07' & Nama Latin",
+    "Serangga Kecil Terbang di Sekitar"
+  ],
+  "prompt_blueprint": "Ilustrasi botani ala buku ilmiah lama. Kertas tua krem dengan bingkai garis tipis, garis tinta halus dengan warna lembut tembus pandang. Label kecil 'Pl. 07' di pojok atas, nama latin bercetak miring di bawah gambar, dan serangga kecil yang terbang di sekitar tanaman."
+}

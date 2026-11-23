@@ -1,0 +1,24 @@
+{
+  "id": "neon",
+  "nama": "Neon 80s Synthwave Outrun",
+  "badge": "80s Synthwave",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Retro neon tahun 80-an: latar ungu-biru gelap, matahari besar bergaris horizontal, jalan grid perspektif biru muda bergerak, semua garis bercahaya glow magenta, cyan, kuning.",
+  "pacingSec": 3.0,
+  "aksen": "#06B6D4",
+  "thumbnail": "/aset/gaya/neon.jpg",
+  "palette_hex": [
+    "#0F051D",
+    "#F43F5E",
+    "#06B6D4",
+    "#FACC15",
+    "#8B5CF6"
+  ],
+  "fiturVisual": [
+    "Latar Grid Perspektif Bergerak (Outrun)",
+    "Glow Magenta, Cyan & Kuning Neon",
+    "Matahari Sunset Bergaris Striped",
+    "Partikel Cahaya Bintang Meluncur"
+  ],
+  "prompt_blueprint": "Retro neon tahun 80-an. Latar ungu-biru gelap, matahari besar bergaris, jalan grid perspektif biru muda yang bergerak. Semua garis bercahaya (glow) warna magenta, cyan, dan kuning, dengan inti garis putih tipis."
+}

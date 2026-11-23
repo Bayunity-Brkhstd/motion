@@ -1,0 +1,24 @@
+{
+  "id": "balok-mainan",
+  "nama": "Balok Mainan Plastik 3D",
+  "badge": "Plastic Bricks",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "3D seperti mainan balok plastik konstruksi: semua benda tersusun dari balok berwarna cerah (merah, biru, kuning, hijau) bertonjolan bulat atas, pencahayaan bersih berkilap.",
+  "pacingSec": 3.0,
+  "aksen": "#EAB308",
+  "thumbnail": "/aset/gaya/bata.jpg",
+  "palette_hex": [
+    "#EF4444",
+    "#3B82F6",
+    "#EAB308",
+    "#22C55E",
+    "#F8FAFC"
+  ],
+  "fiturVisual": [
+    "Tonjolan Silinder Atas Khas Balok",
+    "Warna Plastik Primer Cerah Berkilau",
+    "Alas Hijau Bertonjolan Grid",
+    "Pencahayaan Studio Bersih"
+  ],
+  "prompt_blueprint": "3D seperti mainan balok plastik. Semua benda tersusun dari balok berwarna cerah (merah, biru, kuning, hijau) dengan tonjolan bulat kecil di bagian atas balok. Alas hijau bertonjolan, pencahayaan terang dan bersih."
+}

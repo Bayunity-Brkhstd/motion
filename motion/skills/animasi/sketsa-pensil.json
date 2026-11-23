@@ -1,0 +1,24 @@
+{
+  "id": "sketsa-pensil",
+  "nama": "Sketsa Pensil Buku Tulis",
+  "badge": "Pencil Sketch",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Sketsa goresan pensil di buku tulis bergaris biru dan margin merah: garis grafit bergetar dobel tangan, arsiran miring kasar, pensil kayu kuning yang ikut menggambar objek.",
+  "pacingSec": 3.5,
+  "aksen": "#64748B",
+  "thumbnail": "/aset/gaya/kertas.jpg",
+  "palette_hex": [
+    "#FDFBF7",
+    "#334155",
+    "#64748B",
+    "#EF4444",
+    "#94A3B8"
+  ],
+  "fiturVisual": [
+    "Garis Buku Tulis Biru & Margin Merah",
+    "Goresan Grafit Pensil Bergetar Dobel",
+    "Arsiran Hatching & Cross-Hatching",
+    "Animasi Ujung Pensil Ikut Bergerak"
+  ],
+  "prompt_blueprint": "Sketsa pensil di kertas buku tulis bergaris biru dengan garis margin merah. Garis abu-abu sedikit bergetar dan digambar dobel seperti coretan tangan, isian arsiran miring, pensil kuning ikut bergerak menggambar, dan tulisan tangan kecil di pojok bawah."
+}

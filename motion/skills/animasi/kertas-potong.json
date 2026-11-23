@@ -1,0 +1,24 @@
+{
+  "id": "kertas-potong",
+  "nama": "Kertas Potong Berlapis Papercut",
+  "badge": "Layered Papercut",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Seni kertas potong berlapis (multi-layer papercraft): tiap lapisan potongan kertas memberi bayangan jatuh lembut ke lapisan di belakangnya, bukit bergelombang, gradasi senja.",
+  "pacingSec": 3.5,
+  "aksen": "#F4A261",
+  "thumbnail": "/aset/gaya/kertas.jpg",
+  "palette_hex": [
+    "#1B263B",
+    "#415A77",
+    "#778DA9",
+    "#E0E1DD",
+    "#F4A261"
+  ],
+  "fiturVisual": [
+    "Lapisan Kertas Tumpuk Bertingkat",
+    "Bayangan Jatuh Lembut Antar Kertas",
+    "Bukit Bergelombang Gradasi Terang-Gelap",
+    "Matahari Lingkaran Tumpuk Berlapis"
+  ],
+  "prompt_blueprint": "Seni kertas potong berlapis (papercut). Setiap lapisan kertas berwarna memberi bayangan lembut ke lapisan di belakangnya. Bukit bergelombang berlapis dari terang ke gelap, matahari dari lingkaran bertumpuk, awan kertas putih, gradasi langit senja merah muda ke oranye."
+}

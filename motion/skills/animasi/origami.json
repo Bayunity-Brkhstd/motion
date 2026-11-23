@@ -1,0 +1,24 @@
+{
+  "id": "origami",
+  "nama": "Origami Kertas Lipat Geometris",
+  "badge": "Folded Origami",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Semua objek terbuat dari kertas lipat: bidang segitiga bersegi dengan perbedaan kontras warna di tiap lipatan, bayangan tumpuk kertas, garis putus-putus pola lipatan origami.",
+  "pacingSec": 3.5,
+  "aksen": "#EF4444",
+  "thumbnail": "/aset/gaya/kertas.jpg",
+  "palette_hex": [
+    "#F8F9FA",
+    "#EF4444",
+    "#3B82F6",
+    "#F59E0B",
+    "#10B981"
+  ],
+  "fiturVisual": [
+    "Geometri Poligon Lipatan Kertas",
+    "Bayangan Halus Tumpukan Kertas (Depth)",
+    "Garis Panduan Lipatan Putus-Putus",
+    "Matahari Lipatan Kertas Berputar"
+  ],
+  "prompt_blueprint": "Semua objek dari kertas lipat: bentuk segitiga bersegi dengan dua nada warna di tiap sisi lipatan, bayangan lembut seperti kertas ditempel, matahari kertas berputar pelan, latar kertas krem dengan garis lipatan tipis, garis putus-putus 'lipat di sini'."
+}

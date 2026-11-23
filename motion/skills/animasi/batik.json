@@ -1,0 +1,24 @@
+{
+  "id": "batik",
+  "nama": "Batik Nusantara Sogan & Kawung",
+  "badge": "Batik Tradisional",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Nuansa batik tradisional Indonesia: langit motif kawung, bangunan motif parang, lantai motif truntum, warna klasik sogan (coklat tua, keemasan, krem), garis tepi lilin malam canting.",
+  "pacingSec": 3.8,
+  "aksen": "#D97706",
+  "thumbnail": "/aset/gaya/emas.jpg",
+  "palette_hex": [
+    "#2C1810",
+    "#78350F",
+    "#D97706",
+    "#FDE68A",
+    "#451A03"
+  ],
+  "fiturVisual": [
+    "Pola Geometris Kawung & Parang Rusak",
+    "Warna Klasik Sogan & Emas Keraton",
+    "Tekstur Garis Retakan Lilin Canting",
+    "Pita Border Ornamen Batik Atas-Bawah"
+  ],
+  "prompt_blueprint": "Nuansa batik Indonesia: langit bermotif kawung, bangunan bermotif parang, lantai motif truntum, warna sogan (coklat tua, coklat keemasan, krem). Objek utama oranye dengan tekstur motif tipis dan garis tepi krem, matahari berbentuk bunga kawung, pita batik di atas dan bawah."
+}

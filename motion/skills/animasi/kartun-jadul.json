@@ -1,0 +1,24 @@
+{
+  "id": "kartun-jadul",
+  "nama": "Kartun Jadul 1930s Rubberhose",
+  "badge": "1930s Rubberhose",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Kartun monokrom tahun 1930-an: karakter hitam pekat berwajah krem, mata pai pie-eyes, sarung tangan putih bulat, 15 FPS, goresan vertikal film jadul, vignette berkedip.",
+  "pacingSec": 2.5,
+  "aksen": "#F5F5DC",
+  "thumbnail": "/aset/gaya/retro.jpg",
+  "palette_hex": [
+    "#1A1A1A",
+    "#F5F5DC",
+    "#4A4A4A",
+    "#808080",
+    "#E0E0E0"
+  ],
+  "fiturVisual": [
+    "Mata Pie-Cut & Sarung Tangan Putih",
+    "Efek Seluloid Film Grain & Goresan",
+    "Gerakan Lentur Rubberhose 15 FPS",
+    "Vignette Sudut Gelap Film Bisu"
+  ],
+  "prompt_blueprint": "Kartun hitam-putih tahun 1930-an: karakter hitam pekat dengan wajah krem, mata seperti potongan kue, sarung tangan/kaki putih bulat, matahari tersenyum. Gerak 15 frame per detik, gambar sedikit bergoyang, grain film, goresan vertikal, layar berkedip, vignette gelap, dan kartu judul ala film lama."
+}

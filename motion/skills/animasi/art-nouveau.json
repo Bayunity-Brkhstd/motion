@@ -1,0 +1,24 @@
+{
+  "id": "art-nouveau",
+  "nama": "Art Nouveau Poster Dekoratif",
+  "badge": "Art Nouveau",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Poster dekoratif Art Nouveau awal 1900-an ala Alphonse Mucha: bingkai lengkung ornamen emas dan hijau daun, garis kontur melengkung mengalir bebas, sinar matahari berjari di belakang.",
+  "pacingSec": 4.0,
+  "aksen": "#D4AF37",
+  "thumbnail": "/aset/gaya/emas.jpg",
+  "palette_hex": [
+    "#1F2421",
+    "#D4AF37",
+    "#3A5A40",
+    "#588157",
+    "#F2E8CF"
+  ],
+  "fiturVisual": [
+    "Bingkai Lengkung Ornamen Emas Mengalir",
+    "Sinar Matahari Berjari Radiating Rays",
+    "Garis Kontur Halus Gaya Mucha",
+    "Panel Medallion Dekoratif Melingkar"
+  ],
+  "prompt_blueprint": "Poster dekoratif gaya Art Nouveau awal 1900-an. Bingkai lengkung hias dengan garis emas dan hijau tua, sinar matahari berjari di belakang objek utama, garis kontur melengkung yang mengalir. Palet emas, hijau toska, biru, dan krem, dengan panel ornamen bulat di bagian bawah."
+}

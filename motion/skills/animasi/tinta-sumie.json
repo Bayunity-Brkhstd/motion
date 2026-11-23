@@ -1,0 +1,24 @@
+{
+  "id": "tinta-sumie",
+  "nama": "Tinta Hitam Sumi-e Kaligrafi",
+  "badge": "Sumi-e Ink",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Lukisan tinta basah khas Asia Timur di atas kertas beras krem: sapuan kuas tebal menipis elegan, tepi meresap ke serat kertas, ruang kosong luas (Ma), stempel cap merah khas.",
+  "pacingSec": 4.0,
+  "aksen": "#DC2626",
+  "thumbnail": "/aset/gaya/minimal.jpg",
+  "palette_hex": [
+    "#FAFAF9",
+    "#1C1917",
+    "#44403C",
+    "#A8A29E",
+    "#DC2626"
+  ],
+  "fiturVisual": [
+    "Sapuan Kuas Kaligrafi Kuat & Mengalir",
+    "Resapan Tinta Basah Alami (Ink Bleed)",
+    "Ruang Negatif Luas Harmonis (Zen)",
+    "Stempel Segel Merah Pojok Layar"
+  ],
+  "prompt_blueprint": "Lukisan tinta hitam ala Asia Timur di kertas beras krem bertekstur. Sapuan kuas yang tebal di awal lalu menipis di ujung, tepi sedikit buram seperti tinta meresap. Banyak ruang kosong, batang bambu beruas dengan daun dari satu sapuan, dan satu stempel merah kecil di pojok."
+}

@@ -1,0 +1,24 @@
+{
+  "id": "boneka-rajut",
+  "nama": "Boneka Rajut Benang Wol",
+  "badge": "Knitted Wool",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Semua objek dirajut dari benang wol: isian pola rajutan V berulang, tepi berjahit putus-putus, mata dari kancing baju, matahari kancing besar, warna pastel hangat.",
+  "pacingSec": 3.5,
+  "aksen": "#E07A5F",
+  "thumbnail": "/aset/gaya/hangat.jpg",
+  "palette_hex": [
+    "#FDF4E3",
+    "#E07A5F",
+    "#3D405B",
+    "#81B29A",
+    "#F2CC8F"
+  ],
+  "fiturVisual": [
+    "Pola Anyaman Rajutan V Berulang",
+    "Mata & Ornamen dari Kancing Jahit",
+    "Jahitan Keliling Putus-Putus",
+    "Ujung Serat Benang Wol Lembut"
+  ],
+  "prompt_blueprint": "Semua objek seperti dirajut dari benang wol: isian memakai pola rajutan V berulang, tepi berjahit putus-putus, mata dari kancing, matahari dari kancing besar. Tambahkan gulungan benang dengan ujung benang terurai. Warna pastel lembut."
+}

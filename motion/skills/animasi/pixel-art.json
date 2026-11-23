@@ -1,0 +1,24 @@
+{
+  "id": "pixel-art",
+  "nama": "Pixel Art 16-Bit Retro",
+  "badge": "16-Bit Pixel",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Pixel art ala game 16-bit retro (resolusi internal 135x240 dinaikkan tanpa penghalusan). Palet terbatas 16-24 warna, langit senja bergradasi bertingkat, jendela gedung kotak kecil menyala.",
+  "pacingSec": 3.0,
+  "aksen": "#FEE761",
+  "thumbnail": "/aset/gaya/piksel.jpg",
+  "palette_hex": [
+    "#181425",
+    "#3A4466",
+    "#E43B44",
+    "#FEE761",
+    "#63C74D"
+  ],
+  "fiturVisual": [
+    "Grid Piksel Murni 16-Bit",
+    "Palet Warna Terbatas (Retro Palette)",
+    "Efek Dither & Langit Bertingkat",
+    "Gerakan Objek Step-by-Step"
+  ],
+  "prompt_blueprint": "Pixel art ala game 16-bit. Gambar di resolusi kecil (sekitar 135x240) lalu perbesar tanpa penghalusan agar kotak-kotak pikselnya terlihat. Palet warna terbatas (16-24 warna), langit senja bergradasi bertingkat, jendela gedung kotak kecil yang menyala."
+}

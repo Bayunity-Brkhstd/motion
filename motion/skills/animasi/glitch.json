@@ -1,0 +1,24 @@
+{
+  "id": "glitch",
+  "nama": "Glitch RGB Shift Digital Error",
+  "badge": "Digital Glitch",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Kerusakan sinyal digital futuristik: channel warna RGB terpisah (merah, cyan, putih), irisan horizontal pergeseran pixel acak, jendela pop-up error retro yang muncul mendadak.",
+  "pacingSec": 2.5,
+  "aksen": "#FF0055",
+  "thumbnail": "/aset/gaya/retro.jpg",
+  "palette_hex": [
+    "#050505",
+    "#FF0055",
+    "#00FFFF",
+    "#FFFF00",
+    "#FFFFFF"
+  ],
+  "fiturVisual": [
+    "Pemisahan Channel Warna RGB Aberration",
+    "Potongan Garis Horizontal Slicing",
+    "Kotak Noise Pixel Acak Digital",
+    "Jendela Dialog Error Komputer Retro"
+  ],
+  "prompt_blueprint": "Glitch digital: semua objek digambar tiga kali (merah, cyan, putih) dengan sedikit pergeseran sehingga warnanya terpisah, irisan horizontal acak yang bergeser, kotak piksel berwarna acak. Tambahkan jendela error ala komputer jadul berisi pesan lucu yang muncul dan hilang."
+}

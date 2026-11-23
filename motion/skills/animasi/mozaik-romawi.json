@@ -1,0 +1,24 @@
+{
+  "id": "mozaik-romawi",
+  "nama": "Mozaik Batu Romawi Kuno",
+  "badge": "Stone Mosaic",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Seni ubin mozaik batu kuno: kanvas dipetakan menjadi ribuan ubin batu kecil (tesserae) dengan nat gelap di sela-selanya, warna alami terakota, krem, dan bingkai pola ubin emas.",
+  "pacingSec": 4.0,
+  "aksen": "#D97706",
+  "thumbnail": "/aset/gaya/bata.jpg",
+  "palette_hex": [
+    "#1C1917",
+    "#78350F",
+    "#9A3412",
+    "#D97706",
+    "#FEF3C7"
+  ],
+  "fiturVisual": [
+    "Grid Ubin Batu Kotak-Kotak Kecil",
+    "Sela-Sela Semen Nat Gelap Alami",
+    "Warna Terakota Tanah Liat Kuno",
+    "Bingkai Ornamen Geometris Romawi"
+  ],
+  "prompt_blueprint": "Mozaik batu kuno. Gambar adegan dulu di kanvas tersembunyi yang sangat kecil (sekitar 46x82), lalu ubah tiap piksel jadi ubin batu kecil dengan nat gelap di antaranya. Warna tiap ubin sedikit acak dan posisinya sedikit miring. Palet tanah: krem, terakota, biru laut. Bingkai pola ubin coklat-emas di sekeliling."
+}

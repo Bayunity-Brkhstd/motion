@@ -1,0 +1,24 @@
+{
+  "id": "hologram",
+  "nama": "Hologram Sci-Fi Proyeksi HUD",
+  "badge": "Sci-Fi Hologram",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Proyeksi hologram futuristik: latar biru gelap, objek garis cyan glowing tembus pandang berkedip, scanline berjalan, piringan emitter bawah, radar dan panel data HUD berputar.",
+  "pacingSec": 3.0,
+  "aksen": "#00F0FF",
+  "thumbnail": "/aset/gaya/tekno.jpg",
+  "palette_hex": [
+    "#020C1B",
+    "#00F0FF",
+    "#0077FE",
+    "#7000FF",
+    "#E0F7FA"
+  ],
+  "fiturVisual": [
+    "Proyeksi Garis Cyan Neon Glowing",
+    "Garis Pindai Scanline Bergerak Vertikal",
+    "Piringan Emitter Proyektor Lantai",
+    "Radar & Kotak Target Pelacak HUD"
+  ],
+  "prompt_blueprint": "Proyeksi hologram futuristik: latar biru gelap, semua objek garis cyan bercahaya dengan isian tembus pandang yang berkedip halus, scanline bergerak, piringan proyektor bercahaya di lantai, grid perspektif. Tambahkan HUD: kotak siku di sekitar objek utama dengan label, panel data kecil, radar berputar, teks status di pojok."
+}

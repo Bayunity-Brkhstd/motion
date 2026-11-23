@@ -1,0 +1,24 @@
+{
+  "id": "clay",
+  "nama": "Claymation Plastisin Stop-Motion",
+  "badge": "Stop-Motion Clay",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Animasi tanah liat/plastisin ala stop-motion: sudut membulat lembut, kilap atas halus, bayangan tumpul, bintik sidik jari halus, gerakan patah-patah 12 FPS khas tanah liat.",
+  "pacingSec": 3.0,
+  "aksen": "#F97316",
+  "thumbnail": "/aset/gaya/clay.jpg",
+  "palette_hex": [
+    "#F97316",
+    "#0284C7",
+    "#16A34A",
+    "#CA8A04",
+    "#FDE047"
+  ],
+  "fiturVisual": [
+    "Sudut Membulat Organik Plastisin",
+    "Tekstur Halus Sidik Jari Pengrajin",
+    "Gerakan Kinetik Stop-Motion 12 FPS",
+    "Pencahayaan Studio Hangat Lembut"
+  ],
+  "prompt_blueprint": "Animasi clay/plastisin ala stop-motion. Semua objek seperti dibentuk dari plastisin: sudut membulat, kilap lembut di bagian atas, bayangan lembut di bawah, bintik sidik jari halus. Gerakan sengaja patah-patah 12 frame per detik. Warna cerah hangat, langit biru ke krem."
+}

@@ -1,0 +1,24 @@
+{
+  "id": "blueprint",
+  "nama": "Blueprint Desain Teknik",
+  "badge": "Cyan Blueprint",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Gambar teknik blueprint: latar biru tua dengan grid putih tipis, semua objek digambar garis rancangan putih, ada garis dimensi panah ukuran ('4,50 m') dan kotak etiket pojok.",
+  "pacingSec": 3.5,
+  "aksen": "#38BDF8",
+  "thumbnail": "/aset/gaya/tekno.jpg",
+  "palette_hex": [
+    "#0A2540",
+    "#38BDF8",
+    "#FFFFFF",
+    "#1E3A8A",
+    "#60A5FA"
+  ],
+  "fiturVisual": [
+    "Grid Matematika Putih Tipis",
+    "Garis Ukuran Panah Dimensi Teknis",
+    "Label Ukuran Metrik & Anotasi",
+    "Kotak Etiket Judul Arsitektur"
+  ],
+  "prompt_blueprint": "Gambar teknik blueprint. Latar biru tua dengan grid putih tipis, semua objek digambar garis putih seperti rancangan. Ada garis ukuran dengan panah dan label (misalnya '4,50 m'), garis tengah putus-putus, dan kotak judul gambar di pojok."
+}

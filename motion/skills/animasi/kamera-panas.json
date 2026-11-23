@@ -1,0 +1,24 @@
+{
+  "id": "kamera-panas",
+  "nama": "Kamera Termal Night Vision",
+  "badge": "Thermal Heatmap",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Rekaman sensor inframerah termal: lingkungan dingin ungu-biru, objek utama memancarkan gradasi panas merah-oranye-kuning-putih, indikator REC berkedip, crosshair suhu.",
+  "pacingSec": 3.0,
+  "aksen": "#F48C06",
+  "thumbnail": "/aset/gaya/sorot.jpg",
+  "palette_hex": [
+    "#03071E",
+    "#6A040F",
+    "#D00000",
+    "#F48C06",
+    "#FFBA08"
+  ],
+  "fiturVisual": [
+    "Gradasi Suhu Tubuh Merah-Kuning-Putih",
+    "Latar Lingkungan Dingin Biru-Ungu",
+    "Indikator REC Merah & Crosshair Bidik",
+    "Skala Termometer Suhu di Sisi Kanan"
+  ],
+  "prompt_blueprint": "Rekaman kamera termal: lingkungan berwarna dingin (biru tua dan ungu), objek utama bergradasi panas putih-kuning-oranye-merah-ungu. Tambahkan HUD kamera: REC berkedip, jam, kotak merah 'TARGET TERKUNCI', crosshair, angka suhu, dan skala warna vertikal di sisi kanan."
+}

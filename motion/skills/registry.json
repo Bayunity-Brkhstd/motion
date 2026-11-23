@@ -122,5 +122,485 @@
     "thumbnail": "/aset/gaya/snaptik-animasi-ref.jpg",
     "created_at": "2026-11-23T11:46:16.107604+00:00",
     "inti": false
+  },
+  {
+    "slug": "pixel-art",
+    "name": "Pixel Art 16-Bit Retro",
+    "description": "Pixel art ala game 16-bit retro (resolusi internal 135x240 dinaikkan tanpa penghalusan). Palet terbatas 16-24 warna, langit senja bergradasi bertingkat, jendela gedung kotak kecil menyala.",
+    "palette_hex": [
+      "#181425",
+      "#3A4466",
+      "#E43B44",
+      "#FEE761",
+      "#63C74D"
+    ],
+    "avg_pacing_sec": 3.0,
+    "thumbnail": "/aset/gaya/piksel.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "kapur-tulis",
+    "name": "Kapur Tulis Papan Hijau",
+    "description": "Gambar kapur di papan tulis hijau gelap bertekstur. Garis putih dan kuning sedikit bergetar digambar ulang 8 FPS, isian arsiran miring, dan butiran debu kapur berhamburan.",
+    "palette_hex": [
+      "#1E3A2F",
+      "#F8F9FA",
+      "#FDE047",
+      "#2D5A47",
+      "#0E1D17"
+    ],
+    "avg_pacing_sec": 3.5,
+    "thumbnail": "/aset/gaya/kapur.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "neon",
+    "name": "Neon 80s Synthwave Outrun",
+    "description": "Retro neon tahun 80-an: latar ungu-biru gelap, matahari besar bergaris horizontal, jalan grid perspektif biru muda bergerak, semua garis bercahaya glow magenta, cyan, kuning.",
+    "palette_hex": [
+      "#0F051D",
+      "#F43F5E",
+      "#06B6D4",
+      "#FACC15",
+      "#8B5CF6"
+    ],
+    "avg_pacing_sec": 3.0,
+    "thumbnail": "/aset/gaya/neon.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "ps2-3d",
+    "name": "PS2 3D Low-Poly Retro",
+    "description": "3D low-poly ala game PlayStation 2: mesin 3D sederhana dari balok dan silinder bersisi sedikit, pencahayaan flat, kabut tipis, dither buram, dan scanline horizontal CRT.",
+    "palette_hex": [
+      "#1E293B",
+      "#64748B",
+      "#94A3B8",
+      "#F59E0B",
+      "#0F172A"
+    ],
+    "avg_pacing_sec": 3.5,
+    "thumbnail": "/aset/gaya/ps2.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "komik",
+    "name": "Komik Halftone Pop-Art",
+    "description": "Gaya buku komik pop-art: outline hitam tebal, warna primer datar (merah, biru, kuning), latar pola titik halftone, garis kecepatan dinamis, balon efek suara besar (VROOM!).",
+    "palette_hex": [
+      "#DC2626",
+      "#2563EB",
+      "#FACC15",
+      "#111827",
+      "#FFFFFF"
+    ],
+    "avg_pacing_sec": 2.8,
+    "thumbnail": "/aset/gaya/komik.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "flat-vector",
+    "name": "Flat Vector Pastel Modern",
+    "description": "Ilustrasi flat vector modern: warna pastel lembut tanpa outline hitam, bayangan transparan halus bertumpuk, bukit bergelombang, awan bulat bervolume, matahari cerah.",
+    "palette_hex": [
+      "#F8FAFC",
+      "#38BDF8",
+      "#FB7185",
+      "#FCD34D",
+      "#4ADE80"
+    ],
+    "avg_pacing_sec": 3.5,
+    "thumbnail": "/aset/gaya/flat.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "garis-minimal",
+    "name": "Garis Minimal Rasi Bintang",
+    "description": "Minimalis elegan: latar hitam pekat, garis putih tipis 2-3 px yang tergambar perlahan di awal adegan, titik kecil di setiap sudut menyerupai rasi bintang kosmis berputar halus.",
+    "palette_hex": [
+      "#000000",
+      "#FFFFFF",
+      "#64748B",
+      "#38BDF8",
+      "#E2E8F0"
+    ],
+    "avg_pacing_sec": 4.0,
+    "thumbnail": "/aset/gaya/minimal.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "balok-mainan",
+    "name": "Balok Mainan Plastik 3D",
+    "description": "3D seperti mainan balok plastik konstruksi: semua benda tersusun dari balok berwarna cerah (merah, biru, kuning, hijau) bertonjolan bulat atas, pencahayaan bersih berkilap.",
+    "palette_hex": [
+      "#EF4444",
+      "#3B82F6",
+      "#EAB308",
+      "#22C55E",
+      "#F8FAFC"
+    ],
+    "avg_pacing_sec": 3.0,
+    "thumbnail": "/aset/gaya/bata.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "cat-air",
+    "name": "Cat Air Kertas Basah",
+    "description": "Lukisan cat air di kertas krem bertekstur basah: warna tembus pandang ditumpuk beberapa lapis dengan tepi pigmen mengendap, garis pensil tipis, berubah halus 6 FPS.",
+    "palette_hex": [
+      "#FDFBF7",
+      "#38BDF8",
+      "#F472B6",
+      "#FBBF24",
+      "#34D399"
+    ],
+    "avg_pacing_sec": 3.8,
+    "thumbnail": "/aset/gaya/kolase.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "blueprint",
+    "name": "Blueprint Desain Teknik",
+    "description": "Gambar teknik blueprint: latar biru tua dengan grid putih tipis, semua objek digambar garis rancangan putih, ada garis dimensi panah ukuran ('4,50 m') dan kotak etiket pojok.",
+    "palette_hex": [
+      "#0A2540",
+      "#38BDF8",
+      "#FFFFFF",
+      "#1E3A8A",
+      "#60A5FA"
+    ],
+    "avg_pacing_sec": 3.5,
+    "thumbnail": "/aset/gaya/tekno.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "clay",
+    "name": "Claymation Plastisin Stop-Motion",
+    "description": "Animasi tanah liat/plastisin ala stop-motion: sudut membulat lembut, kilap atas halus, bayangan tumpul, bintik sidik jari halus, gerakan patah-patah 12 FPS khas tanah liat.",
+    "palette_hex": [
+      "#F97316",
+      "#0284C7",
+      "#16A34A",
+      "#CA8A04",
+      "#FDE047"
+    ],
+    "avg_pacing_sec": 3.0,
+    "thumbnail": "/aset/gaya/clay.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "boneka-rajut",
+    "name": "Boneka Rajut Benang Wol",
+    "description": "Semua objek dirajut dari benang wol: isian pola rajutan V berulang, tepi berjahit putus-putus, mata dari kancing baju, matahari kancing besar, warna pastel hangat.",
+    "palette_hex": [
+      "#FDF4E3",
+      "#E07A5F",
+      "#3D405B",
+      "#81B29A",
+      "#F2CC8F"
+    ],
+    "avg_pacing_sec": 3.5,
+    "thumbnail": "/aset/gaya/hangat.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "kartun-jadul",
+    "name": "Kartun Jadul 1930s Rubberhose",
+    "description": "Kartun monokrom tahun 1930-an: karakter hitam pekat berwajah krem, mata pai pie-eyes, sarung tangan putih bulat, 15 FPS, goresan vertikal film jadul, vignette berkedip.",
+    "palette_hex": [
+      "#1A1A1A",
+      "#F5F5DC",
+      "#4A4A4A",
+      "#808080",
+      "#E0E0E0"
+    ],
+    "avg_pacing_sec": 2.5,
+    "thumbnail": "/aset/gaya/retro.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "hologram",
+    "name": "Hologram Sci-Fi Proyeksi HUD",
+    "description": "Proyeksi hologram futuristik: latar biru gelap, objek garis cyan glowing tembus pandang berkedip, scanline berjalan, piringan emitter bawah, radar dan panel data HUD berputar.",
+    "palette_hex": [
+      "#020C1B",
+      "#00F0FF",
+      "#0077FE",
+      "#7000FF",
+      "#E0F7FA"
+    ],
+    "avg_pacing_sec": 3.0,
+    "thumbnail": "/aset/gaya/tekno.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "kamera-panas",
+    "name": "Kamera Termal Night Vision",
+    "description": "Rekaman sensor inframerah termal: lingkungan dingin ungu-biru, objek utama memancarkan gradasi panas merah-oranye-kuning-putih, indikator REC berkedip, crosshair suhu.",
+    "palette_hex": [
+      "#03071E",
+      "#6A040F",
+      "#D00000",
+      "#F48C06",
+      "#FFBA08"
+    ],
+    "avg_pacing_sec": 3.0,
+    "thumbnail": "/aset/gaya/sorot.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "origami",
+    "name": "Origami Kertas Lipat Geometris",
+    "description": "Semua objek terbuat dari kertas lipat: bidang segitiga bersegi dengan perbedaan kontras warna di tiap lipatan, bayangan tumpuk kertas, garis putus-putus pola lipatan origami.",
+    "palette_hex": [
+      "#F8F9FA",
+      "#EF4444",
+      "#3B82F6",
+      "#F59E0B",
+      "#10B981"
+    ],
+    "avg_pacing_sec": 3.5,
+    "thumbnail": "/aset/gaya/kertas.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "ascii",
+    "name": "ASCII Art Terminal Konsol",
+    "description": "Seni karakter teks ASCII di layar terminal hacker: rendering grayscale dikonversi ke karakter monospace hijau (.:-=+*#%@), command line prompt, progress bar, kursor berkedip.",
+    "palette_hex": [
+      "#0A0F0D",
+      "#00FF66",
+      "#003B15",
+      "#1B4332",
+      "#D8F3DC"
+    ],
+    "avg_pacing_sec": 3.0,
+    "thumbnail": "/aset/gaya/tekno.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "glitch",
+    "name": "Glitch RGB Shift Digital Error",
+    "description": "Kerusakan sinyal digital futuristik: channel warna RGB terpisah (merah, cyan, putih), irisan horizontal pergeseran pixel acak, jendela pop-up error retro yang muncul mendadak.",
+    "palette_hex": [
+      "#050505",
+      "#FF0055",
+      "#00FFFF",
+      "#FFFF00",
+      "#FFFFFF"
+    ],
+    "avg_pacing_sec": 2.5,
+    "thumbnail": "/aset/gaya/retro.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "batik",
+    "name": "Batik Nusantara Sogan & Kawung",
+    "description": "Nuansa batik tradisional Indonesia: langit motif kawung, bangunan motif parang, lantai motif truntum, warna klasik sogan (coklat tua, keemasan, krem), garis tepi lilin malam canting.",
+    "palette_hex": [
+      "#2C1810",
+      "#78350F",
+      "#D97706",
+      "#FDE68A",
+      "#451A03"
+    ],
+    "avg_pacing_sec": 3.8,
+    "thumbnail": "/aset/gaya/emas.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "sketsa-pensil",
+    "name": "Sketsa Pensil Buku Tulis",
+    "description": "Sketsa goresan pensil di buku tulis bergaris biru dan margin merah: garis grafit bergetar dobel tangan, arsiran miring kasar, pensil kayu kuning yang ikut menggambar objek.",
+    "palette_hex": [
+      "#FDFBF7",
+      "#334155",
+      "#64748B",
+      "#EF4444",
+      "#94A3B8"
+    ],
+    "avg_pacing_sec": 3.5,
+    "thumbnail": "/aset/gaya/kertas.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "cetak-kayu-jepang",
+    "name": "Cetak Kayu Jepang Ukiyo-e",
+    "description": "Balok cetak kayu klasik Jepang ala Hokusai di kertas krem: warna nila, biru laut, dan merah bata, garis tepi kayu tegas seragam, ombak bergulung dengan buih cakar, stempel merah vertikal.",
+    "palette_hex": [
+      "#0F1E36",
+      "#1D3557",
+      "#457B9D",
+      "#E63946",
+      "#F1FAEE"
+    ],
+    "avg_pacing_sec": 3.8,
+    "thumbnail": "/aset/gaya/sinematik.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "mozaik-romawi",
+    "name": "Mozaik Batu Romawi Kuno",
+    "description": "Seni ubin mozaik batu kuno: kanvas dipetakan menjadi ribuan ubin batu kecil (tesserae) dengan nat gelap di sela-selanya, warna alami terakota, krem, dan bingkai pola ubin emas.",
+    "palette_hex": [
+      "#1C1917",
+      "#78350F",
+      "#9A3412",
+      "#D97706",
+      "#FEF3C7"
+    ],
+    "avg_pacing_sec": 4.0,
+    "thumbnail": "/aset/gaya/bata.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "tinta-sumie",
+    "name": "Tinta Hitam Sumi-e Kaligrafi",
+    "description": "Lukisan tinta basah khas Asia Timur di atas kertas beras krem: sapuan kuas tebal menipis elegan, tepi meresap ke serat kertas, ruang kosong luas (Ma), stempel cap merah khas.",
+    "palette_hex": [
+      "#FAFAF9",
+      "#1C1917",
+      "#44403C",
+      "#A8A29E",
+      "#DC2626"
+    ],
+    "avg_pacing_sec": 4.0,
+    "thumbnail": "/aset/gaya/minimal.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "impasto-minyak",
+    "name": "Impasto Cat Minyak Van Gogh",
+    "description": "Lukisan cat minyak tebal bertekstur (Starry Night style): langit tersusun dari ribuan goresan kuas pendek melingkar dinamis, pusaran kuning-biru, bintang berpendar, kanvas kasar.",
+    "palette_hex": [
+      "#0C1821",
+      "#1E3A8A",
+      "#F59E0B",
+      "#FDE047",
+      "#1E293B"
+    ],
+    "avg_pacing_sec": 3.8,
+    "thumbnail": "/aset/gaya/sinematik.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "gouache-malam",
+    "name": "Gouache Malam Matte Sinematik",
+    "description": "Cat gouache malam hari pekat: bidang warna solid dan matte tanpa outline, palet biru malam misterius, bulan besar krem berkawah halus, bintang berkelip, siluet tajam.",
+    "palette_hex": [
+      "#0B132B",
+      "#1C2541",
+      "#3A506B",
+      "#5BC0BE",
+      "#6FFFE9"
+    ],
+    "avg_pacing_sec": 3.5,
+    "thumbnail": "/aset/gaya/sinematik.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "lukisan-botani",
+    "name": "Lukisan Botani Antik Ilmiah",
+    "description": "Ilustrasi botani ensiklopedia ilmiah lama: kertas perkamen tua krem, garis tinta sangat halus dengan pewarnaan lembut transparan, label nomor pelat 'Pl. 07', nama latin miring.",
+    "palette_hex": [
+      "#F5EBE0",
+      "#2D5A27",
+      "#588157",
+      "#A3B18A",
+      "#BC4749"
+    ],
+    "avg_pacing_sec": 4.0,
+    "thumbnail": "/aset/gaya/hangat.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "kertas-potong",
+    "name": "Kertas Potong Berlapis Papercut",
+    "description": "Seni kertas potong berlapis (multi-layer papercraft): tiap lapisan potongan kertas memberi bayangan jatuh lembut ke lapisan di belakangnya, bukit bergelombang, gradasi senja.",
+    "palette_hex": [
+      "#1B263B",
+      "#415A77",
+      "#778DA9",
+      "#E0E1DD",
+      "#F4A261"
+    ],
+    "avg_pacing_sec": 3.5,
+    "thumbnail": "/aset/gaya/kertas.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "art-nouveau",
+    "name": "Art Nouveau Poster Dekoratif",
+    "description": "Poster dekoratif Art Nouveau awal 1900-an ala Alphonse Mucha: bingkai lengkung ornamen emas dan hijau daun, garis kontur melengkung mengalir bebas, sinar matahari berjari di belakang.",
+    "palette_hex": [
+      "#1F2421",
+      "#D4AF37",
+      "#3A5A40",
+      "#588157",
+      "#F2E8CF"
+    ],
+    "avg_pacing_sec": 4.0,
+    "thumbnail": "/aset/gaya/emas.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "golden-hour",
+    "name": "Golden Hour Siluet Senja",
+    "description": "Siluet senja magis matahari terbenam: langit bergradasi spektakuler ungu-merah muda-oranye-kuning, matahari besar di cakrawala, semua objek siluet coklat gelap tanpa detail, rumput bergoyang.",
+    "palette_hex": [
+      "#3C096C",
+      "#7B2CBF",
+      "#C77DFF",
+      "#FF9E00",
+      "#FF6000"
+    ],
+    "avg_pacing_sec": 3.5,
+    "thumbnail": "/aset/gaya/sinematik.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
+  },
+  {
+    "slug": "anime-pedesaan",
+    "name": "Anime Pedesaan Ghibli / Shinkai",
+    "description": "Anime berlatar alam pedesaan cerah ala Studio Ghibli / Makoto Shinkai: langit biru kristal jernih, awan kumulus bervolume bayangan lembut, padang rumput bunga bermekaran, laut berkilau.",
+    "palette_hex": [
+      "#0284C7",
+      "#38BDF8",
+      "#4ADE80",
+      "#FEF08A",
+      "#F43F5E"
+    ],
+    "avg_pacing_sec": 3.5,
+    "thumbnail": "/aset/gaya/sinematik.jpg",
+    "created_at": "2026-11-23T20:20:00.000000+00:00",
+    "inti": false
   }
 ]

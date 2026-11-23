@@ -1,0 +1,24 @@
+{
+  "id": "garis-minimal",
+  "nama": "Garis Minimal Rasi Bintang",
+  "badge": "Minimalist Line",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Minimalis elegan: latar hitam pekat, garis putih tipis 2-3 px yang tergambar perlahan di awal adegan, titik kecil di setiap sudut menyerupai rasi bintang kosmis berputar halus.",
+  "pacingSec": 4.0,
+  "aksen": "#FFFFFF",
+  "thumbnail": "/aset/gaya/minimal.jpg",
+  "palette_hex": [
+    "#000000",
+    "#FFFFFF",
+    "#64748B",
+    "#38BDF8",
+    "#E2E8F0"
+  ],
+  "fiturVisual": [
+    "Latar Hitam Pekat Deep Void",
+    "Garis Vektor Putih Tipis 2px",
+    "Titik Simpul Rasi Bintang Berkedip",
+    "Orbit Lingkaran Kinematik Halus"
+  ],
+  "prompt_blueprint": "Minimalis elegan. Latar hitam pekat, garis putih tipis 2-3 px yang tergambar perlahan di detik pertama. Titik kecil di setiap sudut bentuk seperti rasi bintang, satu lingkaran orbit tipis dengan titik yang berputar, banyak ruang kosong."
+}

@@ -1,0 +1,24 @@
+{
+  "id": "anime-pedesaan",
+  "nama": "Anime Pedesaan Ghibli / Shinkai",
+  "badge": "Ghibli Countryside",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Anime berlatar alam pedesaan cerah ala Studio Ghibli / Makoto Shinkai: langit biru kristal jernih, awan kumulus bervolume bayangan lembut, padang rumput bunga bermekaran, laut berkilau.",
+  "pacingSec": 3.5,
+  "aksen": "#38BDF8",
+  "thumbnail": "/aset/gaya/sinematik.jpg",
+  "palette_hex": [
+    "#0284C7",
+    "#38BDF8",
+    "#4ADE80",
+    "#FEF08A",
+    "#F43F5E"
+  ],
+  "fiturVisual": [
+    "Langit Biru Cerah Jernih Kristal",
+    "Awan Kumulus Raksasa Bervolume Lembut",
+    "Padang Rumput Hijau Berbunga Bergoyang",
+    "Kilauan Cahaya Matahari di Kejauhan"
+  ],
+  "prompt_blueprint": "Anime berlatar pedesaan yang cerah. Langit biru jernih, awan putih besar bervolume dengan bayangan biru lembut, padang hijau penuh bunga kecil, laut berkilau di kejauhan, rumah kecil beratap merah. Warna jenuh dan bersih, karakter dengan garis tipis dan bayangan sederhana."
+}

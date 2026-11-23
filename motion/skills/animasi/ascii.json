@@ -1,0 +1,24 @@
+{
+  "id": "ascii",
+  "nama": "ASCII Art Terminal Konsol",
+  "badge": "ASCII Terminal",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Seni karakter teks ASCII di layar terminal hacker: rendering grayscale dikonversi ke karakter monospace hijau (.:-=+*#%@), command line prompt, progress bar, kursor berkedip.",
+  "pacingSec": 3.0,
+  "aksen": "#00FF66",
+  "thumbnail": "/aset/gaya/tekno.jpg",
+  "palette_hex": [
+    "#0A0F0D",
+    "#00FF66",
+    "#003B15",
+    "#1B4332",
+    "#D8F3DC"
+  ],
+  "fiturVisual": [
+    "Grid Karakter Monospace Hijau Fosfor",
+    "Kepadatan Densitas Simbol Teks",
+    "Kursor Terminal Berkedip Khas Linux",
+    "Progress Bar Memori di Bagian Bawah"
+  ],
+  "prompt_blueprint": "Seni ASCII di layar terminal: gambar adegan dulu di kanvas tersembunyi dalam skala abu-abu, lalu ubah jadi karakter monospace hijau (`.:-=+*#%@`) sesuai terang-gelapnya. Tambahkan baris perintah terminal di atas, progress bar di bawah, kursor berkedip, dan scanline tipis."
+}
