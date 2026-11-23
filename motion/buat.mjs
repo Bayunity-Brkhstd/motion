@@ -272,7 +272,8 @@ if (audioNarasiOpt) {
 mkdirSync('hasil', { recursive: true });
 const fileProps = resolve('hasil', `${nama}.props.json`);
 writeFileSync(fileProps, JSON.stringify(naskah, null, 2));
-const komposisi = naskah.komposisi || (naskah.rigDefault || (naskah.adegan && naskah.adegan[0]?.rig) ? 'AnimasiBergerak' : 'Motion');
+const hasCharacter = Boolean(naskah.komposisi === 'AnimasiBergerak' || (naskah.adegan && naskah.adegan.some(a => (a.karakter && a.karakter.nama && a.karakter.nama.toLowerCase() !== 'narator') || (a.dialog && a.dialog.includes(':')))));
+const komposisi = naskah.komposisi || (hasCharacter ? 'AnimasiBergerak' : 'Motion');
 const concurrency = process.env.REMOTION_CONCURRENCY || '2';
 const namaGaya = naskah.gaya || naskah.rigDefault || 'animasi';
 const keluar = resolve('hasil', `${nama}-${namaGaya}.mp4`);

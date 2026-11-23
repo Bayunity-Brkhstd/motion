@@ -7113,10 +7113,38 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
       const tampilBalon = modeCerita === 'dialog';
 
       if (subMode === 'storyboard' && DATA_ADEGAN_ANIMASI && DATA_ADEGAN_ANIMASI.length > 0) {
-        const namaTokoh1 = $('#animasiTokoh1')?.value.trim() || 'Budi';
-        const namaTokoh2 = $('#animasiTokoh2')?.value.trim() || 'Ridwan';
+        const namaTokoh1 = $('#animasiTokoh1')?.value.trim();
+        const namaTokoh2 = $('#animasiTokoh2')?.value.trim();
+        const adaKarakterNyata = Boolean(namaTokoh1 || DATA_ADEGAN_ANIMASI.some(a => a.tokoh && a.tokoh !== 'Narator' && a.tokoh.trim() !== ''));
+        const butuhKarakterBergerak = modeCerita === 'dialog' || (adaKarakterNyata && (modeCerita === 'monolog' || Boolean(namaTokoh1)));
+        const komposisiFinal = butuhKarakterBergerak ? 'AnimasiBergerak' : 'Motion';
+
+        const judulOtomatis = $('#animasiTemaCerita')?.value.trim() ||
+          DATA_ADEGAN_ANIMASI[0]?.judul?.replace(/^Adegan\s*\d+\s*:\s*/i, '') ||
+          'Motion Graphics';
+
+        if (komposisiFinal === 'Motion') {
+          return {
+            judul: judulOtomatis,
+            modeCerita: modeCerita,
+            rasio: rasioPilihan,
+            komposisi: 'Motion',
+            audioNarasi: audioNarasi || undefined,
+            adegan: DATA_ADEGAN_ANIMASI.map((a, idx) => ({
+              judul: a.judul,
+              teks: a.teks,
+              durasi_detik: a.durasi_detik || 3.5,
+              durasi: a.durasi_detik || 3.5,
+              latar: a.latar,
+              callout: a.callout,
+              ikon: a.ikon || (idx % 2 === 0 ? '⚡' : '🔬'),
+              gambar: a.gambar || undefined
+            }))
+          };
+        }
+
         return {
-          judul: $('#animasiTemaCerita')?.value.trim() || 'Animasi Karakter Bergerak',
+          judul: judulOtomatis,
           modeCerita: modeCerita,
           tampilkanBalon: tampilBalon,
           rigDefault: rigPilihan,
@@ -7135,11 +7163,11 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
               modeCerita: modeCerita,
               durasi_detik: a.durasi_detik || 3.5,
               rig: rigPilihan,
-              latar: a.latar || 'warung-desa',
+              latar: a.latar || 'halaman-rumah',
               callout: a.callout || undefined,
               karakter: {
-                nama: a.karakter?.nama || namaTokoh1,
-                aksi: a.tokoh1_aksi || 'duduk',
+                nama: a.karakter?.nama || namaTokoh1 || 'Karakter',
+                aksi: a.tokoh1_aksi || 'bicara',
                 benda: a.tokoh1_benda || 'tidak_ada',
                 posisiX: a.tokoh2_aktif ? 320 : 540,
                 hadap: 1
@@ -8307,7 +8335,7 @@ Aturan:
           gaya: gayaTerpilih,
           engine: engineAnimasi,
           ai: PENG.AI || 'lokal',
-          gambar: isi === 'animasi' ? false : $('#gGambarAI').checked,
+          gambar: Boolean($('#gGambarAI')?.checked),
           audioNarasi: audioNarasi
         });
         mulaiPantau('motion');
