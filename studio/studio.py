@@ -925,8 +925,8 @@ def mulai_motion(d: dict) -> dict:
     else:
         langkah.append(([node, "naskah.mjs", topik, f"--ai={ai}", f"--gaya={gaya}", f"--nama={nama}"], MOTION))
     if d.get("gambar") and ai != "lokal":
-        # AI menggambar objek SVG per adegan (gagal → video tetap jadi dengan emoji)
-        langkah.append(([node, "gambar.mjs", f"naskah/{nama}.json", f"--ai={ai}"], MOTION))
+        # AI menggambar objek SVG per adegan mengikuti arahan visual gaya (gagal → video tetap jadi dengan emoji)
+        langkah.append(([node, "gambar.mjs", f"naskah/{nama}.json", f"--ai={ai}", f"--gaya={gaya}"], MOTION))
     p = baca_pengaturan()
     perintah = [node, "buat.mjs", f"naskah/{nama}.json", f"--gaya={gaya}", f"--suara-mac={p.get('SUARA_MAC', 'Damayanti')}"]
     audio_narasi = (d.get("audioNarasi") or "").strip()

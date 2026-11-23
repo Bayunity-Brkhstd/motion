@@ -14,15 +14,31 @@ if (!file) berhenti('Pakai: node gambar.mjs naskah/topikku.json');
 const naskah = JSON.parse(readFileSync(file, 'utf8'));
 const env = bacaEnv();
 const penyedia = (opsi.ai ?? env.AI ?? 'gemini').toLowerCase();
+const gaya = (opsi.gaya ?? naskah.gaya ?? '').toLowerCase();
 const adegan = naskah.adegan.filter((a) => !a.klip && !a.video);
 
+const PANDUAN_GAYA = {
+  'kartun-jadul': 'Gaya Kartun Hitam-Putih 1930s Rubberhose: karakter/objek hitam pekat dengan aksen krem (#EDE5CE), mata pie-cut (potongan kue), sarung tangan/sepatu bulat, garis tinta retro elastis melengkung ala Steamboat Willie / Fleischer, tanpa warna neon modern.',
+  'kapur-tulis': 'Gaya Kapur Tulis Papan Hijau: objek digambar seperti goresan kapur tulis putih (#F8F9FA) dan kuning (#FDE047), garis sedikit bertekstur arsir miring tangan, tanpa warna gradien modern.',
+  'pixel-art': 'Gaya Pixel Art 16-bit: bentuk objek geometris kotak-kotak piksel tegas, palet warna terbatas kontras ala game retro.',
+  'neon': 'Gaya Neon Retro 80-an: garis berpendar cerah warna magenta, cyan, kuning cerah dengan outline menyala.',
+  'komik': 'Gaya Buku Komik: outline hitam tebal tegas, warna primer datar (merah, biru, kuning) tanpa gradien halus.',
+  'clay': 'Gaya Clay / Plastisin: bentuk membulat tebal, warna cerah hangat seperti plastisin stop-motion.',
+  'garis-minimal': 'Gaya Minimalis Garis: garis putih tipis 2-3px bersih, elegan, geometris, banyak ruang kosong.',
+  'blueprint': 'Gaya Gambar Teknik Blueprint: garis putih bersih seperti cetak biru arsitektur / teknik, garis arsir halus.',
+  'origami': 'Gaya Origami: bentuk segitiga lipatan kertas bersegi dengan dua nada warna di tiap sisi lipatan.'
+};
+const arahanGaya = PANDUAN_GAYA[gaya] || 'Gaya ilustrasi vektor: bentuk tegas, 3–6 warna kontras, garis tepi rapi.';
+
 const daftar = adegan.map((a, i) => `${i + 1}. judul: "${a.judul}" | narasi: "${a.teks}"${a.ikon ? ` | petunjuk ikon: ${a.ikon}` : ''}`).join('\n');
-const prompt = `Kamu ilustrator vektor. Gambarlah SATU objek utama untuk tiap adegan video pendek di bawah ini, sebagai SVG.
+const prompt = `Kamu ilustrator vektor profesional. Gambarlah SATU objek visual utama untuk tiap adegan video pendek di bawah ini, sebagai SVG.
+
+Gaya visual yang WAJIB dipatuhi:
+${arahanGaya}
 
 Aturan tiap SVG:
-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">, latar TRANSPARAN (jangan ada persegi latar).
-- Satu objek konkret yang mewakili adegan (benda, kendaraan, alat, hewan, orang sederhana), di tengah, mengisi ±90% kanvas (jangan kecil).
-- Gaya flat illustration: bentuk tegas, 3–6 warna cerah dan kontras, boleh gradien sederhana, garis tepi gelap tipis boleh.
+- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">, latar TRANSPARAN (jangan ada persegi latar full kanvas).
+- Satu objek konkret yang mewakili adegan (benda, teknologi, kendaraan, alat, hewan, atau karakter sederhana), di tengah, mengisi ±90% kanvas (jangan kecil).
 - Hanya elemen: path, circle, ellipse, rect, polygon, polyline, line, g, defs, linearGradient, radialGradient, stop.
 - DILARANG: teks/huruf/angka, <text>, gambar luar, skrip, style, filter. Maksimal ±2500 karakter per SVG.
 

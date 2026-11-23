@@ -2295,9 +2295,13 @@ const SingleAdeganAnimasi: React.FC<{
       }
     }
   } else {
+    // Sinkronkan highlight dengan kecepatan narasi natural Indonesia (~3.3 kata/detik)
+    const estimasiDetikBicara = Math.max(1.0, kata.length * 0.28 + 0.35);
+    const rentangDetik = Math.min(durasiAdegan - 0.35, Math.max(kata.length * 0.2, estimasiDetikBicara));
+    const rasioWicara = Math.min(1, Math.max(0, tDetik / Math.max(0.1, rentangDetik)));
     kataIdxAktif = Math.min(
       kata.length - 1,
-      Math.floor((frame / frameTotal) * kata.length)
+      Math.floor(rasioWicara * kata.length)
     );
   }
 

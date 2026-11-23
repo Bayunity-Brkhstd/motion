@@ -84,33 +84,62 @@ const AdeganKlip: React.FC<{a: Adegan; p: Props}> = ({a, p}) => {
   );
 };
 
-// ── Subtitle mengikuti waktu bicara (perkiraan per panjang kata) ───────────
+// ── Subtitle mengikuti waktu bicara (disinkronkan dengan kecepatan wicara natural) ───────────
 const Subtitle: React.FC<{a: Adegan; t: Tema; w: ReturnType<typeof warnaAdegan>}> = ({a, t, w}) => {
   const f = useCurrentFrame();
   const kata = a.teks.split(/\s+/).filter(Boolean);
-  const total = (a.durasi ?? 3) * FPS;
+  if (kata.length === 0) return null;
+  const dAdegan = typeof a.durasi_detik === 'number' && a.durasi_detik > 0 ? a.durasi_detik : (a.durasi ?? 3);
+  const totalFrame = dAdegan * FPS;
+
+  // Kecepatan wicara narasi Indonesia alami: ~3.3 kata/detik (8-10 frame per kata pada 30 FPS).
+  // Mencegah subtitle merayap terlalu lambat pada adegan dengan durasi panjang (misal 8 detik).
+  const estimasiDetikBicara = Math.max(1.0, kata.length * 0.28 + 0.35);
+  const durasiBicaraFrame = Math.min(totalFrame - 10, Math.max(kata.length * 6, estimasiDetikBicara * FPS));
+  const rentangFrame = Math.max(1, durasiBicaraFrame);
+
   const bobot = kata.map((k) => k.length + 2);
   const jumlah = bobot.reduce((s, b) => s + b, 0);
   let acc = 0;
-  const mulai = bobot.map((b) => { const m = (acc / jumlah) * total; acc += b; return m; });
+  const mulai = bobot.map((b) => { const m = (acc / jumlah) * rentangFrame; acc += b; return m; });
   const aktif = Math.max(0, mulai.findIndex((m, i) => f >= m && (i === kata.length - 1 || f < mulai[i + 1])));
   const grup = Math.floor(aktif / 4) * 4;
   const kunci = new Set((a.kunci ?? []).map((k) => k.toLowerCase()));
   const kotak = t.sub === 'kotak';
   const pil = t.sub === 'pil';
+  const isKartun = (t as any).slug === 'kartun-jadul';
+
   return (
-    <div style={{position: 'absolute', left: 90, right: 90, bottom: 400, textAlign: 'center'}}>
-      <span style={{display: 'inline-block', fontFamily: t.fontTeks, fontSize: t.ukuranSub ?? 58, fontWeight: 800, lineHeight: 1.3, padding: kotak || pil ? '14px 28px' : 0,
-        background: kotak ? '#111111e6' : pil ? '#ffffffd9' : 'transparent', borderRadius: pil ? 999 : kotak ? 10 : 0,
-        boxShadow: pil ? '0 12px 30px #0002' : undefined, color: kotak ? '#fff' : w.teks}}>
+    <div style={{position: 'absolute', left: 80, right: 80, bottom: 400, textAlign: 'center'}}>
+      <span style={{
+        display: 'inline-block',
+        fontFamily: t.fontTeks,
+        fontSize: t.ukuranSub ?? 54,
+        fontWeight: 800,
+        lineHeight: 1.35,
+        padding: isKartun ? '16px 32px' : (kotak || pil ? '14px 28px' : 0),
+        background: isKartun ? '#161412f0' : (kotak ? '#111111e6' : pil ? '#ffffffd9' : 'transparent'),
+        borderRadius: isKartun ? 6 : (pil ? 999 : kotak ? 10 : 0),
+        border: isKartun ? '3px solid #EDE5CE' : undefined,
+        boxShadow: isKartun ? '6px 6px 0 #161412' : (pil ? '0 12px 30px #0002' : undefined),
+        color: isKartun ? '#EDE5CE' : (kotak ? '#fff' : w.teks)
+      }}>
         {kata.slice(grup, grup + 4).map((k, i) => {
           const idx = grup + i;
           const sorot = idx === aktif;
           const penting = kunci.has(k.toLowerCase().replace(/[^\p{L}\p{N}]/gu, ''));
-          const warna = sorot || penting ? (kotak ? t.aksen : w.aksen) : kotak ? '#fff' : pil ? t.teks : w.teks;
+          const warna = isKartun
+            ? (sorot ? '#FFF' : '#EDE5CE')
+            : (sorot || penting ? (kotak ? t.aksen : w.aksen) : kotak ? '#fff' : pil ? t.teks : w.teks);
           return (
-            <span key={idx} style={{display: 'inline-block', margin: '0 9px', color: warna, opacity: f >= mulai[idx] ? 1 : 0.35,
-              transform: `scale(${sorot ? 1.1 : 1})`}}>{k}</span>
+            <span key={idx} style={{
+              display: 'inline-block',
+              margin: '0 8px',
+              color: warna,
+              opacity: f >= mulai[idx] ? 1 : (isKartun ? 0.45 : 0.35),
+              transform: `scale(${sorot ? 1.08 : 1})`,
+              textShadow: isKartun && sorot ? '0 0 10px #EDE5CE88' : undefined
+            }}>{k}</span>
           );
         })}
       </span>
@@ -203,12 +232,38 @@ const Ikon: React.FC<{a: Adegan; t: Tema; w: ReturnType<typeof warnaAdegan>; i: 
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
   if (!a.ikon && !a.gambar) return null;
+  const isKartun = (t as any).slug === 'kartun-jadul';
+  // Pada kartun jadul tanpa SVG AI, maskot animasi rubberhose 1930s sudah ditampilkan di latar
+  if (isKartun && !a.gambar) return null;
+
   const s = spring({frame: f - 6, fps, config: {damping: 9, mass: 0.8}});
   const mengambang = Math.sin(f / 18) * 8;
   const pos: React.CSSProperties = {position: 'absolute', top: 300, left: 0, right: 0, display: 'flex', justifyContent: 'center'};
   const emoji = (ukuran: number) => a.gambar
     ? <SvgObjek svg={a.gambar} ukuran={ukuran * 1.15} />
     : <span style={{fontSize: ukuran, lineHeight: 1}}>{a.ikon}</span>;
+
+  if (isKartun && a.gambar) {
+    return (
+      <div style={{...pos, top: 320, transform: `scale(${s}) translateY(${mengambang}px)`}}>
+        <div style={{
+          width: 380,
+          height: 380,
+          borderRadius: '50%',
+          background: '#EDE5CE',
+          border: '8px solid #161412',
+          boxShadow: '0 16px 40px rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden'
+        }}>
+          {emoji(320)}
+        </div>
+      </div>
+    );
+  }
+
   if (t.efek) {
     // gaya ilustrasi: ikon besar "digambar ulang" lewat filter, melayang seperti terbang
     const miring = Math.sin(f / 14) * 4;
