@@ -5018,11 +5018,38 @@
             <div id="seksiTemplateAnimasi" hidden>
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
                 <h2 class="judul-kartu" style="margin:0"><i style="background:#38bdf8"></i>Gaya Visual Animasi</h2>
-                <span style="font-size:10px;padding:2px 8px;border-radius:99px;background:rgba(56,189,248,0.2);color:#38bdf8;font-weight:700">Art Style Universe</span>
+                <span style="font-size:10px;padding:2px 8px;border-radius:99px;background:rgba(56,189,248,0.2);color:#38bdf8;font-weight:700">30+ Claude Universe</span>
               </div>
-              <p style="font-size:11.5px;color:var(--redup);margin:0 0 10px;line-height:1.4">
-                Pilih estetika dunia animasi (shading cel, warna, dan proporsi rig).
+              <p style="font-size:11.5px;color:var(--redup);margin:0 0 8px;line-height:1.4">
+                Pilih estetika dunia animasi dari 30+ preset prosedural Claude (@coretanfery).
               </p>
+
+              <!-- Fitur Engine & Kategori Universe -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.2);border-radius:8px;margin-bottom:8px;font-size:11.5px">
+                <span style="font-weight:700;color:var(--aksen)">⚡ Engine Render:</span>
+                <div style="display:flex;gap:10px">
+                  <label style="cursor:pointer;display:flex;align-items:center;gap:4px">
+                    <input type="radio" name="optEngineAnimasi" value="prosedural" checked> <span>Canvas Prosedural (Claude)</span>
+                  </label>
+                  <label style="cursor:pointer;display:flex;align-items:center;gap:4px">
+                    <input type="radio" name="optEngineAnimasi" value="remotion"> <span>Remotion React</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Input Cari Gaya & Filter Kategori -->
+              <div style="margin-bottom:8px">
+                <input type="search" id="cariGayaAnimasi" class="input" placeholder="🔍 Cari gaya (mis. pixel, neon, komik, ps2, batik, anime, clay)..." style="font-size:12px;padding:6px 12px;border-radius:8px;width:100%;box-sizing:border-box">
+              </div>
+              <div id="filterKatAnimasi" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px">
+                <button type="button" class="pro-skill-badge aktif" data-kat="semua" style="cursor:pointer;font-size:10px;padding:3px 8px">Semua (35)</button>
+                <button type="button" class="pro-skill-badge" data-kat="lucu" style="cursor:pointer;font-size:10px;padding:3px 8px">🧸 Lucu &amp; Hangat</button>
+                <button type="button" class="pro-skill-badge" data-kat="tekno" style="cursor:pointer;font-size:10px;padding:3px 8px">⚡ Keren &amp; Tekno</button>
+                <button type="button" class="pro-skill-badge" data-kat="artistik" style="cursor:pointer;font-size:10px;padding:3px 8px">🎨 Artistik</button>
+                <button type="button" class="pro-skill-badge" data-kat="klasik" style="cursor:pointer;font-size:10px;padding:3px 8px">🏛️ Klasik</button>
+                <button type="button" class="pro-skill-badge" data-kat="retro" style="cursor:pointer;font-size:10px;padding:3px 8px">📼 Retro</button>
+                <button type="button" class="pro-skill-badge" data-kat="dramatis" style="cursor:pointer;font-size:10px;padding:3px 8px">🌅 Dramatis</button>
+              </div>
               <div class="gaya-pilih" id="pilGayaAnimasi" style="grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));margin-bottom:14px">
                 <button type="button" class="gaya aktif" data-v="toon-desa" title="Toon 3D Pedesaan &amp; Warung Lokal">
                   <img src="/aset/gaya/sinematik.jpg" alt="" loading="lazy">
@@ -6628,6 +6655,49 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
           });
         }
       };
+
+      // Filter Pencarian & Kategori Gaya Animasi 30+ Claude Universe
+      const KAT_MAP = {
+        lucu: new Set(['pixel-art', 'flat-vector', 'balok-mainan', 'clay', 'boneka-rajut', 'kertas-potong', 'anime-pedesaan', 'toon-desa', 'toon-3d', 'stickman']),
+        tekno: new Set(['neon', 'ps2-3d', 'hologram', 'kamera-panas', 'glitch', 'ascii', 'isometric']),
+        artistik: new Set(['kapur-tulis', 'cat-air', 'garis-minimal', 'origami', 'batik', 'sketsa-pensil', 'tinta-sumie', 'impasto-minyak', 'gouache-malam']),
+        klasik: new Set(['cetak-kayu-jepang', 'mozaik-romawi', 'lukisan-botani', 'art-nouveau']),
+        retro: new Set(['komik', 'kartun-jadul', 'blueprint', 'kartun-gerak']),
+        dramatis: new Set(['golden-hour', 'gouache-malam', 'snaptik-animasi-ref'])
+      };
+
+      let filterKatAktif = 'semua';
+      let cariGayaText = '';
+
+      const terapkanFilterGaya = () => {
+        const q = cariGayaText.toLowerCase().trim();
+        $$('.gaya', elPilGayaAnim).forEach((el) => {
+          const v = el.dataset.v || '';
+          const judul = (el.querySelector('b')?.textContent || el.title || v).toLowerCase();
+          const matchKat = filterKatAktif === 'semua' || (KAT_MAP[filterKatAktif] && KAT_MAP[filterKatAktif].has(v));
+          const matchQ = !q || judul.includes(q) || v.includes(q);
+          el.style.display = (matchKat && matchQ) ? '' : 'none';
+        });
+      };
+
+      const inpCariGaya = $('#cariGayaAnimasi');
+      if (inpCariGaya) {
+        inpCariGaya.oninput = (e) => {
+          cariGayaText = e.target.value;
+          terapkanFilterGaya();
+        };
+      }
+
+      const elFilterKat = $('#filterKatAnimasi');
+      if (elFilterKat) {
+        elFilterKat.onclick = (e) => {
+          const btn = e.target.closest('button');
+          if (!btn) return;
+          $$('button', elFilterKat).forEach(b => b.classList.toggle('aktif', b === btn));
+          filterKatAktif = btn.dataset.kat || 'semua';
+          terapkanFilterGaya();
+        };
+      }
     }
 
     // Pilihan Latar Tempat Global (di Panel Kanan)
@@ -8275,10 +8345,13 @@ Aturan:
           ? ($('#pilGayaAnimasi .gaya.aktif')?.dataset.v || $('#wadahPilihanRig .kartu-rig.aktif')?.dataset.rig || 'toon-3d')
           : ($('#pilGaya .aktif')?.dataset.v || 'garis');
 
+        const engineAnimasi = $('input[name="optEngineAnimasi"]:checked')?.value || 'prosedural';
+
         await api('/api/motion', {
           topik: isi === 'topik' ? $('#topik').value : '',
           naskah: naskahFinal,
           gaya: gayaTerpilih,
+          engine: engineAnimasi,
           ai: PENG.AI || 'lokal',
           gambar: isi === 'animasi' ? false : $('#gGambarAI').checked,
           audioNarasi: audioNarasi
@@ -10010,6 +10083,11 @@ Aturan:
             `;
             targetContainer.insertBefore(card, targetContainer.firstChild);
           });
+
+          const btnSemua = $('#filterKatAnimasi button[data-kat="semua"]');
+          if (btnSemua && pilGayaAnim) {
+            btnSemua.textContent = `Semua (${$$('.gaya', pilGayaAnim).length})`;
+          }
 
           if (pilGaya && jmlEl) {
             jmlEl.textContent = $$('#pilGaya .gaya').length;
