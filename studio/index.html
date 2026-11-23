@@ -4665,23 +4665,16 @@
                     
                     <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:6px;margin-top:8px">
                       <div>
-                        <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Tokoh Utama:</label>
-                        <input type="text" class="input" id="animasiTokoh1" value="Budi" placeholder="Budi" style="font-size:11px;padding:5px 8px" />
+                        <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Karakter / Tokoh Utama:</label>
+                        <input type="text" class="input" id="animasiTokoh1" value="" placeholder="misal: Andre / Narator" style="font-size:11px;padding:5px 8px" />
                       </div>
                       <div>
-                        <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Tokoh 2 (Lawan Bicara):</label>
-                        <input type="text" class="input" id="animasiTokoh2" value="Ridwan" placeholder="Ridwan" style="font-size:11px;padding:5px 8px" />
+                        <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Karakter 2 / Lawan Bicara:</label>
+                        <input type="text" class="input" id="animasiTokoh2" value="" placeholder="misal: Wulan / Seno (opsional)" style="font-size:11px;padding:5px 8px" />
                       </div>
                       <div>
                         <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Preferensi Latar:</label>
-                        <select class="input" id="animasiLatarPreferensi" style="font-size:11px;padding:5px 8px">
-                          <option value="auto" selected>🤖 Otomatis AI</option>
-                          <option value="warung-desa">🛖 Warung Makan Desa</option>
-                          <option value="kursi-bambu">🎋 Kursi Bambu</option>
-                          <option value="pos-ronda">🥁 Pos Ronda</option>
-                          <option value="jalan-desa">🌾 Jalanan Sawah</option>
-                          <option value="kota">🏙️ Perkantoran Modern</option>
-                        </select>
+                        <input type="text" class="input" id="animasiLatarPreferensi" value="" placeholder="🤖 Otomatis mengikuti naskah..." style="font-size:11px;padding:5px 8px" />
                       </div>
                     </div>
 
@@ -6821,93 +6814,53 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
             <div>
               <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Judul Adegan:</label>
               <input type="text" value="${escapeHtml(a.judul || '')}" class="input" style="font-size:11px;padding:4px 8px"
-                onchange="DATA_ADEGAN_ANIMASI[${idx}].judul = this.value" placeholder="misal: Budi Mampir Warung" />
+                onchange="DATA_ADEGAN_ANIMASI[${idx}].judul = this.value" placeholder="misal: Adegan 1: Menelusuri Rumah Kosong" />
             </div>
             <div>
               <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Badge Callout Layar:</label>
               <input type="text" value="${escapeHtml(a.callout || '')}" class="input" style="font-size:11px;padding:4px 8px"
-                onchange="DATA_ADEGAN_ANIMASI[${idx}].callout = this.value" placeholder="misal: 📍 WARUNG SIFOREJO" />
+                onchange="DATA_ADEGAN_ANIMASI[${idx}].callout = this.value" placeholder="misal: 📍 HALAMAN RUMAH KOSONG" />
             </div>
           </div>
 
-          <!-- Pilihan Latar Tempat Lingkungan -->
+          <!-- Latar Tempat Lingkungan (Mengikuti Naskah) -->
           <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:6px;padding:6px 8px">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
               <label style="font-size:10px;font-weight:600;color:var(--aksen);display:flex;align-items:center;gap:4px">
                 <span>🏞️ Latar Tempat (Environment):</span>
               </label>
-              <span style="font-size:9.5px;color:var(--redup)">Canvas 2D</span>
+              <span style="font-size:9.5px;color:#10b981;font-weight:700">✨ Mengikuti Naskah</span>
             </div>
-            <select class="input" style="font-size:11px;padding:4px 8px;border-color:rgba(56,189,248,0.25)" onchange="DATA_ADEGAN_ANIMASI[${idx}].latar = this.value">
-              <option value="warung-desa" ${a.latar === 'warung-desa' ? 'selected' : ''}>🛖 Warung Makan Desa (Siforejo / Spanduk &amp; Kopi)</option>
-              <option value="kursi-bambu" ${a.latar === 'kursi-bambu' ? 'selected' : ''}>🎋 Kursi Bambu Depan Warung (Tempat Nongkrong Santai)</option>
-              <option value="jalan-desa" ${a.latar === 'jalan-desa' ? 'selected' : ''}>🌾 Jalanan Sawah Desa (Pedusunan Asri)</option>
-              <option value="pos-ronda" ${a.latar === 'pos-ronda' ? 'selected' : ''}>🥁 Pos Ronda / Gardu Siskamling</option>
-              <option value="senja" ${a.latar === 'senja' ? 'selected' : ''}>🌇 Langit Senja Cel-Shaded</option>
-              <option value="kota" ${a.latar === 'kota' ? 'selected' : ''}>🏙️ Kota &amp; Perkantoran Modern</option>
-              <option value="blueprint" ${a.latar === 'blueprint' ? 'selected' : ''}>📐 Blueprint Edukasi Teknis</option>
-              <option value="isometric-grid" ${a.latar === 'isometric-grid' ? 'selected' : ''}>🧊 3D Isometric Tech Grid</option>
-            </select>
+            <input type="text" class="input" style="font-size:11px;padding:5px 8px;border-color:rgba(56,189,248,0.3)"
+              value="${escapeHtml(a.latar || '')}"
+              onchange="DATA_ADEGAN_ANIMASI[${idx}].latar = this.value; if(!DATA_ADEGAN_ANIMASI[${idx}].callout || DATA_ADEGAN_ANIMASI[${idx}].callout.startsWith('📍')) DATA_ADEGAN_ANIMASI[${idx}].callout = '📍 ' + this.value.toUpperCase();"
+              placeholder="misal: Laboratorium Digital / Halaman Depan Rumah Kosong..." />
           </div>
 
-          <!-- Pengaturan Tokoh 1 & Tokoh 2 -->
-          <div style="background:rgba(0,0,0,0.25);border-radius:6px;padding:6px 8px">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
-              <div>
-                <span style="font-size:10px;font-weight:700;color:var(--aksen);display:block;margin-bottom:2px">Tokoh 1 (${escapeHtml(a.karakter?.nama || t1NamaGlobal)}):</span>
-                <div style="display:flex;gap:4px">
-                  <select class="input" style="font-size:10px;padding:2px 4px" onchange="DATA_ADEGAN_ANIMASI[${idx}].tokoh1_aksi = this.value">
-                    <option value="duduk" ${a.tokoh1_aksi === 'duduk' ? 'selected' : ''}>Duduk Santai</option>
-                    <option value="jalan" ${a.tokoh1_aksi === 'jalan' ? 'selected' : ''}>Jalan Masuk</option>
-                    <option value="bicara" ${a.tokoh1_aksi === 'bicara' ? 'selected' : ''}>Bicara / Senyum</option>
-                    <option value="kaget" ${a.tokoh1_aksi === 'kaget' ? 'selected' : ''}>Kaget / Panik</option>
-                    <option value="pikir" ${a.tokoh1_aksi === 'pikir' ? 'selected' : ''}>Pikir / Pura Lupa</option>
-                    <option value="tunjuk" ${a.tokoh1_aksi === 'tunjuk' ? 'selected' : ''}>Tunjuk</option>
-                  </select>
-                  <select class="input" style="font-size:10px;padding:2px 4px" onchange="DATA_ADEGAN_ANIMASI[${idx}].tokoh1_benda = this.value">
-                    <option value="tidak_ada" ${a.tokoh1_benda === 'tidak_ada' ? 'selected' : ''}>Tanpa Benda</option>
-                    <option value="kopi" ${a.tokoh1_benda === 'kopi' ? 'selected' : ''}>☕ Kopi Tubruk</option>
-                    <option value="rokok" ${a.tokoh1_benda === 'rokok' ? 'selected' : ''}>🚬 Rokok</option>
-                  </select>
-                </div>
+          <!-- Arahan Visual, Tokoh & Narasi (Mengikuti Naskah) -->
+          <div style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.04);border-radius:6px;padding:8px">
+            <!-- Karakter / Arahan Visual -->
+            <div style="margin-bottom:6px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+                <label style="font-size:10px;font-weight:600;color:var(--aksen)">👤 Tokoh &amp; Arahan Visual Gerak:</label>
+                <span style="font-size:9.5px;color:#10b981;font-weight:700">✨ Mengikuti Naskah</span>
               </div>
-
-              <div>
-                <label style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#f59e0b;cursor:pointer;margin-bottom:2px">
-                  <input type="checkbox" ${a.tokoh2_aktif ? 'checked' : ''} onchange="DATA_ADEGAN_ANIMASI[${idx}].tokoh2_aktif = this.checked; renderDaftarAdeganAnimasi();" />
-                  <span>+ Tokoh 2 (${escapeHtml(a.karakter2?.nama || t2NamaGlobal)})</span>
-                </label>
-                ${a.tokoh2_aktif ? `
-                  <div style="display:flex;gap:4px">
-                    <select class="input" style="font-size:10px;padding:2px 4px" onchange="DATA_ADEGAN_ANIMASI[${idx}].tokoh2_aksi = this.value">
-                      <option value="tunjuk" ${a.tokoh2_aksi === 'tunjuk' ? 'selected' : ''}>Tunjuk / Tagih</option>
-                      <option value="duduk" ${a.tokoh2_aksi === 'duduk' ? 'selected' : ''}>Duduk Nongkrong</option>
-                      <option value="bicara" ${a.tokoh2_aksi === 'bicara' ? 'selected' : ''}>Bicara Serius</option>
-                      <option value="kaget" ${a.tokoh2_aksi === 'kaget' ? 'selected' : ''}>Kaget</option>
-                    </select>
-                    <select class="input" style="font-size:10px;padding:2px 4px" onchange="DATA_ADEGAN_ANIMASI[${idx}].tokoh2_benda = this.value">
-                      <option value="rokok" ${a.tokoh2_benda === 'rokok' ? 'selected' : ''}>🚬 Rokok</option>
-                      <option value="kopi" ${a.tokoh2_benda === 'kopi' ? 'selected' : ''}>☕ Kopi</option>
-                      <option value="tidak_ada" ${a.tokoh2_benda === 'tidak_ada' ? 'selected' : ''}>Tanpa Benda</option>
-                    </select>
-                  </div>
-                ` : `
-                  <span style="font-size:10px;color:var(--redup);line-height:22px">Hanya 1 tokoh di scene ini</span>
-                `}
-              </div>
+              <input type="text" value="${escapeHtml(a.karakter?.nama || a.tokoh || '')}" class="input" style="font-size:11px;padding:4px 8px"
+                onchange="if(!DATA_ADEGAN_ANIMASI[${idx}].karakter) DATA_ADEGAN_ANIMASI[${idx}].karakter = {}; DATA_ADEGAN_ANIMASI[${idx}].karakter.nama = this.value; DATA_ADEGAN_ANIMASI[${idx}].tokoh = this.value;"
+                placeholder="misal: Andre &amp; Wulan / Seno membawa proyektor / Narator..." />
             </div>
 
-            <!-- Balon Dialog -->
+            <!-- Balon Dialog (Opsional) -->
             <div style="margin-bottom:6px">
-              <label style="display:block;font-size:10px;color:#facc15;font-weight:600;margin-bottom:2px">💬 Balon Dialog Karakter (Pop-up di Layar):</label>
-              <input type="text" value="${escapeHtml(a.dialog || '')}" class="input" style="font-size:11px;padding:4px 8px;border-color:rgba(250,204,21,0.3)"
-                onchange="DATA_ADEGAN_ANIMASI[${idx}].dialog = this.value" placeholder="misal: Ridwan: Bud, utang rokok pas takbiran bayar!" />
+              <label style="display:block;font-size:10px;color:#facc15;font-weight:600;margin-bottom:2px">💬 Balon Dialog Karakter (Opsional - Pop-up Layar):</label>
+              <input type="text" value="${escapeHtml(a.dialog || '')}" class="input" style="font-size:11px;padding:4px 8px;border-color:rgba(250,204,21,0.25)"
+                onchange="DATA_ADEGAN_ANIMASI[${idx}].dialog = this.value" placeholder="misal: Andre: Coba sorot senter ke jendela atas! (kosongkan jika narasi)" />
             </div>
 
             <!-- Teks Narasi Voice-Over -->
             <div>
-              <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">Teks Narasi / Suara Voice-Over:</label>
-              <textarea class="input" style="min-height:48px;font-size:11px;padding:4px 8px"
+              <label style="display:block;font-size:10px;color:var(--redup);margin-bottom:2px">🎙️ Teks Narasi / Suara Voice-Over:</label>
+              <textarea class="input" style="min-height:52px;font-size:11px;padding:5px 8px;line-height:1.4"
                 onchange="DATA_ADEGAN_ANIMASI[${idx}].teks = this.value" placeholder="Teks yang akan dibacakan oleh suara narator...">${escapeHtml(a.teks || '')}</textarea>
             </div>
           </div>
@@ -6918,20 +6871,19 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
 
     function tambahAdeganAnimasi() {
       const idx = DATA_ADEGAN_ANIMASI.length + 1;
-      const t1 = $('#animasiTokoh1')?.value.trim() || 'Budi';
-      const t2 = $('#animasiTokoh2')?.value.trim() || 'Ridwan';
-      const latarDefault = $('#animasiLatarPreferensi')?.value;
-      const latar = (latarDefault && latarDefault !== 'auto') ? latarDefault : (idx % 2 === 0 ? 'kursi-bambu' : 'warung-desa');
+      const t1 = $('#animasiTokoh1')?.value.trim() || '';
+      const latarDefault = $('#animasiLatarPreferensi')?.value?.trim();
+      const latar = (latarDefault && latarDefault !== 'auto') ? latarDefault : `Adegan ${idx}`;
       DATA_ADEGAN_ANIMASI.push({
         judul: `Adegan ${idx}`,
         latar: latar,
-        callout: `ADEGAN ${idx}`,
+        callout: `📍 ADEGAN ${idx}`,
         tokoh1_aksi: 'bicara',
         tokoh1_benda: 'tidak_ada',
-        tokoh2_aktif: Boolean($('#animasiTokoh2')?.value.trim()),
-        tokoh2_aksi: 'bicara',
-        tokoh2_benda: 'rokok',
-        dialog: `${t1}: 'Dialog adegan ${idx}...'`,
+        tokoh2_aktif: false,
+        tokoh: t1,
+        karakter: { nama: t1, posisiX: 540, hadap: 1 },
+        dialog: '',
         teks: `Penjelasan narasi untuk adegan ${idx}.`,
         durasi_detik: 3.5
       });
@@ -7044,11 +6996,12 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
             latarSlug: latarSlug,
             callout: `📍 ${namaLatar.toUpperCase()}`,
             tokoh_ada_berapa: 1,
-            tokoh1_aksi: idx === 0 ? 'bicara' : 'tunjuk',
+            tokoh1_aksi: 'bicara',
             tokoh1_benda: 'tidak_ada',
             tokoh2_aktif: false,
+            tokoh: $('#animasiTokoh1')?.value.trim() || '',
             karakter: {
-              nama: $('#animasiTokoh1')?.value.trim() || 'Pak Budi',
+              nama: $('#animasiTokoh1')?.value.trim() || '',
               posisiX: 540,
               hadap: 1
             }
@@ -7065,16 +7018,17 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
       const baris = raw.split(/\n+/).map(b => b.trim()).filter(Boolean);
       if (baris.length > 0) {
         DATA_ADEGAN_ANIMASI = baris.map((b, idx) => ({
-          judul: b.slice(0, 28),
+          judul: `Adegan ${idx + 1}: ` + b.slice(0, 24),
           teks: b,
           durasi_detik: 3.5,
-          latar: idx === 0 ? 'warung-desa' : (idx === 1 ? 'kursi-bambu' : 'jalan-desa'),
-          callout: `ADEGAN ${idx + 1}`,
+          latar: `Latar Adegan ${idx + 1}`,
+          callout: `📍 ADEGAN ${idx + 1}`,
           tokoh_ada_berapa: 1,
           tokoh1_aksi: 'bicara',
           tokoh1_benda: 'tidak_ada',
           tokoh2_aktif: false,
-          karakter: { nama: 'Budi', posisiX: 540, hadap: 1 }
+          tokoh: $('#animasiTokoh1')?.value.trim() || '',
+          karakter: { nama: $('#animasiTokoh1')?.value.trim() || '', posisiX: 540, hadap: 1 }
         }));
         renderDaftarAdeganAnimasi();
         return toast(`✅ Berhasil mengimpor ${baris.length} baris naskah ke storyboard!`);
