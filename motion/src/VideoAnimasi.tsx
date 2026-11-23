@@ -684,68 +684,213 @@ const LatarRumahDanHalaman: React.FC<{
       ctx.fillRect(winX - 25, winY + winH, winW + 50, 28);
     } else {
       // Halaman Rumah Kosong / Samping Bangunan Rumah
-      // Siluet Atap dan Bangunan Rumah di Tengah
-      ctx.fillStyle = '#0F172A';
-      ctx.beginPath();
-      if (isSamping) {
-        // Tembok tinggi di sebelah kiri / samping lorong
-        ctx.moveTo(0, height * 0.1);
-        ctx.lineTo(width * 0.45, height * 0.28);
-        ctx.lineTo(width * 0.45, height * 0.75);
-        ctx.lineTo(0, height * 0.75);
-      } else {
-        // Tampak Depan Rumah Kosong 2 Lantai
-        ctx.moveTo(width * 0.12, height * 0.46);
-        ctx.lineTo(width * 0.5, height * 0.24);
-        ctx.lineTo(width * 0.88, height * 0.46);
-        ctx.lineTo(width * 0.88, height * 0.75);
-        ctx.lineTo(width * 0.12, height * 0.75);
+      // Tampak Depan Rumah No. 13 Kosong (Gaya Referensi)
+      const rX = width * 0.15;
+      const rW = width * 0.7;
+      const rY = height * 0.28;
+      const rH = height * 0.44;
+
+      // 1. Dinding Kayu Papan Rumah Abu-Abu Putih Kusam
+      ctx.fillStyle = '#D1D5DB';
+      ctx.fillRect(rX, rY + 80, rW, rH - 80);
+      ctx.strokeStyle = '#374151';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(rX, rY + 80, rW, rH - 80);
+
+      // Garis-garis papan kayu horizontal
+      ctx.strokeStyle = 'rgba(55, 65, 81, 0.45)';
+      ctx.lineWidth = 2;
+      for (let ly = rY + 110; ly < rY + rH; ly += 24) {
+        ctx.beginPath();
+        ctx.moveTo(rX, ly);
+        ctx.lineTo(rX + rW, ly);
+        ctx.stroke();
       }
+
+      // 2. Atap Segitiga Rumah
+      ctx.fillStyle = '#4B5563';
+      ctx.beginPath();
+      ctx.moveTo(rX - 30, rY + 80);
+      ctx.lineTo(width / 2, rY - 30);
+      ctx.lineTo(rX + rW + 30, rY + 80);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#1F2937';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Ventilasi Bulat di Bawah Atap
+      ctx.fillStyle = '#111827';
+      ctx.beginPath();
+      ctx.arc(width / 2, rY + 35, 26, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 3. Jendela Kiri (Disalib Papan Kayu X)
+      const winKW = rW * 0.32;
+      const winKH = 120;
+      const winKX = rX + 40;
+      const winKY = rY + 110;
+      ctx.fillStyle = '#111827';
+      ctx.fillRect(winKX, winKY, winKW, winKH);
+      ctx.strokeStyle = '#1F2937';
+      ctx.strokeRect(winKX, winKY, winKW, winKH);
+
+      // Dua papan kayu silang cokelat
+      ctx.save();
+      ctx.fillStyle = '#92400E';
+      ctx.strokeStyle = '#451A03';
+      ctx.lineWidth = 2.5;
+      // Batang 1 (\)
+      ctx.beginPath();
+      ctx.moveTo(winKX - 10, winKY + 10);
+      ctx.lineTo(winKX + winKW + 10, winKY + winKH - 10);
+      ctx.lineTo(winKX + winKW + 5, winKY + winKH + 10);
+      ctx.lineTo(winKX - 15, winKY + 30);
+      ctx.closePath();
+      ctx.fill(); ctx.stroke();
+      // Batang 2 (/)
+      ctx.beginPath();
+      ctx.moveTo(winKX - 10, winKY + winKH - 15);
+      ctx.lineTo(winKX + winKW + 10, winKY + 15);
+      ctx.lineTo(winKX + winKW + 15, winKY + 35);
+      ctx.lineTo(winKX - 5, winKY + winKH + 5);
+      ctx.closePath();
+      ctx.fill(); ctx.stroke();
+      ctx.restore();
+
+      // 4. Jendela Kanan (Tirai Kuning Bercahaya & Siluet)
+      const winRW = winKW;
+      const winRH = winKH;
+      const winRX = rX + rW - winRW - 40;
+      const winRY = winKY;
+      // Cahaya Kuning hangat jendela
+      ctx.fillStyle = '#D97706';
+      ctx.fillRect(winRX, winRY, winRW, winRH);
+      // Tirai kiri & kanan
+      ctx.fillStyle = '#F59E0B';
+      ctx.beginPath();
+      ctx.moveTo(winRX, winRY);
+      ctx.lineTo(winRX + 25, winRY);
+      ctx.quadraticCurveTo(winRX + 15, winRY + winRH * 0.5, winRX + 30, winRY + winRH);
+      ctx.lineTo(winRX, winRY + winRH);
       ctx.closePath();
       ctx.fill();
 
-      // Jendela Lantai 2 Rumah Kosong (Bercahaya Samar / Menyeramkan)
-      const jY = isSamping ? height * 0.35 : height * 0.42;
-      const jX = isSamping ? width * 0.18 : width * 0.42;
-      ctx.fillStyle = cAksen + '33';
-      ctx.fillRect(jX, jY, width * 0.16, height * 0.11);
-      ctx.strokeStyle = '#0F172A';
-      ctx.lineWidth = 4;
-      ctx.strokeRect(jX, jY, width * 0.16, height * 0.11);
-
-      // Pagar Kayu / Ranting Halaman
-      ctx.strokeStyle = '#1E293B';
-      ctx.lineWidth = 6;
-      for (let p = 0; p < width; p += 55) {
-        ctx.beginPath();
-        ctx.moveTo(p, height * 0.75);
-        ctx.lineTo(p, height * 0.65 + ((p * 7) % 25));
-        ctx.stroke();
-      }
       ctx.beginPath();
-      ctx.moveTo(0, height * 0.69);
-      ctx.lineTo(width, height * 0.69);
+      ctx.moveTo(winRX + winRW, winRY);
+      ctx.lineTo(winRX + winRW - 25, winRY);
+      ctx.quadraticCurveTo(winRX + winRW - 15, winRY + winRH * 0.5, winRX + winRW - 30, winRY + winRH);
+      ctx.lineTo(winRX + winRW, winRY + winRH);
+      ctx.closePath();
+      ctx.fill();
+
+      // Siluet Misterius di Jendela Kanan
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+      ctx.beginPath();
+      ctx.arc(winRX + winRW / 2, winRY + 45, 24, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(winRX + winRW / 2 - 28, winRY + winRH);
+      ctx.quadraticCurveTo(winRX + winRW / 2, winRY + 65, winRX + winRW / 2 + 28, winRY + winRH);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = '#1F2937';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(winRX, winRY, winRW, winRH);
+      // Garis kusen tengah
+      ctx.beginPath();
+      ctx.moveTo(winRX + winRW / 2, winRY);
+      ctx.lineTo(winRX + winRW / 2, winRY + winRH);
       ctx.stroke();
 
-      // Semak-semak Samping Rumah
-      ctx.fillStyle = '#064E3B';
-      for (let s = 0; s < 4; s++) {
+      // 5. Plat Nomor Rumah "13"
+      const platW = 60;
+      const platH = 34;
+      const platX = width / 2 - platW / 2;
+      const platY = rY + 245;
+      ctx.fillStyle = '#FEF3C7';
+      ctx.fillRect(platX, platY, platW, platH);
+      ctx.strokeStyle = '#1F2937';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(platX, platY, platW, platH);
+      ctx.fillStyle = '#111827';
+      ctx.font = '900 20px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('13', width / 2, platY + platH / 2);
+
+      // Pintu Kayu Rumah
+      const pintuW = 90;
+      const pintuH = 145;
+      const pintuX = width / 2 - pintuW / 2;
+      const pintuY = platY + platH + 8;
+      ctx.fillStyle = '#78350F';
+      ctx.fillRect(pintuX, pintuY, pintuW, pintuH);
+      ctx.strokeStyle = '#1F2937';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(pintuX, pintuY, pintuW, pintuH);
+
+      // 6. Pagar Kayu Berjejer Rapi (Gaya Referensi)
+      const pagarY = rY + rH - 30;
+      ctx.fillStyle = '#374151';
+      ctx.strokeStyle = '#111827';
+      ctx.lineWidth = 2.5;
+      const stepPagar = 44;
+      for (let px = 20; px < width - 20; px += stepPagar) {
+        if (px > width / 2 - 50 && px < width / 2 + 50) continue; // Celah pintu masuk
         ctx.beginPath();
-        ctx.arc(width * 0.72 + s * 70, height * 0.74, 55 + (s % 2) * 15, 0, Math.PI * 2);
+        ctx.moveTo(px, pagarY + 110);
+        ctx.lineTo(px, pagarY + 20);
+        ctx.lineTo(px + 12, pagarY);
+        ctx.lineTo(px + 24, pagarY + 20);
+        ctx.lineTo(px + 24, pagarY + 110);
+        ctx.closePath();
         ctx.fill();
+        ctx.stroke();
       }
+      // Palang horizontal pagar
+      ctx.fillRect(10, pagarY + 35, width - 20, 14);
+      ctx.strokeRect(10, pagarY + 35, width - 20, 14);
+      ctx.fillRect(10, pagarY + 75, width - 20, 14);
+      ctx.strokeRect(10, pagarY + 75, width - 20, 14);
 
-      // Tanah / Rumput Gelap
-      ctx.fillStyle = '#060B14';
-      ctx.fillRect(0, height * 0.74, width, height * 0.26);
-
-      // Sorotan Senter Andre / Cahaya Temaram
-      const senterGrad = ctx.createRadialGradient(width * 0.5, height * 0.72, 30, width * 0.5, height * 0.72, 280);
-      senterGrad.addColorStop(0, 'rgba(250, 204, 21, 0.22)');
-      senterGrad.addColorStop(1, 'transparent');
-      ctx.fillStyle = senterGrad;
+      // Pohon Ranting Kering di Sisi Kiri & Kanan (Siluet Misterius)
+      ctx.strokeStyle = '#1F2937';
+      ctx.lineWidth = 5;
+      // Pohon kiri
       ctx.beginPath();
-      ctx.arc(width * 0.5, height * 0.72, 280, 0, Math.PI * 2);
+      ctx.moveTo(60, height * 0.72);
+      ctx.lineTo(60, height * 0.3);
+      ctx.lineTo(20, height * 0.22);
+      ctx.moveTo(60, height * 0.42);
+      ctx.lineTo(110, height * 0.35);
+      ctx.stroke();
+      // Pohon kanan
+      ctx.beginPath();
+      ctx.moveTo(width - 60, height * 0.72);
+      ctx.lineTo(width - 60, height * 0.32);
+      ctx.lineTo(width - 20, height * 0.25);
+      ctx.moveTo(width - 60, height * 0.45);
+      ctx.lineTo(width - 105, height * 0.38);
+      ctx.stroke();
+
+      // Tanah / Jalanan Gelap Berkabut
+      const kabutGrad = ctx.createLinearGradient(0, height * 0.65, 0, height);
+      kabutGrad.addColorStop(0, 'rgba(15, 23, 42, 0.7)');
+      kabutGrad.addColorStop(0.3, '#111827');
+      kabutGrad.addColorStop(1, '#030712');
+      ctx.fillStyle = kabutGrad;
+      ctx.fillRect(0, height * 0.68, width, height * 0.32);
+
+      // Jalan Setapak Tengah Menuju Pintu
+      ctx.fillStyle = 'rgba(55, 65, 81, 0.45)';
+      ctx.beginPath();
+      ctx.moveTo(width / 2 - 40, pintuY + pintuH);
+      ctx.lineTo(width / 2 + 40, pintuY + pintuH);
+      ctx.lineTo(width / 2 + 110, height);
+      ctx.lineTo(width / 2 - 110, height);
+      ctx.closePath();
       ctx.fill();
     }
   }, [width, height, frame, latarKey, cSkyTop, cSkyMid, cAksen]);
