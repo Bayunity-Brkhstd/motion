@@ -29,17 +29,833 @@
   const ctx = canvas.getContext('2d');
   const W = 1080, H = 1920;
 
-  // Data Timestamp Kata & Adegan dari Analisis Audio Whisper AI
-  const TIME_ADEPAN = [
-    { start: 0.0, end: 11.3, scene: 1, sub: "Pernahkah kalian merasa diawasi dari balik jendela rumah kosong? Malam ini, Andre dan Wulan mencoba membuktikan rumor tentang penampakan bayangan putih di ujung gang yang sepi ini." },
-    { start: 11.3, end: 21.2, scene: 2, sub: "Tiba-tiba, tirai di lantai atas bergerak. Suara ketukan pelan pada kaca membuat bulu kuduk Wulan berdiri seketika. Sesuatu benar-benar ada di sana." },
-    { start: 21.2, end: 32.6, scene: 3, sub: "Andre memberanikan diri. Saat cahaya senter menembus kaca berdebu, bayangan itu tidak menghilang, tapi justru terlihat aneh. Kaku, dan memiliki garis tepi seperti potongan kardus." },
-    { start: 32.6, end: 43.6, scene: 4, sub: "Tiba-tiba terdengar tawa tertahan. Dari balik semak-semak, Seno muncul membawa proyektor dan remote. Ternyata, semua teror ini hanyalah rekayasa buatannya." },
-    { start: 43.6, end: 53.4, scene: 5, sub: "Seno menggunakan proyektor mini, benang pancing, dan rekaman suara untuk menakut-nakuti warga. Tujuannya sederhana, agar tidak ada yang mendekati tempat persembunyiannya ini." },
-    { start: 53.4, end: 64.36, scene: 6, sub: "Ketiganya pun pergi menuju pos ronda untuk menjelaskan fakta sebenarnya. Ingat, tidak semua yang terlihat menyeramkan itu mistis, terkadang itu hanya ulah teman yang terlalu kreatif." }
-  ];
+  // Data Subtitle Word-by-Word dari Whisper Alignment
+  const SUBTITLES = [
+  {
+    "index": 0,
+    "start": 0.0,
+    "end": 3.46,
+    "text": "Pernahkah kalian merasa diawasi dari balik jendela rumah kosong?",
+    "words": [
+      {
+        "w": "Pernahkah",
+        "s": 0.0,
+        "e": 0.38
+      },
+      {
+        "w": "kalian",
+        "s": 0.38,
+        "e": 0.77
+      },
+      {
+        "w": "merasa",
+        "s": 0.77,
+        "e": 1.15
+      },
+      {
+        "w": "diawasi",
+        "s": 1.15,
+        "e": 1.54
+      },
+      {
+        "w": "dari",
+        "s": 1.54,
+        "e": 1.92
+      },
+      {
+        "w": "balik",
+        "s": 1.92,
+        "e": 2.31
+      },
+      {
+        "w": "jendela",
+        "s": 2.31,
+        "e": 2.69
+      },
+      {
+        "w": "rumah",
+        "s": 2.69,
+        "e": 3.08
+      },
+      {
+        "w": "kosong?",
+        "s": 3.08,
+        "e": 3.46
+      }
+    ]
+  },
+  {
+    "index": 1,
+    "start": 4.36,
+    "end": 11.08,
+    "text": "Malam ini, Andre dan Wulan mencoba membuktikan rumor tentang penampakan bayangan putih di ujung gang yang sepi ini.",
+    "words": [
+      {
+        "w": "Malam",
+        "s": 4.36,
+        "e": 4.68
+      },
+      {
+        "w": "ini,",
+        "s": 4.68,
+        "e": 4.98
+      },
+      {
+        "w": "Andre",
+        "s": 5.28,
+        "e": 5.58
+      },
+      {
+        "w": "dan",
+        "s": 5.58,
+        "e": 5.8
+      },
+      {
+        "w": "Wulan",
+        "s": 5.8,
+        "e": 6.1
+      },
+      {
+        "w": "mencoba",
+        "s": 6.1,
+        "e": 6.64
+      },
+      {
+        "w": "membuktikan",
+        "s": 6.64,
+        "e": 7.34
+      },
+      {
+        "w": "rumor",
+        "s": 7.34,
+        "e": 7.78
+      },
+      {
+        "w": "tentang",
+        "s": 7.78,
+        "e": 8.08
+      },
+      {
+        "w": "penampakan",
+        "s": 8.08,
+        "e": 8.72
+      },
+      {
+        "w": "bayangan",
+        "s": 8.72,
+        "e": 9.04
+      },
+      {
+        "w": "putih",
+        "s": 9.04,
+        "e": 9.44
+      },
+      {
+        "w": "di",
+        "s": 9.44,
+        "e": 9.6
+      },
+      {
+        "w": "ujung",
+        "s": 9.6,
+        "e": 9.88
+      },
+      {
+        "w": "gang",
+        "s": 9.88,
+        "e": 10.18
+      },
+      {
+        "w": "yang",
+        "s": 10.18,
+        "e": 10.38
+      },
+      {
+        "w": "sepi",
+        "s": 10.38,
+        "e": 10.72
+      },
+      {
+        "w": "ini.",
+        "s": 10.72,
+        "e": 11.08
+      }
+    ]
+  },
+  {
+    "index": 2,
+    "start": 11.52,
+    "end": 13.96,
+    "text": "Tiba-tiba, tirai di lantai atas bergerak.",
+    "words": [
+      {
+        "w": "Tiba-tiba,",
+        "s": 11.52,
+        "e": 11.93
+      },
+      {
+        "w": "tirai",
+        "s": 11.93,
+        "e": 12.33
+      },
+      {
+        "w": "di",
+        "s": 12.33,
+        "e": 12.74
+      },
+      {
+        "w": "lantai",
+        "s": 12.74,
+        "e": 13.15
+      },
+      {
+        "w": "atas",
+        "s": 13.15,
+        "e": 13.55
+      },
+      {
+        "w": "bergerak.",
+        "s": 13.55,
+        "e": 13.96
+      }
+    ]
+  },
+  {
+    "index": 3,
+    "start": 14.46,
+    "end": 20.68,
+    "text": "Suara ketukan pelan pada kaca membuat bulu kuduk Wulan berdiri seketika. Sesuatu benar-benar ada di sana.",
+    "words": [
+      {
+        "w": "Suara",
+        "s": 14.46,
+        "e": 14.85
+      },
+      {
+        "w": "ketukan",
+        "s": 14.85,
+        "e": 15.24
+      },
+      {
+        "w": "pelan",
+        "s": 15.24,
+        "e": 15.63
+      },
+      {
+        "w": "pada",
+        "s": 15.63,
+        "e": 16.02
+      },
+      {
+        "w": "kaca",
+        "s": 16.02,
+        "e": 16.4
+      },
+      {
+        "w": "membuat",
+        "s": 16.4,
+        "e": 16.79
+      },
+      {
+        "w": "bulu",
+        "s": 16.79,
+        "e": 17.18
+      },
+      {
+        "w": "kuduk",
+        "s": 17.18,
+        "e": 17.57
+      },
+      {
+        "w": "Wulan",
+        "s": 17.57,
+        "e": 17.96
+      },
+      {
+        "w": "berdiri",
+        "s": 17.96,
+        "e": 18.35
+      },
+      {
+        "w": "seketika.",
+        "s": 18.35,
+        "e": 18.74
+      },
+      {
+        "w": "Sesuatu",
+        "s": 18.74,
+        "e": 19.12
+      },
+      {
+        "w": "benar-benar",
+        "s": 19.12,
+        "e": 19.51
+      },
+      {
+        "w": "ada",
+        "s": 19.51,
+        "e": 19.9
+      },
+      {
+        "w": "di",
+        "s": 19.9,
+        "e": 20.29
+      },
+      {
+        "w": "sana.",
+        "s": 20.29,
+        "e": 20.68
+      }
+    ]
+  },
+  {
+    "index": 4,
+    "start": 21.72,
+    "end": 26.84,
+    "text": "Andre memberanikan diri. Saat cahaya senter menembus kaca berdebu...",
+    "words": [
+      {
+        "w": "Andre",
+        "s": 21.72,
+        "e": 22.29
+      },
+      {
+        "w": "memberanikan",
+        "s": 22.29,
+        "e": 22.86
+      },
+      {
+        "w": "diri.",
+        "s": 22.86,
+        "e": 23.43
+      },
+      {
+        "w": "Saat",
+        "s": 23.43,
+        "e": 24.0
+      },
+      {
+        "w": "cahaya",
+        "s": 24.0,
+        "e": 24.56
+      },
+      {
+        "w": "senter",
+        "s": 24.56,
+        "e": 25.13
+      },
+      {
+        "w": "menembus",
+        "s": 25.13,
+        "e": 25.7
+      },
+      {
+        "w": "kaca",
+        "s": 25.7,
+        "e": 26.27
+      },
+      {
+        "w": "berdebu...",
+        "s": 26.27,
+        "e": 26.84
+      }
+    ]
+  },
+  {
+    "index": 5,
+    "start": 26.84,
+    "end": 32.22,
+    "text": "bayangan itu tidak menghilang, tapi justru terlihat aneh. Kaku, dan memiliki garis tepi seperti potongan kardus.",
+    "words": [
+      {
+        "w": "bayangan",
+        "s": 26.84,
+        "e": 27.18
+      },
+      {
+        "w": "itu",
+        "s": 27.18,
+        "e": 27.51
+      },
+      {
+        "w": "tidak",
+        "s": 27.51,
+        "e": 27.85
+      },
+      {
+        "w": "menghilang,",
+        "s": 27.85,
+        "e": 28.18
+      },
+      {
+        "w": "tapi",
+        "s": 28.18,
+        "e": 28.52
+      },
+      {
+        "w": "justru",
+        "s": 28.52,
+        "e": 28.86
+      },
+      {
+        "w": "terlihat",
+        "s": 28.86,
+        "e": 29.19
+      },
+      {
+        "w": "aneh.",
+        "s": 29.19,
+        "e": 29.53
+      },
+      {
+        "w": "Kaku,",
+        "s": 29.53,
+        "e": 29.87
+      },
+      {
+        "w": "dan",
+        "s": 29.87,
+        "e": 30.2
+      },
+      {
+        "w": "memiliki",
+        "s": 30.2,
+        "e": 30.54
+      },
+      {
+        "w": "garis",
+        "s": 30.54,
+        "e": 30.88
+      },
+      {
+        "w": "tepi",
+        "s": 30.88,
+        "e": 31.21
+      },
+      {
+        "w": "seperti",
+        "s": 31.21,
+        "e": 31.55
+      },
+      {
+        "w": "potongan",
+        "s": 31.55,
+        "e": 31.88
+      },
+      {
+        "w": "kardus.",
+        "s": 31.88,
+        "e": 32.22
+      }
+    ]
+  },
+  {
+    "index": 6,
+    "start": 33.0,
+    "end": 35.08,
+    "text": "Tiba-tiba terdengar tawa tertahan.",
+    "words": [
+      {
+        "w": "Tiba-tiba",
+        "s": 33.0,
+        "e": 33.52
+      },
+      {
+        "w": "terdengar",
+        "s": 33.52,
+        "e": 34.04
+      },
+      {
+        "w": "tawa",
+        "s": 34.04,
+        "e": 34.56
+      },
+      {
+        "w": "tertahan.",
+        "s": 34.56,
+        "e": 35.08
+      }
+    ]
+  },
+  {
+    "index": 7,
+    "start": 35.86,
+    "end": 39.62,
+    "text": "Dari balik semak-semak, Seno muncul membawa proyektor dan remote.",
+    "words": [
+      {
+        "w": "Dari",
+        "s": 35.86,
+        "e": 36.28
+      },
+      {
+        "w": "balik",
+        "s": 36.28,
+        "e": 36.7
+      },
+      {
+        "w": "semak-semak,",
+        "s": 36.7,
+        "e": 37.11
+      },
+      {
+        "w": "Seno",
+        "s": 37.11,
+        "e": 37.53
+      },
+      {
+        "w": "muncul",
+        "s": 37.53,
+        "e": 37.95
+      },
+      {
+        "w": "membawa",
+        "s": 37.95,
+        "e": 38.37
+      },
+      {
+        "w": "proyektor",
+        "s": 38.37,
+        "e": 38.78
+      },
+      {
+        "w": "dan",
+        "s": 38.78,
+        "e": 39.2
+      },
+      {
+        "w": "remote.",
+        "s": 39.2,
+        "e": 39.62
+      }
+    ]
+  },
+  {
+    "index": 8,
+    "start": 40.04,
+    "end": 42.84,
+    "text": "Ternyata, semua teror ini hanyalah rekayasa buatannya.",
+    "words": [
+      {
+        "w": "Ternyata,",
+        "s": 40.04,
+        "e": 40.44
+      },
+      {
+        "w": "semua",
+        "s": 40.44,
+        "e": 40.84
+      },
+      {
+        "w": "teror",
+        "s": 40.84,
+        "e": 41.24
+      },
+      {
+        "w": "ini",
+        "s": 41.24,
+        "e": 41.64
+      },
+      {
+        "w": "hanyalah",
+        "s": 41.64,
+        "e": 42.04
+      },
+      {
+        "w": "rekayasa",
+        "s": 42.04,
+        "e": 42.44
+      },
+      {
+        "w": "buatannya.",
+        "s": 42.44,
+        "e": 42.84
+      }
+    ]
+  },
+  {
+    "index": 9,
+    "start": 44.36,
+    "end": 49.5,
+    "text": "Seno menggunakan proyektor mini, benang pancing, dan rekaman suara untuk menakut-nakuti warga.",
+    "words": [
+      {
+        "w": "Seno",
+        "s": 44.36,
+        "e": 44.79
+      },
+      {
+        "w": "menggunakan",
+        "s": 44.79,
+        "e": 45.22
+      },
+      {
+        "w": "proyektor",
+        "s": 45.22,
+        "e": 45.64
+      },
+      {
+        "w": "mini,",
+        "s": 45.64,
+        "e": 46.07
+      },
+      {
+        "w": "benang",
+        "s": 46.07,
+        "e": 46.5
+      },
+      {
+        "w": "pancing,",
+        "s": 46.5,
+        "e": 46.93
+      },
+      {
+        "w": "dan",
+        "s": 46.93,
+        "e": 47.36
+      },
+      {
+        "w": "rekaman",
+        "s": 47.36,
+        "e": 47.79
+      },
+      {
+        "w": "suara",
+        "s": 47.79,
+        "e": 48.22
+      },
+      {
+        "w": "untuk",
+        "s": 48.22,
+        "e": 48.64
+      },
+      {
+        "w": "menakut-nakuti",
+        "s": 48.64,
+        "e": 49.07
+      },
+      {
+        "w": "warga.",
+        "s": 49.07,
+        "e": 49.5
+      }
+    ]
+  },
+  {
+    "index": 10,
+    "start": 50.1,
+    "end": 53.4,
+    "text": "Tujuannya sederhana, agar tidak ada yang mendekati tempat persembunyiannya ini.",
+    "words": [
+      {
+        "w": "Tujuannya",
+        "s": 50.1,
+        "e": 50.43
+      },
+      {
+        "w": "sederhana,",
+        "s": 50.43,
+        "e": 50.76
+      },
+      {
+        "w": "agar",
+        "s": 50.76,
+        "e": 51.09
+      },
+      {
+        "w": "tidak",
+        "s": 51.09,
+        "e": 51.42
+      },
+      {
+        "w": "ada",
+        "s": 51.42,
+        "e": 51.75
+      },
+      {
+        "w": "yang",
+        "s": 51.75,
+        "e": 52.08
+      },
+      {
+        "w": "mendekati",
+        "s": 52.08,
+        "e": 52.41
+      },
+      {
+        "w": "tempat",
+        "s": 52.41,
+        "e": 52.74
+      },
+      {
+        "w": "persembunyiannya",
+        "s": 52.74,
+        "e": 53.07
+      },
+      {
+        "w": "ini.",
+        "s": 53.07,
+        "e": 53.4
+      }
+    ]
+  },
+  {
+    "index": 11,
+    "start": 53.4,
+    "end": 57.44,
+    "text": "Ketiganya pun pergi menuju pos ronda untuk menjelaskan fakta sebenarnya.",
+    "words": [
+      {
+        "w": "Ketiganya",
+        "s": 53.4,
+        "e": 53.8
+      },
+      {
+        "w": "pun",
+        "s": 53.8,
+        "e": 54.21
+      },
+      {
+        "w": "pergi",
+        "s": 54.21,
+        "e": 54.61
+      },
+      {
+        "w": "menuju",
+        "s": 54.61,
+        "e": 55.02
+      },
+      {
+        "w": "pos",
+        "s": 55.02,
+        "e": 55.42
+      },
+      {
+        "w": "ronda",
+        "s": 55.42,
+        "e": 55.82
+      },
+      {
+        "w": "untuk",
+        "s": 55.82,
+        "e": 56.23
+      },
+      {
+        "w": "menjelaskan",
+        "s": 56.23,
+        "e": 56.63
+      },
+      {
+        "w": "fakta",
+        "s": 56.63,
+        "e": 57.04
+      },
+      {
+        "w": "sebenarnya.",
+        "s": 57.04,
+        "e": 57.44
+      }
+    ]
+  },
+  {
+    "index": 12,
+    "start": 58.12,
+    "end": 61.06,
+    "text": "Ingat, tidak semua yang terlihat menyeramkan itu mistis...",
+    "words": [
+      {
+        "w": "Ingat,",
+        "s": 58.12,
+        "e": 58.6
+      },
+      {
+        "w": "tidak",
+        "s": 58.6,
+        "e": 59.12
+      },
+      {
+        "w": "semua",
+        "s": 59.12,
+        "e": 59.48
+      },
+      {
+        "w": "yang",
+        "s": 59.48,
+        "e": 59.66
+      },
+      {
+        "w": "terlihat",
+        "s": 59.66,
+        "e": 59.9
+      },
+      {
+        "w": "menyeramkan",
+        "s": 59.9,
+        "e": 60.38
+      },
+      {
+        "w": "itu",
+        "s": 60.38,
+        "e": 60.6
+      },
+      {
+        "w": "mistis...",
+        "s": 60.6,
+        "e": 61.06
+      }
+    ]
+  },
+  {
+    "index": 13,
+    "start": 61.68,
+    "end": 64.12,
+    "text": "terkadang itu hanya ulah teman yang terlalu kreatif.",
+    "words": [
+      {
+        "w": "terkadang",
+        "s": 61.68,
+        "e": 62.22
+      },
+      {
+        "w": "itu",
+        "s": 62.4,
+        "e": 62.54
+      },
+      {
+        "w": "hanya",
+        "s": 62.54,
+        "e": 62.72
+      },
+      {
+        "w": "ulah",
+        "s": 62.72,
+        "e": 62.98
+      },
+      {
+        "w": "teman",
+        "s": 62.98,
+        "e": 63.18
+      },
+      {
+        "w": "yang",
+        "s": 63.18,
+        "e": 63.3
+      },
+      {
+        "w": "terlalu",
+        "s": 63.3,
+        "e": 63.56
+      },
+      {
+        "w": "kreatif.",
+        "s": 63.56,
+        "e": 64.12
+      }
+    ]
+  }
+];
 
-  // Fungsi Gambar Bintang
+  // Bintang Langit Malam
   const STARS = [
     [140, 90], [290, 160], [430, 110], [680, 140], [890, 95],
     [160, 290], [350, 230], [580, 280], [820, 220], [970, 290],
@@ -47,16 +863,14 @@
   ];
 
   function drawSkyAndMoon(t) {
-    // Langit Gradien Malam Biru Pekat
     const sky = ctx.createLinearGradient(0, 0, 0, H);
-    sky.addColorStop(0, '#0F1626');
-    sky.addColorStop(0.35, '#1B263B');
-    sky.addColorStop(0.7, '#24344D');
-    sky.addColorStop(1, '#0D131F');
+    sky.addColorStop(0, '#0B132B');
+    sky.addColorStop(0.4, '#1C2541');
+    sky.addColorStop(0.8, '#273452');
+    sky.addColorStop(1, '#0F172A');
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, W, H);
 
-    // Bintang-bintang
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
     for (let i = 0; i < STARS.length; i++) {
       const [sx, sy] = STARS[i];
@@ -77,13 +891,11 @@
     ctx.arc(mx, my, mr * 3.2, 0, Math.PI * 2);
     ctx.fill();
 
-    // Permukaan Bulan
     ctx.fillStyle = '#E8E5D3';
     ctx.beginPath();
     ctx.arc(mx, my, mr, 0, Math.PI * 2);
     ctx.fill();
 
-    // Kawah Bulan
     ctx.fillStyle = 'rgba(195, 190, 165, 0.45)';
     ctx.beginPath();
     ctx.arc(mx - 18, my - 16, 16, 0, Math.PI * 2);
@@ -99,7 +911,6 @@
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    // Pohon Kiri
     ctx.beginPath();
     ctx.moveTo(55, H * 0.74);
     ctx.lineTo(45, H * 0.36);
@@ -110,7 +921,6 @@
     ctx.lineTo(10, H * 0.55);
     ctx.stroke();
 
-    // Pohon Kanan
     ctx.beginPath();
     ctx.moveTo(W - 55, H * 0.74);
     ctx.lineTo(W - 45, H * 0.38);
@@ -122,13 +932,13 @@
     ctx.stroke();
   }
 
-  function drawHouseNo13(t, zoom = 1.0) {
+  // 1. Scene 1 & 3: Tampak Depan Rumah No. 13
+  function drawHouseNo13(t, flashlight = false) {
     ctx.save();
-    // Rumah Tampak Depan
     const rx = W * 0.18, rw = W * 0.64;
     const ry = H * 0.37, rh = H * 0.36;
 
-    // 1. Dinding Papan Kayu Putih-Abu Kusam
+    // Dinding Papan Kayu Putih-Abu Kusam
     ctx.fillStyle = '#D6D3D1';
     ctx.fillRect(rx, ry + 75, rw, rh - 75);
     ctx.strokeStyle = '#292524';
@@ -145,7 +955,7 @@
       ctx.stroke();
     }
 
-    // 2. Atap Segitiga Rumah
+    // Atap Segitiga Rumah
     ctx.fillStyle = '#44403C';
     ctx.beginPath();
     ctx.moveTo(rx - 40, ry + 75);
@@ -157,13 +967,13 @@
     ctx.lineWidth = 4.5;
     ctx.stroke();
 
-    // Ventilasi Bulat Gelap di Bawah Atap
+    // Ventilasi Bulat Gelap
     ctx.fillStyle = '#1C1917';
     ctx.beginPath();
     ctx.arc(W / 2, ry + 25, 26, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3. Jendela Kiri (Disalib Papan Kayu X Cokelat)
+    // Jendela Kiri (Palang X)
     const jw = rw * 0.34, jh = 125;
     const jkx = rx + 36, jky = ry + 105;
     ctx.fillStyle = '#1C1917';
@@ -172,13 +982,11 @@
     ctx.lineWidth = 3.5;
     ctx.strokeRect(jkx, jky, jw, jh);
 
-    // Dua Palang Papan Kayu X
     ctx.save();
     ctx.fillStyle = '#9A3412';
     ctx.strokeStyle = '#431407';
     ctx.lineWidth = 3.5;
-    // Palang \
-    ctx.beginPath();
+    // Palang     ctx.beginPath();
     ctx.moveTo(jkx - 18, jky + 10);
     ctx.lineTo(jkx + jw + 18, jky + jh - 12);
     ctx.lineTo(jkx + jw + 12, jky + jh + 10);
@@ -195,12 +1003,11 @@
     ctx.fill(); ctx.stroke();
     ctx.restore();
 
-    // 4. Jendela Kanan (Tirai Cokelat & Siluet Merah/Hitam)
+    // Jendela Kanan (Tirai & Siluet Merah)
     const jrx = rx + rw - jw - 36, jry = jky;
     ctx.fillStyle = '#3F2012';
     ctx.fillRect(jrx, jry, jw, jh);
 
-    // Cahaya Tirai Kuning Hangat di Balik Jendela
     const jglow = ctx.createLinearGradient(jrx, jry, jrx, jry + jh);
     jglow.addColorStop(0, '#B45309');
     jglow.addColorStop(0.5, '#D97706');
@@ -208,7 +1015,7 @@
     ctx.fillStyle = jglow;
     ctx.fillRect(jrx, jry, jw, jh);
 
-    // Tirai Melengkung Kiri & Kanan
+    // Tirai
     ctx.fillStyle = '#451A03';
     ctx.beginPath();
     ctx.moveTo(jrx, jry);
@@ -226,7 +1033,7 @@
     ctx.closePath();
     ctx.fill();
 
-    // Siluet Merah Bayangan Kepala Berdiri di Jendela (Sesuai Referensi)
+    // Siluet Merah Bayangan
     const redSilhouette = ctx.createLinearGradient(jrx, jry, jrx, jry + jh);
     redSilhouette.addColorStop(0, 'rgba(153, 27, 27, 0.95)');
     redSilhouette.addColorStop(1, 'rgba(30, 20, 20, 0.98)');
@@ -240,7 +1047,7 @@
     ctx.closePath();
     ctx.fill();
 
-    // Bingkai Kusen Luar
+    // Bingkai Kusen
     ctx.strokeStyle = '#1C1917';
     ctx.lineWidth = 4;
     ctx.strokeRect(jrx, jry, jw, jh);
@@ -249,7 +1056,7 @@
     ctx.lineTo(jrx + jw / 2, jry + jh);
     ctx.stroke();
 
-    // 5. Plat Nomor Rumah "13"
+    // Plat Nomor 13
     const pw = 58, ph = 34;
     const px = W / 2 - pw / 2, py = ry + 235;
     ctx.fillStyle = '#FEF3C7';
@@ -263,7 +1070,7 @@
     ctx.textBaseline = 'middle';
     ctx.fillText('13', W / 2, py + ph / 2 + 1);
 
-    // Pintu Rumah Kayu Cokelat
+    // Pintu
     const dw = 92, dh = 145;
     const dx = W / 2 - dw / 2, dy = py + ph + 8;
     ctx.fillStyle = '#78350F';
@@ -271,23 +1078,19 @@
     ctx.strokeStyle = '#1C1917';
     ctx.lineWidth = 4;
     ctx.strokeRect(dx, dy, dw, dh);
-    // Gagang Pintu Bulat
     ctx.fillStyle = '#F59E0B';
     ctx.beginPath();
     ctx.arc(dx + 16, dy + dh * 0.54, 5.5, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = '#451A03';
-    ctx.lineWidth = 2;
-    ctx.stroke();
 
-    // 6. Pagar Kayu Vertikal Berjejer Rapi
+    // Pagar Kayu
     const pagarY = ry + rh - 30;
     ctx.fillStyle = '#292524';
     ctx.strokeStyle = '#0C0A09';
     ctx.lineWidth = 3.5;
     const step = 42;
     for (let x = 30; x < W - 30; x += step) {
-      if (x > W / 2 - 50 && x < W / 2 + 50) continue; // Celah pintu pagar
+      if (x > W / 2 - 50 && x < W / 2 + 50) continue;
       ctx.beginPath();
       ctx.moveTo(x, pagarY + 120);
       ctx.lineTo(x, pagarY + 20);
@@ -299,7 +1102,7 @@
       ctx.stroke();
     }
 
-    // Pintu Pagar Terbuka Miring di Tengah (Sesuai Referensi)
+    // Pintu Pagar Miring
     ctx.save();
     ctx.translate(W / 2 - 42, pagarY + 20);
     ctx.rotate(0.09);
@@ -313,7 +1116,7 @@
     ctx.fillRect(-5, 72, 62, 12); ctx.strokeRect(-5, 72, 62, 12);
     ctx.restore();
 
-    // Palang Horizontal Pagar
+    // Palang Pagar Horizontal
     ctx.fillRect(20, pagarY + 36, W / 2 - 70, 14);
     ctx.strokeRect(20, pagarY + 36, W / 2 - 70, 14);
     ctx.fillRect(20, pagarY + 80, W / 2 - 70, 14);
@@ -324,7 +1127,7 @@
     ctx.fillRect(W / 2 + 50, pagarY + 80, W / 2 - 70, 14);
     ctx.strokeRect(W / 2 + 50, pagarY + 80, W / 2 - 70, 14);
 
-    // 7. Tanah / Jalanan Gelap Pekat Berkabut
+    // Tanah Gelap
     const ground = ctx.createLinearGradient(0, H * 0.68, 0, H);
     ground.addColorStop(0, 'rgba(12, 16, 26, 0.7)');
     ground.addColorStop(0.3, '#101726');
@@ -332,7 +1135,7 @@
     ctx.fillStyle = ground;
     ctx.fillRect(0, H * 0.68, W, H * 0.32);
 
-    // Jalan Setapak Tengah Menuju Pintu
+    // Jalan Setapak
     ctx.fillStyle = 'rgba(30, 41, 59, 0.55)';
     ctx.beginPath();
     ctx.moveTo(W / 2 - 35, dy + dh);
@@ -342,26 +1145,325 @@
     ctx.closePath();
     ctx.fill();
 
+    // Efek Senter di Adegan 3
+    if (flashlight) {
+      const beam = ctx.createRadialGradient(W / 2, H * 0.75, 40, jrx + jw / 2, jry + 46, 320);
+      beam.addColorStop(0, 'rgba(254, 240, 138, 0.45)');
+      beam.addColorStop(0.6, 'rgba(253, 224, 71, 0.15)');
+      beam.addColorStop(1, 'transparent');
+      ctx.fillStyle = beam;
+      ctx.beginPath();
+      ctx.moveTo(W / 2 - 20, H * 0.75);
+      ctx.lineTo(jrx - 40, jry - 20);
+      ctx.lineTo(jrx + jw + 40, jry + jh + 20);
+      ctx.lineTo(W / 2 + 20, H * 0.75);
+      ctx.closePath();
+      ctx.fill();
+    }
+
     ctx.restore();
   }
 
-  // ── Gambar Karakter Perempuan Berkerudung Oranye (Sesuai Referensi Claude) ──
+  // 2. Scene 2: Close-up Jendela Kamar Atas
+  function drawWindowCloseUp(t) {
+    ctx.save();
+    ctx.fillStyle = '#161F30';
+    ctx.fillRect(0, 0, W, H);
+
+    const winW = W * 0.74, winH = H * 0.54;
+    const winX = (W - winW) / 2, winY = H * 0.18;
+
+    const kg = ctx.createLinearGradient(winX, winY, winX + winW, winY + winH);
+    kg.addColorStop(0, '#0F172A');
+    kg.addColorStop(0.5, '#1E293B');
+    kg.addColorStop(1, '#0A0F1D');
+    ctx.fillStyle = kg;
+    ctx.fillRect(winX, winY, winW, winH);
+
+    const gCahaya = ctx.createRadialGradient(winX + winW * 0.75, winY + winH * 0.45, 40, winX + winW * 0.75, winY + winH * 0.45, 260);
+    gCahaya.addColorStop(0, 'rgba(217, 119, 6, 0.45)');
+    gCahaya.addColorStop(1, 'transparent');
+    ctx.fillStyle = gCahaya;
+    ctx.fillRect(winX, winY, winW, winH);
+
+    // Tirai Bergerak
+    const tiraiWave = Math.sin(t * 4) * 14;
+    ctx.fillStyle = 'rgba(254, 243, 199, 0.16)';
+    ctx.beginPath();
+    ctx.moveTo(winX + 20, winY);
+    ctx.quadraticCurveTo(winX + 80 + tiraiWave, winY + winH * 0.5, winX + 40, winY + winH);
+    ctx.lineTo(winX, winY + winH);
+    ctx.lineTo(winX, winY);
+    ctx.closePath();
+    ctx.fill();
+
+    // Siluet Bayangan Sosok Bergerak di Jendela
+    const silX = winX + winW * 0.65 + Math.sin(t * 2) * 12;
+    const silY = winY + winH * 0.52;
+    ctx.fillStyle = 'rgba(20, 15, 25, 0.95)';
+    ctx.beginPath();
+    ctx.arc(silX, silY - 70, 48, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(silX - 65, silY + 110);
+    ctx.quadraticCurveTo(silX, silY - 20, silX + 65, silY + 110);
+    ctx.closePath();
+    ctx.fill();
+
+    // Kusen Jendela
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 16;
+    ctx.strokeRect(winX, winY, winW, winH);
+
+    ctx.lineWidth = 10;
+    ctx.beginPath();
+    ctx.moveTo(winX + winW / 2, winY);
+    ctx.lineTo(winX + winW / 2, winY + winH);
+    ctx.moveTo(winX, winY + winH / 2);
+    ctx.lineTo(winX + winW, winY + winH / 2);
+    ctx.stroke();
+
+    ctx.fillStyle = '#1E293B';
+    ctx.fillRect(winX - 30, winY + winH, winW + 60, 32);
+    ctx.strokeStyle = '#0F172A';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(winX - 30, winY + winH, winW + 60, 32);
+
+    ctx.restore();
+  }
+
+  // 3. Scene 4 & 5: Samping Bangunan Rumah & Seno dengan Proyektor
+  function drawSideHouseAndSeno(t) {
+    ctx.save();
+    // Langit
+    drawSkyAndMoon(t);
+
+    // Dinding Samping Rumah (Papan Kayu Miring Perspektif)
+    ctx.fillStyle = '#C4C0BD';
+    ctx.beginPath();
+    ctx.moveTo(0, H * 0.22);
+    ctx.lineTo(W * 0.48, H * 0.32);
+    ctx.lineTo(W * 0.48, H * 0.78);
+    ctx.lineTo(0, H * 0.84);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#292524';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // Garis Papan Kayu Samping
+    ctx.strokeStyle = 'rgba(68, 64, 60, 0.4)';
+    ctx.lineWidth = 2.5;
+    for (let y = H * 0.26; y < H * 0.82; y += 32) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(W * 0.48, y + 45);
+      ctx.stroke();
+    }
+
+    // Tanah Gelap
+    ctx.fillStyle = '#0F172A';
+    ctx.fillRect(0, H * 0.74, W, H * 0.26);
+
+    // Semak-Semak Rimbun di Samping Rumah
+    const bushG = ctx.createLinearGradient(0, H * 0.65, 0, H * 0.82);
+    bushG.addColorStop(0, '#1E3A2F');
+    bushG.addColorStop(1, '#0C1C15');
+    ctx.fillStyle = bushG;
+    ctx.strokeStyle = '#06100C';
+    ctx.lineWidth = 4;
+
+    const sway = Math.sin(t * 3) * 6;
+    for (let i = 0; i < 5; i++) {
+      const bx = W * 0.42 + i * 115 + sway * (i % 2 === 0 ? 1 : -1);
+      const by = H * 0.72 + (i % 2) * 20;
+      ctx.beginPath();
+      ctx.arc(bx, by, 75, 0, Math.PI * 2);
+      ctx.fill(); ctx.stroke();
+    }
+
+    // Karakter Seno Muncul dari Balik Semak (Hoodie Hijau Tua #15803D)
+    const senoX = W * 0.74;
+    const senoY = H * 0.65 + Math.sin(t * 4) * 3;
+    ctx.save();
+    ctx.translate(senoX, senoY);
+
+    // Badan Seno
+    ctx.fillStyle = '#15803D';
+    ctx.strokeStyle = '#0F172A';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.roundRect(-65, -10, 130, 150, [25, 25, 0, 0]);
+    ctx.fill(); ctx.stroke();
+
+    // Kepala Seno (Topi/Rambut Hitam)
+    ctx.fillStyle = '#DCA988';
+    ctx.beginPath();
+    ctx.ellipse(0, -75, 55, 62, 0, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
+
+    // Topi Beanie Hitam
+    ctx.fillStyle = '#1E293B';
+    ctx.beginPath();
+    ctx.arc(0, -95, 55, Math.PI, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
+
+    // Wajah & Senyum Nyengir Seno
+    ctx.fillStyle = '#1E1B18';
+    ctx.beginPath();
+    ctx.arc(-20, -75, 6, 0, Math.PI * 2);
+    ctx.arc(20, -75, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, -52, 16, 0, Math.PI);
+    ctx.stroke();
+
+    // Tangan Seno Memegang Mini Proyektor
+    ctx.fillStyle = '#DCA988';
+    ctx.beginPath();
+    ctx.arc(-55, 40, 15, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
+
+    // Mini Proyektor Hitam
+    ctx.fillStyle = '#0F172A';
+    ctx.fillRect(-95, 20, 48, 34);
+    ctx.strokeStyle = '#38BDF8';
+    ctx.lineWidth = 2.5;
+    ctx.strokeRect(-95, 20, 48, 34);
+
+    // Lensa Biru Proyektor
+    ctx.fillStyle = '#38BDF8';
+    ctx.beginPath();
+    ctx.arc(-95, 37, 8, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Remote di Tangan Kanan
+    ctx.fillStyle = '#DCA988';
+    ctx.beginPath();
+    ctx.arc(55, 40, 15, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#1E293B';
+    ctx.fillRect(48, 15, 18, 35);
+    ctx.fillStyle = '#EF4444';
+    ctx.beginPath();
+    ctx.arc(57, 24, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Pancaran Berkas Cahaya Hologram Proyektor ke Kiri
+    const projBeam = ctx.createLinearGradient(-95, 37, -350, -60);
+    projBeam.addColorStop(0, 'rgba(56, 189, 248, 0.7)');
+    projBeam.addColorStop(0.5, 'rgba(56, 189, 248, 0.25)');
+    projBeam.addColorStop(1, 'transparent');
+    ctx.fillStyle = projBeam;
+    ctx.beginPath();
+    ctx.moveTo(-95, 37);
+    ctx.lineTo(-420, -120);
+    ctx.lineTo(-380, 180);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+    ctx.restore();
+  }
+
+  // 4. Scene 6: Pos Ronda Malam Hari
+  function drawPosRonda(t) {
+    ctx.save();
+    drawSkyAndMoon(t);
+
+    // Tanah Gelap
+    ctx.fillStyle = '#0B111E';
+    ctx.fillRect(0, H * 0.72, W, H * 0.28);
+
+    // Bangunan Pos Ronda Kayu & Bambu
+    const px = W * 0.16, pw = W * 0.68;
+    const py = H * 0.38, ph = H * 0.36;
+
+    // Lantai Panggung Kayu / Bale-bale
+    ctx.fillStyle = '#78350F';
+    ctx.fillRect(px, py + ph - 45, pw, 35);
+    ctx.strokeStyle = '#1C1917';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(px, py + ph - 45, pw, 35);
+
+    // Tiang-tiang Pos Ronda
+    ctx.fillStyle = '#451A03';
+    ctx.fillRect(px + 20, py + 40, 24, ph - 80);
+    ctx.strokeRect(px + 20, py + 40, 24, ph - 80);
+
+    ctx.fillRect(px + pw - 44, py + 40, 24, ph - 80);
+    ctx.strokeRect(px + pw - 44, py + 40, 24, ph - 80);
+
+    ctx.fillRect(W / 2 - 12, py + 40, 24, ph - 80);
+    ctx.strokeRect(W / 2 - 12, py + 40, 24, ph - 80);
+
+    // Atap Segitiga Pos Ronda
+    ctx.fillStyle = '#854D0E';
+    ctx.beginPath();
+    ctx.moveTo(px - 35, py + 45);
+    ctx.lineTo(W / 2, py - 35);
+    ctx.lineTo(px + pw + 35, py + 45);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#1C1917';
+    ctx.lineWidth = 5;
+    ctx.stroke();
+
+    // Kentongan Kayu Menggantung
+    ctx.fillStyle = '#9A3412';
+    ctx.fillRect(px + 60, py + 75, 26, 75);
+    ctx.strokeStyle = '#431407';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(px + 60, py + 75, 26, 75);
+    // Celah Kentongan
+    ctx.fillStyle = '#1C1917';
+    ctx.fillRect(px + 71, py + 92, 5, 45);
+
+    // Lampu Bohlam Gantung Menyala Kuning Hangat
+    const lampX = W / 2, lampY = py + 70;
+    const lampGlow = ctx.createRadialGradient(lampX, lampY, 15, lampX, lampY, 280);
+    lampGlow.addColorStop(0, 'rgba(253, 224, 71, 0.65)');
+    lampGlow.addColorStop(0.5, 'rgba(234, 179, 8, 0.22)');
+    lampGlow.addColorStop(1, 'transparent');
+    ctx.fillStyle = lampGlow;
+    ctx.beginPath();
+    ctx.arc(lampX, lampY, 280, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Kabel & Bohlam
+    ctx.strokeStyle = '#0F172A';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(lampX, py + 10);
+    ctx.lineTo(lampX, lampY);
+    ctx.stroke();
+
+    ctx.fillStyle = '#FEF08A';
+    ctx.beginPath();
+    ctx.arc(lampX, lampY + 12, 14, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#EAB308';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  // Karakter Perempuan Berkerudung Oranye (Sesuai Referensi Claude)
   function drawGirlCharacter(cx, cy, t, isSpeaking = true) {
     ctx.save();
     ctx.translate(cx, cy);
 
-    // Gerakan Napas / Idle Mantap
     const breatheY = Math.sin(t * 3.5) * 4;
     ctx.translate(0, breatheY);
 
-    // 1. Badan Hoodie / Baju Oranye Hangat
+    // Badan Baju Oranye
     ctx.fillStyle = '#E06A3B';
     ctx.strokeStyle = '#1E1B18';
     ctx.lineWidth = 4;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    // Badan Utama
     ctx.beginPath();
     ctx.moveTo(-115, 230);
     ctx.lineTo(-95, 20);
@@ -389,69 +1491,48 @@
     ctx.lineTo(0, 220);
     ctx.stroke();
 
-    // 2. Lengan Kiri & Kanan Memegang Cangkir Tumbler
+    // Lengan Memegang Cangkir
     ctx.fillStyle = '#E06A3B';
     ctx.strokeStyle = '#1E1B18';
     ctx.lineWidth = 4;
-    // Lengan Kiri
     ctx.beginPath();
-    ctx.moveTo(-90, 30);
-    ctx.lineTo(-45, 130);
-    ctx.lineTo(-25, 110);
-    ctx.lineTo(-70, 25);
-    ctx.closePath();
-    ctx.fill(); ctx.stroke();
+    ctx.moveTo(-90, 30); ctx.lineTo(-45, 130); ctx.lineTo(-25, 110); ctx.lineTo(-70, 25);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
 
-    // Lengan Kanan
     ctx.beginPath();
-    ctx.moveTo(90, 30);
-    ctx.lineTo(45, 130);
-    ctx.lineTo(25, 110);
-    ctx.lineTo(70, 25);
-    ctx.closePath();
-    ctx.fill(); ctx.stroke();
+    ctx.moveTo(90, 30); ctx.lineTo(45, 130); ctx.lineTo(25, 110); ctx.lineTo(70, 25);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
 
-    // Cangkir / Tumbler Minuman di Tengah Dada
+    // Cangkir Tumbler
     ctx.fillStyle = '#334155';
     ctx.fillRect(-28, 75, 56, 85);
     ctx.strokeStyle = '#0F172A';
     ctx.lineWidth = 3.5;
     ctx.strokeRect(-28, 75, 56, 85);
-    // Tutup Tumbler
     ctx.fillStyle = '#1E293B';
     ctx.fillRect(-32, 62, 64, 15);
     ctx.strokeRect(-32, 62, 64, 15);
 
-    // Dua Tangan Kartun Mitten (#C89D7C) Memegang Cangkir
+    // Tangan Mitten (#C89D7C)
     ctx.fillStyle = '#C89D7C';
     ctx.strokeStyle = '#1E1B18';
     ctx.lineWidth = 3.5;
-    // Tangan Kiri
-    ctx.beginPath();
-    ctx.arc(-26, 115, 18, 0, Math.PI * 2);
-    ctx.fill(); ctx.stroke();
-    // Tangan Kanan
-    ctx.beginPath();
-    ctx.arc(26, 115, 18, 0, Math.PI * 2);
-    ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(-26, 115, 18, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(26, 115, 18, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
 
-    // 3. Kepala & Kerudung Oranye Khas
-    // Lingkaran Luar Kerudung Oranye
+    // Kepala & Kerudung Oranye
     ctx.fillStyle = '#E06A3B';
     ctx.strokeStyle = '#1E1B18';
     ctx.lineWidth = 4.5;
     ctx.beginPath();
     ctx.ellipse(0, -115, 115, 130, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
+    ctx.fill(); ctx.stroke();
 
-    // Lipatan Bawah Kerudung di Leher
     ctx.beginPath();
     ctx.moveTo(-75, -15);
     ctx.quadraticCurveTo(0, 10, 75, -15);
     ctx.quadraticCurveTo(0, 30, -75, -15);
-    ctx.fill();
-    ctx.stroke();
+    ctx.fill(); ctx.stroke();
 
     // Lubang Wajah Oval Krem Kulit (#DCA988)
     ctx.fillStyle = '#DCA988';
@@ -459,10 +1540,9 @@
     ctx.lineWidth = 4;
     ctx.beginPath();
     ctx.ellipse(0, -115, 80, 88, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
+    ctx.fill(); ctx.stroke();
 
-    // Inner Ciput / Rambut Gelap Halus di Dahi
+    // Rambut/Ciput Gelap
     ctx.fillStyle = '#292524';
     ctx.beginPath();
     ctx.arc(0, -145, 68, Math.PI * 0.9, Math.PI * 2.1);
@@ -477,23 +1557,21 @@
     ctx.moveTo(12, -148); ctx.quadraticCurveTo(28, -156, 45, -148);
     ctx.stroke();
 
-    // Dua Mata Hitam Oval Ekspresif (Sesuai Referensi)
+    // Mata Hitam Oval Ekspresif
     ctx.fillStyle = '#1E1B18';
     ctx.beginPath();
     ctx.ellipse(-30, -125, 11, 16, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
     ctx.ellipse(30, -125, 11, 16, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // Pantulan Cahaya Putih di Mata
+    // Pantulan Mata
     ctx.fillStyle = '#FFFFFF';
     ctx.beginPath();
     ctx.arc(-27, -130, 4, 0, Math.PI * 2);
     ctx.arc(33, -130, 4, 0, Math.PI * 2);
     ctx.fill();
 
-    // Mulut Berbicara / Kaget Bentuk "O" Bergerak
+    // Mulut Berbicara Bentuk "O"
     const mouthO = isSpeaking ? (Math.sin(t * 14) * 0.5 + 0.5) : 0.2;
     ctx.fillStyle = '#1E1B18';
     ctx.beginPath();
@@ -503,69 +1581,8 @@
     ctx.restore();
   }
 
-  // ── Close-up Jendela Kamar Lantai Atas (Adegan 2) ──
-  function drawWindowCloseUp(t) {
-    ctx.save();
-    // Dinding Kamar
-    ctx.fillStyle = '#161F30';
-    ctx.fillRect(0, 0, W, H);
-
-    // Frame Jendela Besar
-    const winW = W * 0.74, winH = H * 0.54;
-    const winX = (W - winW) / 2, winY = H * 0.18;
-
-    // Kaca Jendela Gelap dengan Pantulan Remang
-    const kg = ctx.createLinearGradient(winX, winY, winX + winW, winY + winH);
-    kg.addColorStop(0, '#0F172A');
-    kg.addColorStop(0.5, '#1E293B');
-    kg.addColorStop(1, '#0A0F1D');
-    ctx.fillStyle = kg;
-    ctx.fillRect(winX, winY, winW, winH);
-
-    // Cahaya Kuning Hangat Samar dari Belakang
-    const gCahaya = ctx.createRadialGradient(winX + winW * 0.75, winY + winH * 0.45, 40, winX + winW * 0.75, winY + winH * 0.45, 260);
-    gCahaya.addColorStop(0, 'rgba(217, 119, 6, 0.45)');
-    gCahaya.addColorStop(1, 'transparent');
-    ctx.fillStyle = gCahaya;
-    ctx.fillRect(winX, winY, winW, winH);
-
-    // Tirai Bergerak Halus
-    const tiraiWave = Math.sin(t * 4) * 14;
-    ctx.fillStyle = 'rgba(254, 243, 199, 0.16)';
-    ctx.beginPath();
-    ctx.moveTo(winX + 20, winY);
-    ctx.quadraticCurveTo(winX + 80 + tiraiWave, winY + winH * 0.5, winX + 40, winY + winH);
-    ctx.lineTo(winX, winY + winH);
-    ctx.lineTo(winX, winY);
-    ctx.closePath();
-    ctx.fill();
-
-    // Kusen Jendela 4 Panel
-    ctx.strokeStyle = '#334155';
-    ctx.lineWidth = 16;
-    ctx.strokeRect(winX, winY, winW, winH);
-
-    // Palang Salib Kusen
-    ctx.lineWidth = 10;
-    ctx.beginPath();
-    ctx.moveTo(winX + winW / 2, winY);
-    ctx.lineTo(winX + winW / 2, winY + winH);
-    ctx.moveTo(winX, winY + winH / 2);
-    ctx.lineTo(winX + winW, winY + winH / 2);
-    ctx.stroke();
-
-    // Ambang Jendela
-    ctx.fillStyle = '#1E293B';
-    ctx.fillRect(winX - 30, winY + winH, winW + 60, 32);
-    ctx.strokeStyle = '#0F172A';
-    ctx.lineWidth = 4;
-    ctx.strokeRect(winX - 30, winY + winH, winW + 60, 32);
-
-    ctx.restore();
-  }
-
-  // ── Overlay UI & Tipografi 1:1 Sesuai Referensi ──
-  function drawOverlayUI(t, sceneData) {
+  // Overlay HUD & Tipografi 1:1
+  function drawOverlayUI(t, locationText, activeSeg) {
     ctx.save();
 
     // 1. HUD Kiri Atas: Waktu & Tanggal
@@ -580,7 +1597,7 @@
 
     ctx.font = '800 15px system-ui, sans-serif';
     ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-    ctx.fillText('RUMAH NOMOR 13', 55, 142);
+    ctx.fillText(locationText, 55, 142);
 
     // 2. Badge Kanan Atas: PART 1 & Watermark
     ctx.fillStyle = '#E11D48';
@@ -609,49 +1626,66 @@
     ctx.lineJoin = 'miter';
     ctx.miterLimit = 2;
 
-    // Baris 1: KONON, RUMAH NO. 13 (Putih)
     ctx.strokeText('KONON, RUMAH NO. 13', W / 2, 205);
     ctx.fillStyle = '#FFFFFF';
     ctx.fillText('KONON, RUMAH NO. 13', W / 2, 205);
 
-    // Baris 2: KOSONG 10 TAHUN (Kuning Emas #FACC15)
     ctx.font = '900 48px Impact, "Arial Black", sans-serif';
     ctx.strokeText('KOSONG 10 TAHUN', W / 2, 268);
     ctx.fillStyle = '#FACC15';
     ctx.fillText('KOSONG 10 TAHUN', W / 2, 268);
     ctx.restore();
 
-    // 4. Subtitle Bersih di Bagian Bawah
-    if (sceneData && sceneData.sub) {
+    // 4. Subtitle Karaoke Word-by-Word di Bagian Bawah
+    if (activeSeg && activeSeg.words && activeSeg.words.length > 0) {
       ctx.save();
       ctx.font = '800 36px system-ui, -apple-system, sans-serif';
-      ctx.textAlign = 'center';
+      ctx.textAlign = 'left';
       ctx.textBaseline = 'bottom';
       ctx.lineWidth = 8;
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.9)';
-      ctx.fillStyle = '#FFFFFF';
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.95)';
+      ctx.lineJoin = 'round';
 
-      // Bungkus Teks Subtitle Jika Terlalu Panjang
-      const words = sceneData.sub.split(' ');
-      let line = '';
+      // Bungkus baris subtitle kata-per-kata
+      const words = activeSeg.words;
+      const spaceWidth = ctx.measureText(' ').width;
       const lines = [];
-      for (const w of words) {
-        const testLine = line + (line ? ' ' : '') + w;
-        if (ctx.measureText(testLine).width > W - 140) {
-          lines.push(line);
-          line = w;
+      let currentLine = [];
+      let currentLineWidth = 0;
+
+      for (let i = 0; i < words.length; i++) {
+        const wObj = words[i];
+        const wWidth = ctx.measureText(wObj.w).width;
+        if (currentLineWidth + wWidth + spaceWidth > W - 140 && currentLine.length > 0) {
+          lines.push({ words: currentLine, totalWidth: currentLineWidth });
+          currentLine = [wObj];
+          currentLineWidth = wWidth;
         } else {
-          line = testLine;
+          currentLine.push(wObj);
+          currentLineWidth += wWidth + (currentLine.length > 1 ? spaceWidth : 0);
         }
       }
-      if (line) lines.push(line);
+      if (currentLine.length > 0) {
+        lines.push({ words: currentLine, totalWidth: currentLineWidth });
+      }
 
       const bottomY = H - 110;
-      const lineHeight = 50;
-      for (let i = 0; i < lines.length; i++) {
-        const ly = bottomY - (lines.length - 1 - i) * lineHeight;
-        ctx.strokeText(lines[i], W / 2, ly);
-        ctx.fillText(lines[i], W / 2, ly);
+      const lineHeight = 52;
+      for (let l = 0; l < lines.length; l++) {
+        const lineObj = lines[l];
+        let curX = (W - lineObj.totalWidth) / 2;
+        const ly = bottomY - (lines.length - 1 - l) * lineHeight;
+
+        for (let j = 0; j < lineObj.words.length; j++) {
+          const item = lineObj.words[j];
+          const isHighlight = t >= item.s && t <= item.e + 0.12;
+
+          ctx.strokeText(item.w, curX, ly);
+          ctx.fillStyle = isHighlight ? '#FACC15' : '#FFFFFF';
+          ctx.fillText(item.w, curX, ly);
+
+          curX += ctx.measureText(item.w).width + spaceWidth;
+        }
       }
       ctx.restore();
     }
@@ -659,50 +1693,75 @@
     ctx.restore();
   }
 
-  // ── Engine Render Deterministik Utama ──
+  // Engine Render Utama Deterministik
   window.__draw = function(t) {
     ctx.clearRect(0, 0, W, H);
 
-    // Tentukan adegan aktif berdasarkan waktu t
-    let activeScene = TIME_ADEPAN[0];
-    for (const adg of TIME_ADEPAN) {
-      if (t >= adg.start && t < adg.end) {
-        activeScene = adg;
+    // Cari Subtitle Segment Aktif
+    let activeSeg = null;
+    for (let i = 0; i < SUBTITLES.length; i++) {
+      if (t >= SUBTITLES[i].start && t < SUBTITLES[i].end + 0.25) {
+        activeSeg = SUBTITLES[i];
         break;
       }
     }
-    if (t >= TIME_ADEPAN[TIME_ADEPAN.length - 1].end) {
-      activeScene = TIME_ADEPAN[TIME_ADEPAN.length - 1];
+    if (!activeSeg) {
+      for (let i = 0; i < SUBTITLES.length; i++) {
+        if (t < SUBTITLES[i].end) { activeSeg = SUBTITLES[i]; break; }
+      }
     }
+    if (!activeSeg) activeSeg = SUBTITLES[SUBTITLES.length - 1];
 
-    // 1. Render Latar Belakang & Rumah
-    if (activeScene.scene === 2) {
-      // Adegan 2: Close-up Jendela Lantai Atas
-      drawWindowCloseUp(t);
-      // Karakter terlihat di bagian bawah melihat ke jendela
-      drawGirlCharacter(W / 2, H * 0.94, t, true);
-    } else {
-      // Adegan 1, 3, 4, 5, 6: Halaman Depan Rumah No. 13
+    // Tentukan Lokasi & Latar Visual Berdasarkan Waktu t
+    let locText = 'HALAMAN RUMAH NO. 13';
+
+    if (t < 11.2) {
+      // Adegan 1: Halaman Depan Rumah No. 13
+      locText = 'HALAMAN RUMAH NO. 13';
       drawSkyAndMoon(t);
       drawTrees();
-      drawHouseNo13(t);
-      // Karakter Perempuan Berkerudung Oranye Berdiri di Halaman Depan
+      drawHouseNo13(t, false);
       drawGirlCharacter(W / 2, H * 0.77, t, true);
+    } else if (t < 21.0) {
+      // Adegan 2: Jendela Kamar Lantai Atas
+      locText = 'JENDELA LANTAI 2';
+      drawWindowCloseUp(t);
+      drawGirlCharacter(W / 2, H * 0.94, t, true);
+    } else if (t < 32.6) {
+      // Adegan 3: Halaman Depan Rumah + Sorot Cahaya Senter
+      locText = 'HALAMAN RUMAH NO. 13';
+      drawSkyAndMoon(t);
+      drawTrees();
+      drawHouseNo13(t, true);
+      drawGirlCharacter(W / 2, H * 0.77, t, true);
+    } else if (t < 53.4) {
+      // Adegan 4 & 5: Samping Rumah & Seno dengan Proyektor
+      locText = 'SAMPING BANGUNAN RUMAH';
+      drawSideHouseAndSeno(t);
+      drawGirlCharacter(W * 0.28, H * 0.80, t, false);
+    } else {
+      // Adegan 6: Pos Ronda Malam Hari
+      locText = 'POS RONDA';
+      drawPosRonda(t);
+      drawGirlCharacter(W * 0.35, H * 0.78, t, true);
     }
 
-    // 2. Render Overlay HUD & Tipografi 1:1
-    drawOverlayUI(t, activeScene);
+    // Render Overlay UI, HUD Dinamis, dan Subtitle Karaoke
+    drawOverlayUI(t, locText, activeSeg);
   };
 
-  // Preview Realtime di Browser jika dibuka langsung
-  let startTime = null;
-  function loop(now) {
-    if (!startTime) startTime = now;
-    const t = (now - startTime) / 1000;
-    window.__draw(t % 64.36);
+  // JALANKAN LOOP HANYA JIKA DIBUKA MANUAL DENGAN ?preview=1
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('preview') === '1') {
+    let startTime = null;
+    function loop(now) {
+      if (!startTime) startTime = now;
+      const t = (now - startTime) / 1000;
+      window.__draw(t % 64.36);
+      requestAnimationFrame(loop);
+    }
     requestAnimationFrame(loop);
   }
-  requestAnimationFrame(loop);
 </script>
 </body>
 </html>
