@@ -11,6 +11,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
+import { STYLE_PRESETS, getPreset } from './presets';
 
 export const FPS = 30;
 
@@ -53,6 +54,8 @@ export type PropsAnimasi = {
   adegan: AdeganAnimasi[];
   rasio?: 'vertikal' | 'landscape';
   aksen?: string;
+  gaya?: string;
+  palet?: string[];
 };
 
 const JEDA = 0.3; // detik jeda antar adegan
@@ -576,6 +579,229 @@ const LatarKota: React.FC<{ width: number; height: number }> = React.memo(({ wid
   </div>
 ));
 
+// ── Latar Rumah, Halaman & Jendela Kamar (Adaptive Silhouette & Ambient Architecture) ──
+const LatarRumahDanHalaman: React.FC<{
+  latarKey: string;
+  width: number;
+  height: number;
+  frame: number;
+  palet?: string[];
+}> = React.memo(({ latarKey, width, height, frame, palet }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const l = (latarKey || '').toLowerCase();
+  const cSkyTop = palet?.[0] || '#0B132B';
+  const cSkyMid = palet?.[1] || '#1C2541';
+  const cAksen = palet?.[2] || '#FACC15';
+  const cTanah = '#0A0E1A';
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // 1. Langit Malam / Misteri Atmosferik
+    const sky = ctx.createLinearGradient(0, 0, 0, height);
+    sky.addColorStop(0, cSkyTop);
+    sky.addColorStop(0.55, cSkyMid);
+    sky.addColorStop(1, cTanah);
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, width, height);
+
+    // Bintang-bintang / partikel malam
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    for (let i = 0; i < 20; i++) {
+      const bx = (i * 137.5) % width;
+      const by = (i * 83.1) % (height * 0.45);
+      ctx.fillRect(bx, by, (i % 2) + 1.5, (i % 2) + 1.5);
+    }
+
+    // Bulan / Cahaya Remang di Sudut Atas
+    const moonGrad = ctx.createRadialGradient(width * 0.8, height * 0.16, 20, width * 0.8, height * 0.16, 120);
+    moonGrad.addColorStop(0, cAksen + '44');
+    moonGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = moonGrad;
+    ctx.beginPath();
+    ctx.arc(width * 0.8, height * 0.16, 120, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#FEF9C3';
+    ctx.beginPath();
+    ctx.arc(width * 0.8, height * 0.16, 36, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Bangunan Rumah & Lantai Atas / Jendela
+    const isJendela = l.includes('jendela') || l.includes('kamar');
+    const isSamping = l.includes('samping') || l.includes('lorong') || l.includes('gang');
+
+    if (isJendela) {
+      // Tampilan Dekat (Close-up) Jendela Kamar Lantai Atas
+      ctx.fillStyle = '#111827';
+      // Dinding kamar / kusen
+      ctx.fillRect(0, 0, width, height);
+
+      // Frame Jendela Besar
+      const winW = width * 0.72;
+      const winH = height * 0.52;
+      const winX = (width - winW) / 2;
+      const winY = height * 0.18;
+
+      ctx.fillStyle = '#030712';
+      ctx.fillRect(winX, winY, winW, winH);
+
+      // Kaca Jendela dengan pantulan / bayangan tirai
+      const glassGrad = ctx.createLinearGradient(winX, winY, winX + winW, winY + winH);
+      glassGrad.addColorStop(0, 'rgba(56, 189, 248, 0.12)');
+      glassGrad.addColorStop(0.5, 'rgba(250, 204, 21, 0.05)');
+      glassGrad.addColorStop(1, 'rgba(15, 23, 42, 0.8)');
+      ctx.fillStyle = glassGrad;
+      ctx.fillRect(winX, winY, winW, winH);
+
+      // Kusen Jendela Kayu
+      ctx.strokeStyle = '#374151';
+      ctx.lineWidth = 14;
+      ctx.strokeRect(winX, winY, winW, winH);
+      // Palang salib kusen
+      ctx.beginPath();
+      ctx.moveTo(winX + winW / 2, winY);
+      ctx.lineTo(winX + winW / 2, winY + winH);
+      ctx.moveTo(winX, winY + winH / 2);
+      ctx.lineTo(winX + winW, winY + winH / 2);
+      ctx.stroke();
+
+      // Tirai bergoyang halus
+      const tiraiGoyang = Math.sin(frame / 15) * 12;
+      ctx.fillStyle = 'rgba(243, 244, 246, 0.18)';
+      ctx.beginPath();
+      ctx.moveTo(winX, winY);
+      ctx.quadraticCurveTo(winX + 60 + tiraiGoyang, winY + winH * 0.6, winX + 40, winY + winH);
+      ctx.lineTo(winX, winY + winH);
+      ctx.closePath();
+      ctx.fill();
+
+      // Ambang Jendela Bawah
+      ctx.fillStyle = '#1F2937';
+      ctx.fillRect(winX - 25, winY + winH, winW + 50, 28);
+    } else {
+      // Halaman Rumah Kosong / Samping Bangunan Rumah
+      // Siluet Atap dan Bangunan Rumah di Tengah
+      ctx.fillStyle = '#0F172A';
+      ctx.beginPath();
+      if (isSamping) {
+        // Tembok tinggi di sebelah kiri / samping lorong
+        ctx.moveTo(0, height * 0.1);
+        ctx.lineTo(width * 0.45, height * 0.28);
+        ctx.lineTo(width * 0.45, height * 0.75);
+        ctx.lineTo(0, height * 0.75);
+      } else {
+        // Tampak Depan Rumah Kosong 2 Lantai
+        ctx.moveTo(width * 0.12, height * 0.46);
+        ctx.lineTo(width * 0.5, height * 0.24);
+        ctx.lineTo(width * 0.88, height * 0.46);
+        ctx.lineTo(width * 0.88, height * 0.75);
+        ctx.lineTo(width * 0.12, height * 0.75);
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      // Jendela Lantai 2 Rumah Kosong (Bercahaya Samar / Menyeramkan)
+      const jY = isSamping ? height * 0.35 : height * 0.42;
+      const jX = isSamping ? width * 0.18 : width * 0.42;
+      ctx.fillStyle = cAksen + '33';
+      ctx.fillRect(jX, jY, width * 0.16, height * 0.11);
+      ctx.strokeStyle = '#0F172A';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(jX, jY, width * 0.16, height * 0.11);
+
+      // Pagar Kayu / Ranting Halaman
+      ctx.strokeStyle = '#1E293B';
+      ctx.lineWidth = 6;
+      for (let p = 0; p < width; p += 55) {
+        ctx.beginPath();
+        ctx.moveTo(p, height * 0.75);
+        ctx.lineTo(p, height * 0.65 + ((p * 7) % 25));
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.moveTo(0, height * 0.69);
+      ctx.lineTo(width, height * 0.69);
+      ctx.stroke();
+
+      // Semak-semak Samping Rumah
+      ctx.fillStyle = '#064E3B';
+      for (let s = 0; s < 4; s++) {
+        ctx.beginPath();
+        ctx.arc(width * 0.72 + s * 70, height * 0.74, 55 + (s % 2) * 15, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Tanah / Rumput Gelap
+      ctx.fillStyle = '#060B14';
+      ctx.fillRect(0, height * 0.74, width, height * 0.26);
+
+      // Sorotan Senter Andre / Cahaya Temaram
+      const senterGrad = ctx.createRadialGradient(width * 0.5, height * 0.72, 30, width * 0.5, height * 0.72, 280);
+      senterGrad.addColorStop(0, 'rgba(250, 204, 21, 0.22)');
+      senterGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = senterGrad;
+      ctx.beginPath();
+      ctx.arc(width * 0.5, height * 0.72, 280, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }, [width, height, frame, latarKey, cSkyTop, cSkyMid, cAksen]);
+
+  return <canvas ref={canvasRef} width={width} height={height} style={{ position: 'absolute', top: 0, left: 0 }} />;
+});
+
+// ── Latar Dinamis Universal Generatif (Menyesuaikan Palet Tema & Kata Kunci) ──
+const LatarDinamisGeneratif: React.FC<{
+  latarKey: string;
+  width: number;
+  height: number;
+  frame: number;
+  palet?: string[];
+}> = React.memo(({ latarKey, width, height, frame, palet }) => {
+  const bg1 = palet?.[0] || '#0F172A';
+  const bg2 = palet?.[1] || '#1E293B';
+  const aksen = palet?.[2] || '#38BDF8';
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        background: `linear-gradient(180deg, ${bg1} 0%, ${bg2} 60%, #020617 100%)`,
+        overflow: 'hidden',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: '25%',
+          left: '50%',
+          width: width * 0.8,
+          height: width * 0.8,
+          transform: 'translate(-50%, -50%)',
+          background: `radial-gradient(circle, ${aksen}22 0%, transparent 70%)`,
+          borderRadius: '50%',
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          height: height * 0.26,
+          background: 'rgba(2, 6, 23, 0.85)',
+          borderTop: `3px solid ${aksen}44`,
+        }}
+      />
+    </div>
+  );
+});
+
 // ── Latar Stickman Motion Explainer (Master Production Blueprint) ─────────
 const LatarStickmanExplainer: React.FC<{
   latarKey: string;
@@ -1003,22 +1229,37 @@ const LatarStickmanExplainer: React.FC<{
 });
 
 // Helper Pemilih Latar Dinamis (Resolves Indonesian setting keywords automatically)
-const renderLatarDinamis = (latarKey: string | undefined, width: number, height: number, frame: number) => {
-  const l = (latarKey || '').toLowerCase();
+const renderLatarDinamis = (
+  latarKey: string | undefined,
+  width: number,
+  height: number,
+  frame: number,
+  palet?: string[],
+  callout?: string
+) => {
+  const l = ((latarKey || '') + ' ' + (callout || '')).toLowerCase();
   
-  // 1. Stickman Motion Explainer Scenarios (Senayan, Meja Rapat, Bola Salju, Podium, Whiteboard, Outro)
+  // 1. Suasana Rumah, Halaman, Kamar, Jendela, Bangunan, Lorong, Gang
+  if (
+    l.includes('rumah') || l.includes('jendela') || l.includes('kamar') ||
+    l.includes('halaman') || l.includes('samping') || l.includes('bangunan') ||
+    l.includes('gang') || l.includes('lorong') || l.includes('semak')
+  ) {
+    return <LatarRumahDanHalaman latarKey={l} width={width} height={height} frame={frame} palet={palet} />;
+  }
+
+  // 2. Stickman Motion Explainer Scenarios (Senayan, Meja Rapat, Bola Salju, Podium, Whiteboard, Outro)
   if (
     l.includes('senayan') || l.includes('parlemen') || l.includes('breaking') ||
-    l.includes('meja') || l.includes('dokumen') || l.includes('surat') ||
-    l.includes('salju') || l.includes('stempel') || l.includes('podium') ||
-    l.includes('jam') || l.includes('pasir') || l.includes('kosong') ||
-    l.includes('whiteboard') || l.includes('tahap') || l.includes('outro') ||
-    l.includes('gerbang')
+    l.includes('meja-rapat') || l.includes('dokumen') || l.includes('surat-resmi') ||
+    l.includes('bola-salju') || l.includes('stempel-hukum') || l.includes('podium') ||
+    l.includes('jam-pasir') || l.includes('whiteboard') || l.includes('tahap-sidang') ||
+    l.includes('outro-channel') || l.includes('gerbang-dpr')
   ) {
     return <LatarStickmanExplainer latarKey={l} width={width} height={height} frame={frame} />;
   }
 
-  // 2. Rural & Traditional Scenarios
+  // 3. Rural & Traditional Scenarios
   if (l.includes('warung') || l.includes('kedai') || l.includes('siforejo')) {
     return <LatarWarungDesa width={width} height={height} frame={frame} />;
   }
@@ -1040,8 +1281,8 @@ const renderLatarDinamis = (latarKey: string | undefined, width: number, height:
   if (l.includes('blueprint')) {
     return <LatarBlueprint width={width} height={height} />;
   }
-  // Default fallback jika tema cerita pedesaan/lokal
-  return <LatarWarungDesa width={width} height={height} frame={frame} />;
+  // Universal fallback yang adaptif terhadap palet gaya/ekstraksi
+  return <LatarDinamisGeneratif latarKey={l} width={width} height={height} frame={frame} palet={palet} />;
 };
 
 // ── Fungsi Render Karakter Tunggal (Kinetic Rig Engine) ────────────────────
@@ -1688,10 +1929,30 @@ const SingleAdeganAnimasi: React.FC<{
 
   const isLandscape = width > height;
 
+  // Integrasi Style Preset (Ekstraksi Video / Tema)
+  const namaGaya = propsUtama.gaya || (adegan as any).gaya || (propsUtama as any).tema;
+  const presetAktif = namaGaya && STYLE_PRESETS[namaGaya] ? STYLE_PRESETS[namaGaya] : undefined;
+  const paletAktif = propsUtama.palet || presetAktif?.palette_hex;
+
   return (
     <AbsoluteFill style={{ overflow: 'hidden' }}>
-      {/* 1. Latar Belakang Dinamis (Warung Desa, Senayan, Meja Rapat, dll.) */}
-      {renderLatarDinamis(adegan.latar, width, height, steppedFrame)}
+      {/* 0. Preset Style Latar (Jika ada dari preset ekstraksi video) */}
+      {presetAktif && presetAktif.Latar ? (
+        <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+          <presetAktif.Latar
+            f={steppedFrame}
+            i={0}
+            n={1}
+            aksen={presetAktif.aksen || '#38BDF8'}
+            judul={adegan.judul}
+          />
+        </div>
+      ) : null}
+
+      {/* 1. Latar Belakang Dinamis (Rumah/Jendela, Warung Desa, Senayan, dll.) */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: presetAktif?.Latar ? 1 : 0, opacity: presetAktif?.Latar ? 0.85 : 1 }}>
+        {renderLatarDinamis(adegan.latar, width, height, steppedFrame, paletAktif, adegan.callout || adegan.judul)}
+      </div>
 
       {/* 2. Top Callout Badge Layar Bersatu */}
       <div

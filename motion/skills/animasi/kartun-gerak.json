@@ -1,0 +1,18 @@
+{
+  "id": "kartun-gerak",
+  "nama": "Kartun Gerak",
+  "kategori": "animasi-bergerak",
+  "deskripsi": "Hasil ekstraksi gaya video animasi bergerak (kartun-gerak) dengan pacing ~3.0s.",
+  "rigDefault": "toon-3d",
+  "latarDefault": "blueprint",
+  "pacingSec": 3.0,
+  "aksen": "#38BDF8",
+  "badge": "Extracted Animation",
+  "thumbnail": "/aset/gaya/kartun-gerak.jpg",
+  "palette_hex": [],
+  "fiturVisual": [
+    "Kinetic Character Rig",
+    "Shading Cel-Shaded",
+    "Deterministik Memory Render"
+  ]
+}

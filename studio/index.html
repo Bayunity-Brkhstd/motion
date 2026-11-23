@@ -6963,16 +6963,15 @@ Banyak orang menyerah di hari ke-14 karena kehilangan motivasi awal...</pre>
           const namaLatar = m[2].trim();
           const teksNarasi = m[3].trim();
           let latarSlug = namaLatar.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-          if (latarSlug.includes('sekolah') || latarSlug.includes('halaman')) latarSlug = 'jalan-desa';
-          else if (latarSlug.includes('kelas') || latarSlug.includes('kantor') || latarSlug.includes('ruang')) latarSlug = 'warung-desa';
-          else if (!latarSlug) latarSlug = 'warung-desa';
+          if (!latarSlug) latarSlug = 'halaman-rumah';
 
           return {
             judul: `Adegan ${no}: ${namaLatar.slice(0, 24)}`,
             teks: teksNarasi,
             dialog: '',
             durasi_detik: Math.max(3.0, Math.min(8.0, Math.round(teksNarasi.split(/\s+/).length * 0.45 * 10) / 10)),
-            latar: latarSlug,
+            latar: namaLatar,
+            latarSlug: latarSlug,
             callout: `📍 ${namaLatar.toUpperCase()}`,
             tokoh_ada_berapa: 1,
             tokoh1_aksi: idx === 0 ? 'bicara' : 'tunjuk',
