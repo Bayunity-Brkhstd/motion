@@ -1420,6 +1420,203 @@ const LatarStickmanExplainer: React.FC<{
   return <canvas ref={canvasRef} width={width} height={height} style={{ position: 'absolute', top: 0, left: 0 }} />;
 });
 
+// ── Latar Digital Lab & Microchip / Hardware Tech ───────────────────────────
+const LatarTechLabChip: React.FC<{
+  latarKey: string;
+  width: number;
+  height: number;
+  frame: number;
+  palet?: string[];
+}> = React.memo(({ latarKey, width, height, frame, palet }) => {
+  const isChip = latarKey.includes('chip') || latarKey.includes('mikro');
+  const aksen = palet?.[2] || (isChip ? '#00F5D4' : '#38BDF8');
+  const aksenSec = isChip ? '#A855F7' : '#00F5D4';
+  const pulse = Math.sin(frame * 0.1) * 0.2 + 0.8;
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        background: 'linear-gradient(180deg, #030712 0%, #0B132B 50%, #030712 100%)',
+        overflow: 'hidden',
+      }}
+    >
+      {/* 1. Perspective Tech Grid (Lantai Digital) */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          height: height * 0.45,
+          perspective: 350,
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            inset: '-50% -50% 0 -50%',
+            transform: 'rotateX(65deg)',
+            backgroundImage: `
+              linear-gradient(to right, ${aksen}25 1px, transparent 1px),
+              linear-gradient(to bottom, ${aksen}25 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px',
+            maskImage: 'linear-gradient(to bottom, transparent, black 40%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 40%)',
+          }}
+        />
+        {/* Glow floor horizon */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 3,
+            background: `linear-gradient(90deg, transparent, ${aksen}, transparent)`,
+            boxShadow: `0 0 24px ${aksen}`,
+          }}
+        />
+      </div>
+
+      {/* 2. Visual Inti: Microchip Processor / Core Matrix atau Hologram Lab */}
+      <svg
+        width={width}
+        height={height}
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+      >
+        <defs>
+          <radialGradient id="chipGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor={aksen} stopOpacity="0.35" />
+            <stop offset="100%" stopColor={aksen} stopOpacity="0" />
+          </radialGradient>
+          <filter id="neonBlur" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Central Glow Aura */}
+        <circle cx={width / 2} cy={height * 0.42} r={280} fill="url(#chipGlow)" />
+
+        {isChip ? (
+          /* ── Modus Ruang Mikro Chip: Silicon Die & Matrix Array ── */
+          <g transform={`translate(${width / 2}, ${height * 0.42})`}>
+            {/* PCB Trace Bus Lines radiating out */}
+            {[-180, -120, -60, 0, 60, 120, 180].map((deg, i) => {
+              const rad = (deg * Math.PI) / 180;
+              const x1 = Math.cos(rad) * 140;
+              const y1 = Math.sin(rad) * 140;
+              const x2 = Math.cos(rad) * 360;
+              const y2 = Math.sin(rad) * 360;
+              return (
+                <g key={i}>
+                  <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={aksen} strokeWidth="2" strokeOpacity="0.4" strokeDasharray="6,4" />
+                  <circle cx={x2} cy={y2} r="4" fill={aksenSec} opacity="0.8" />
+                </g>
+              );
+            })}
+
+            {/* Processor Die Base (Outer Shell) */}
+            <rect x="-140" y="-140" width="280" height="280" rx="16" fill="#0B132B" stroke={aksen} strokeWidth="3" filter="url(#neonBlur)" />
+            {/* Gold Edge Connector Pins */}
+            {Array.from({ length: 8 }).map((_, idx) => (
+              <g key={idx}>
+                {/* Top pins */}
+                <rect x={-110 + idx * 30} y="-155" width="14" height="12" rx="2" fill="#FACC15" opacity="0.8" />
+                {/* Bottom pins */}
+                <rect x={-110 + idx * 30} y="143" width="14" height="12" rx="2" fill="#FACC15" opacity="0.8" />
+                {/* Left pins */}
+                <rect x="-155" y={-110 + idx * 30} width="12" height="14" rx="2" fill="#FACC15" opacity="0.8" />
+                {/* Right pins */}
+                <rect x="143" y={-110 + idx * 30} width="12" height="14" rx="2" fill="#FACC15" opacity="0.8" />
+              </g>
+            ))}
+
+            {/* Inner Silicon Wafer Core */}
+            <rect x="-105" y="-105" width="210" height="210" rx="10" fill="#030712" stroke={aksenSec} strokeWidth="2" strokeDasharray="8,4" />
+
+            {/* 4x4 Parallel Core Matrix Blocks (CUDA / Tensor Grid) */}
+            {Array.from({ length: 4 }).map((_, row) =>
+              Array.from({ length: 4 }).map((__, col) => {
+                const coreActive = (row + col + Math.floor(frame / 6)) % 3 === 0;
+                return (
+                  <rect
+                    key={`${row}-${col}`}
+                    x={-85 + col * 45}
+                    y={-85 + row * 45}
+                    width="35"
+                    height="35"
+                    rx="4"
+                    fill={coreActive ? aksen : '#1E293B'}
+                    opacity={coreActive ? pulse : 0.4}
+                  />
+                );
+              })
+            )}
+
+            {/* Core Chip Label */}
+            <text x="0" y="125" textAnchor="middle" fill="#FFFFFF" fontSize="13" fontWeight="900" letterSpacing="2" fontFamily="monospace">
+              TENSOR / CUDA DIE ARCHITECTURE
+            </text>
+          </g>
+        ) : (
+          /* ── Modus Laboratorium Digital: Server Racks & Holographic Tech Hub ── */
+          <g>
+            {/* Left & Right Server Racks */}
+            <rect x="40" y={height * 0.2} width="110" height={height * 0.55} rx="8" fill="#0B132B" stroke="#1E293B" strokeWidth="2" />
+            <rect x={width - 150} y={height * 0.2} width="110" height={height * 0.55} rx="8" fill="#0B132B" stroke="#1E293B" strokeWidth="2" />
+
+            {/* Server Rack Status Blinkers */}
+            {Array.from({ length: 12 }).map((_, idx) => (
+              <g key={idx}>
+                <line x1="55" y1={height * 0.23 + idx * 36} x2="135" y2={height * 0.23 + idx * 36} stroke="#1E293B" strokeWidth="2" />
+                <circle cx="65" cy={height * 0.23 + idx * 36} r="3" fill={(idx + frame) % 4 === 0 ? '#10B981' : '#38BDF8'} />
+                <circle cx="78" cy={height * 0.23 + idx * 36} r="3" fill={(idx + frame) % 5 === 0 ? '#F59E0B' : '#64748B'} />
+
+                <line x1={width - 135} y1={height * 0.23 + idx * 36} x2={width - 55} y2={height * 0.23 + idx * 36} stroke="#1E293B" strokeWidth="2" />
+                <circle cx={width - 70} cy={height * 0.23 + idx * 36} r="3" fill={(idx + frame) % 3 === 0 ? '#10B981' : '#38BDF8'} />
+              </g>
+            ))}
+
+            {/* Center Holographic Workstation Circle */}
+            <g transform={`translate(${width / 2}, ${height * 0.38})`}>
+              <circle cx="0" cy="0" r="160" fill="none" stroke={aksen} strokeWidth="2" strokeDasharray="12,8" opacity="0.7" />
+              <circle cx="0" cy="0" r="110" fill="none" stroke={aksenSec} strokeWidth="1.5" strokeDasharray="4,6" opacity="0.6" />
+              <circle cx="0" cy="0" r="60" fill="none" stroke="#FFFFFF" strokeWidth="1" opacity="0.4" />
+
+              {/* Crosshair & Data Readouts */}
+              <line x1="-180" y1="0" x2="180" y2="0" stroke={aksen} strokeWidth="1" strokeDasharray="4,4" opacity="0.3" />
+              <line x1="0" y1="-180" x2="0" y2="180" stroke={aksen} strokeWidth="1" strokeDasharray="4,4" opacity="0.3" />
+
+              <text x="0" y="-8" textAnchor="middle" fill="#FFFFFF" fontSize="16" fontWeight="900" letterSpacing="1.5" fontFamily="monospace">
+                DIGITAL AI LAB
+              </text>
+              <text x="0" y="16" textAnchor="middle" fill={aksen} fontSize="11" fontWeight="700" letterSpacing="1" fontFamily="monospace">
+                HIGH PERFORMANCE COMPUTING
+              </text>
+            </g>
+          </g>
+        )}
+
+        {/* Top-Level Tech Telemetry HUD */}
+        <g transform="translate(60, 130)">
+          <text x="0" y="0" fill={aksen} fontSize="11" fontWeight="700" fontFamily="monospace" letterSpacing="1">
+            SYS: CORE_PIPELINE // MATRIX: ACTIVE
+          </text>
+        </g>
+      </svg>
+    </div>
+  );
+});
+
 // Helper Pemilih Latar Dinamis (Resolves Indonesian setting keywords automatically)
 const renderLatarDinamis = (
   latarKey: string | undefined,
@@ -1473,6 +1670,17 @@ const renderLatarDinamis = (
   if (l.includes('blueprint')) {
     return <LatarBlueprint width={width} height={height} />;
   }
+
+  // 4. Tech / Lab / Microchip / Cyber / Digital Scenarios
+  if (
+    l.includes('lab') || l.includes('chip') || l.includes('mikro') ||
+    l.includes('gpu') || l.includes('komputer') || l.includes('tech') ||
+    l.includes('digital') || l.includes('server') || l.includes('sirkuit') ||
+    l.includes('matrix') || l.includes('data') || l.includes('sains')
+  ) {
+    return <LatarTechLabChip latarKey={l} width={width} height={height} frame={frame} palet={palet} />;
+  }
+
   // Universal fallback yang adaptif terhadap palet gaya/ekstraksi
   return <LatarDinamisGeneratif latarKey={l} width={width} height={height} frame={frame} palet={palet} />;
 };
@@ -2146,96 +2354,157 @@ const SingleAdeganAnimasi: React.FC<{
         {renderLatarDinamis(adegan.latar, width, height, steppedFrame, paletAktif, adegan.callout || adegan.judul)}
       </div>
 
-      {/* 2. Top HUD Bar & Tag (Sesuai Referensi Snaptik Video) */}
-      {/* 2a. Sisi Kiri: Waktu & Tanggal HUD */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 60,
-          left: 55,
-          color: '#FFFFFF',
-          fontFamily: 'system-ui, -apple-system, sans-serif',
-          zIndex: 15,
-        }}
-      >
-        <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: 1.5, opacity: 0.9 }}>HARI 7</div>
-        <div style={{ fontSize: 34, fontWeight: 900, lineHeight: 1.1, fontFamily: 'monospace' }}>23.47</div>
-        <div style={{ fontSize: 14, fontWeight: 800, letterSpacing: 1, opacity: 0.75, marginTop: 4 }}>
-          {adegan.latar?.toUpperCase().replace(/-/g, ' ') || 'RUMAH NOMOR 13'}
-        </div>
-      </div>
+      {/* 2. Top HUD Bar & Tag */}
+      {(() => {
+        const isHorror = ((adegan.latar || '') + ' ' + (propsUtama.judul || '')).toLowerCase().includes('rumah no') ||
+                         ((adegan.latar || '') + ' ' + (propsUtama.judul || '')).toLowerCase().includes('kosong 10 tahun');
 
-      {/* 2b. Sisi Kanan: Badge Part & Watermark */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 60,
-          right: 55,
-          textAlign: 'right',
-          zIndex: 15,
-        }}
-      >
-        <div
-          style={{
-            display: 'inline-block',
-            background: '#DC2626',
-            color: '#FFFFFF',
-            fontFamily: 'system-ui, -apple-system, sans-serif',
-            fontWeight: 900,
-            fontSize: 16,
-            padding: '6px 16px',
-            borderRadius: 8,
-            letterSpacing: 1,
-            boxShadow: '0 4px 12px rgba(220,38,38,0.4)',
-          }}
-        >
-          PART 1
-        </div>
-        <div style={{ fontSize: 13, color: '#94A3B8', fontWeight: 600, marginTop: 6 }}>
-          dibuat pakai Claude
-        </div>
-      </div>
+        const rawJudul = (propsUtama.judul || '').trim();
+        const isGeneric = !rawJudul || rawJudul.toLowerCase().includes('animasi karakter bergerak');
 
-      {/* 2c. Header Judul Besar Berwarna Putih & Kuning (1:1 Mirip Referensi) */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 195,
-          left: 40,
-          right: 40,
-          textAlign: 'center',
-          zIndex: 15,
-        }}
-      >
-        <div
-          style={{
-            fontFamily: 'Impact, Arial Black, sans-serif',
-            fontSize: 48,
-            fontWeight: 900,
-            color: '#FFFFFF',
-            letterSpacing: 2,
-            textTransform: 'uppercase',
-            textShadow: '3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 0 6px 14px rgba(0,0,0,0.8)',
-            lineHeight: 1.2,
-          }}
-        >
-          KONON, RUMAH NO. 13
-        </div>
-        <div
-          style={{
-            fontFamily: 'Impact, Arial Black, sans-serif',
-            fontSize: 44,
-            fontWeight: 900,
-            color: '#FACC15',
-            letterSpacing: 2,
-            textTransform: 'uppercase',
-            textShadow: '3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 0 6px 14px rgba(0,0,0,0.8)',
-            marginTop: 4,
-          }}
-        >
-          KOSONG 10 TAHUN
-        </div>
-      </div>
+        let judulPakai = '';
+        if (!isGeneric) {
+          judulPakai = rawJudul;
+        } else if (isHorror) {
+          judulPakai = 'KONON, RUMAH NO. 13\nKOSONG 10 TAHUN';
+        }
+
+        let baris1 = judulPakai;
+        let baris2 = '';
+        if (judulPakai.includes('\n')) {
+          const parts = judulPakai.split('\n');
+          baris1 = parts[0].trim();
+          baris2 = parts.slice(1).join(' ').trim();
+        } else if (judulPakai.includes(':')) {
+          const parts = judulPakai.split(':');
+          baris1 = parts[0].trim();
+          baris2 = parts.slice(1).join(':').trim();
+        } else if (judulPakai.includes(' - ')) {
+          const parts = judulPakai.split(' - ');
+          baris1 = parts[0].trim();
+          baris2 = parts.slice(1).join(' - ').trim();
+        } else if (judulPakai.length > 26) {
+          const kataList = judulPakai.split(' ');
+          const mid = Math.ceil(kataList.length / 2);
+          baris1 = kataList.slice(0, mid).join(' ');
+          baris2 = kataList.slice(mid).join(' ');
+        }
+
+        return (
+          <>
+            {/* 2a. Sisi Kiri: Badge Scene & Callout Latar */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 60,
+                left: 55,
+                color: '#FFFFFF',
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                zIndex: 15,
+              }}
+            >
+              {isHorror ? (
+                <>
+                  <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: 1.5, opacity: 0.9 }}>HARI 7</div>
+                  <div style={{ fontSize: 34, fontWeight: 900, lineHeight: 1.1, fontFamily: 'monospace' }}>23.47</div>
+                </>
+              ) : null}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  background: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid rgba(56, 189, 248, 0.35)',
+                  borderRadius: 6,
+                  padding: '5px 12px',
+                  fontSize: 13,
+                  fontWeight: 800,
+                  letterSpacing: 0.8,
+                  color: '#38BDF8',
+                  backdropFilter: 'blur(4px)',
+                  marginTop: isHorror ? 4 : 0,
+                }}
+              >
+                {adegan.callout || (adegan.latar ? `📍 ${adegan.latar.toUpperCase()}` : '📍 SCENE')}
+              </div>
+            </div>
+
+            {/* 2b. Sisi Kanan: Badge Part */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 60,
+                right: 55,
+                textAlign: 'right',
+                zIndex: 15,
+              }}
+            >
+              <div
+                style={{
+                  display: 'inline-block',
+                  background: 'rgba(220, 38, 38, 0.9)',
+                  color: '#FFFFFF',
+                  fontFamily: 'system-ui, -apple-system, sans-serif',
+                  fontWeight: 900,
+                  fontSize: 15,
+                  padding: '5px 14px',
+                  borderRadius: 6,
+                  letterSpacing: 1,
+                  boxShadow: '0 4px 12px rgba(220,38,38,0.3)',
+                }}
+              >
+                PART 1
+              </div>
+            </div>
+
+            {/* 2c. Header Judul Besar Berwarna Putih & Kuning (Dinamis dari Naskah) */}
+            {judulPakai ? (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 170,
+                  left: 40,
+                  right: 40,
+                  textAlign: 'center',
+                  zIndex: 15,
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: 'Impact, Arial Black, sans-serif',
+                    fontSize: 44,
+                    fontWeight: 900,
+                    color: '#FFFFFF',
+                    letterSpacing: 2,
+                    textTransform: 'uppercase',
+                    textShadow: '3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 0 6px 14px rgba(0,0,0,0.8)',
+                    lineHeight: 1.15,
+                  }}
+                >
+                  {baris1}
+                </div>
+                {baris2 ? (
+                  <div
+                    style={{
+                      fontFamily: 'Impact, Arial Black, sans-serif',
+                      fontSize: 40,
+                      fontWeight: 900,
+                      color: '#FACC15',
+                      letterSpacing: 2,
+                      textTransform: 'uppercase',
+                      textShadow: '3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 0 6px 14px rgba(0,0,0,0.8)',
+                      marginTop: 4,
+                    }}
+                  >
+                    {baris2}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+          </>
+        );
+      })()}
 
       {/* 3. Canvas Karakter Bergerak (Multi-Rig Support dengan Lip-Sync Aktif) */}
       <KarakterCanvas adegan={adegan} frame={frame} width={width} height={height} />
